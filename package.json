@@ -1,0 +1,15 @@
+{
+  "name": "trabajo-grupal",
+  "version": "1.0.0",
+  "description": "- Bootstrap 5.3\r - PrimeNG",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && ng serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
