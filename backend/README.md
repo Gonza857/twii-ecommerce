@@ -5,7 +5,7 @@ Proyecto demo e-commerce Full-Stack
 - Prisma
 - PostgreSQL
 
-## Iniciar servidor para Frontend
+## Iniciar servidor para Backend
 
 Para iniciar servidor local:
 
@@ -40,7 +40,7 @@ Rutas de la aplicación
 
 Archivo de configuración del servidor Express
 - Middlewares 
-  - espress.json() | Parsear cuerpo de solicitudes a JSON
+  - `espress.json()` | Parsear cuerpo de solicitudes a JSON
   - express.urlencoded({ extended: true }) | Parsear cuerpo de solicitudes HTTP
   - cors() | Permitir peticiones se dominios cruzados
   - this.routes() | Enrutado actual de la aplicación
