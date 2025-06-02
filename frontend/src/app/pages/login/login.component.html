@@ -21,6 +21,12 @@
         <p-message severity="success" class="col-12">Iniciaste sesión correctamente. Redirigiendo...</p-message>
       }
 
+      @if (mensajeError ?? false) {
+        <div class="field">
+          <p-message severity="error" class="col-12">{{ mensajeError }}</p-message>
+        </div>
+      }
+
       @if (this.enviando) {
         <p-button label="Enviando..." fluid disabled></p-button>
       } @else {

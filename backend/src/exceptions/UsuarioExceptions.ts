@@ -3,3 +3,10 @@ export class CorreoExistenteException extends Error {
         super(props);
     }
 }
+
+export class DatosIncorrectoException extends Error {
+    constructor(props: string | undefined) {
+        super(props);
+    }
+
+}

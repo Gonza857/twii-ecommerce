@@ -34,6 +34,7 @@ export class RegisterComponent implements OnInit {
   protected exito: boolean = false;
 
   register(): void {
+    this.mensajeError = "";
     this.enviando = true;
 
     if (this.form.get('cContrasena')?.value !== this.form.get('contrasena')?.value) {
@@ -49,9 +50,7 @@ export class RegisterComponent implements OnInit {
       usuario[campo] = this.form.get(campo)?.value;
     }
 
-
     if (this.form.valid) {
-      this.mensajeError = "";
       this.enviando = false;
       this.servicioUsuario.registrarse(usuario).subscribe({
         next: (data: any) => {

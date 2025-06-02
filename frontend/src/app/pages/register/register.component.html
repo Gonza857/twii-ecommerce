@@ -51,6 +51,9 @@
         @if (form.get("cContrasena")?.hasError("mismatch")) {
           <p class="text-danger">Las contraseñas deben ser iguales</p>
         }
+        @if(form.get('contrasena')?.errors?.['minlength']) {
+          <p class="text-danger">La contraseña debe tener al menos 6 carácteres.</p>
+        }
       </div>
 
       <div class="field">

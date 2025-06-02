@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
+import {CardModule} from 'primeng/card';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
 import {UsuarioService} from '../../services/usuario.service';
 import {MessageModule} from 'primeng/message';
 import {Router} from '@angular/router';
@@ -15,15 +15,18 @@ import {Router} from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  private servicioUsuario: UsuarioService = inject(UsuarioService)
+  private router: Router = inject(Router);
   private fb: FormBuilder = inject(FormBuilder);
   protected form!: FormGroup;
   protected enviando: boolean = false;
   protected exito: boolean = false;
-  private servicioUsuario: UsuarioService = inject(UsuarioService)
-  private router: Router = inject(Router);
+  protected mensajeError!: string;
+
 
   login() {
     this.enviando = true;
+    this.mensajeError = "";
     const email = this.form.get('email')?.value;
     const contrasena = this.form.get('password')?.value;
 
@@ -33,12 +36,13 @@ export class LoginComponent implements OnInit {
         next: (data: any) => {
           if (data.exito) {
             this.exito = data.exito;
-            setTimeout(()=>{
+            setTimeout(() => {
               this.router.navigate(['/']);
             }, 2500)
           }
         },
-        error: (error) => console.log(error),
+        error: (e) => this.mensajeError = e.error.mensaje
+        ,
         complete: () => this.enviando = false
       })
     } else {
@@ -52,7 +56,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       email: ['test@test.com', [Validators.required, Validators.email]],
-      password: ['tester', [Validators.required, Validators.minLength(6)]],
+      password: ['tester', [Validators.required]],
     })
   }
 }

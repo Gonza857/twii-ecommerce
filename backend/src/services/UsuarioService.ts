@@ -1,6 +1,10 @@
 import {IUsuarioLogin} from "../models/usuario-model";
 import {PrismaClient} from "@prisma/client";
-import {CorreoExistenteException} from "../exceptions/UsuarioExceptions";
+import {
+    CorreoExistenteException,
+    DatosIncorrectoException,
+} from "../exceptions/UsuarioExceptions";
+import bcrypt from "bcrypt";
 
 interface IResultadoAccion {
     exito?: boolean;
@@ -31,11 +35,12 @@ class UsuarioService implements IUsuarioService {
             }
         })
 
-        if (!usuarioEncontrado) {
-            return {
-                exito: false,
-            }
-        }
+        if (!usuarioEncontrado)
+            throw new DatosIncorrectoException("Datos incorrectos.")
+
+        if (!await this.verificarContrasena(usuario.contrasena, usuarioEncontrado.contrasena))
+            throw new DatosIncorrectoException("Datos incorrectos.")
+
 
         return {
             exito: true,
@@ -52,7 +57,7 @@ class UsuarioService implements IUsuarioService {
         const usuarioBuscado = await this.buscarPorCorreo(usuario.email)
         if (usuarioBuscado) throw new CorreoExistenteException("El correo ya existe.");
 
-        console.log("El correo no existe", usuario)
+        usuario.contrasena = await this.cifrarContrasena(usuario.contrasena);
 
         try {
             await this.prisma.usuario.create({data: usuario})
@@ -81,6 +86,18 @@ class UsuarioService implements IUsuarioService {
             return null
         }
     }
+
+    private cifrarContrasena = async (plainPassword: string): Promise<string> => {
+        const saltRounds = 10;
+        return await bcrypt.hash(plainPassword, saltRounds);
+    };
+
+    private verificarContrasena = async (
+        plainPassword: string,
+        hashedPassword: string
+    ): Promise<boolean> => {
+        return await bcrypt.compare(plainPassword, hashedPassword);
+    };
 
 
 }

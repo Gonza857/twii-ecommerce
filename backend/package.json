@@ -14,6 +14,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
+    "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.18",
     "@types/node": "^22.15.21",
     "nodemon": "^3.1.10",
@@ -24,6 +25,7 @@
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "@types/express": "^5.0.2",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "env-var": "^7.5.0",
