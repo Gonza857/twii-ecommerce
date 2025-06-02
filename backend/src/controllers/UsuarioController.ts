@@ -4,7 +4,7 @@ import UsuarioService from "../services/UsuarioService";
 import {usuarioSchema} from "../schemas/app.schemas";
 import {validate} from "../utils/zod-validator";
 import {ZodSchema} from "zod";
-import {CorreoExistenteException} from "../exceptions/UsuarioExceptions";
+import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
 
 class UsuarioController {
     private usuarioService!: UsuarioService;
@@ -21,7 +21,7 @@ class UsuarioController {
         const body = _req.body
         let resultadoValidacion = this.validarFormatoUsuario(usuarioSchema, body, true);
         if (typeof resultadoValidacion === "boolean") {
-            res.status(400).send();
+            res.status(400).send({mensaje: "Datos incorrectos."});
             return;
         }
 
@@ -30,7 +30,12 @@ class UsuarioController {
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)
-            res.status(400).send()
+            if (e instanceof DatosIncorrectoException) {
+                res.status(401).send({ mensaje: e.message });
+            } else {
+                res.status(401).send({mensaje: "Datos incorrectos."})
+            }
+
         }
     }
 
@@ -48,9 +53,9 @@ class UsuarioController {
         } catch (e) {
             console.log(e)
             if (e instanceof CorreoExistenteException) {
-                res.status(409).json({ exito: false, mensaje: e.message });
+                res.status(409).json({ mensaje: e.message });
             } else {
-                res.status(400).send()
+                res.status(500).send({mensaje: "Ocurrió un error al procesar tu solicitud."})
             }
         }
     }
