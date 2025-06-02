@@ -6,6 +6,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
 import {UsuarioService} from '../../services/usuario.service';
 import {Router} from '@angular/router';
+import {Message, MessageModule} from 'primeng/message';
 
 @Component({
   selector: 'app-register',
@@ -16,17 +17,21 @@ import {Router} from '@angular/router';
     PasswordModule,
     ButtonModule,
     ReactiveFormsModule,
+    Message,
+    MessageModule
   ],
   templateUrl: './register.component.html',
   standalone: true,
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
+  private servicioUsuario: UsuarioService = inject(UsuarioService)
+  private router: Router = inject(Router)
   private fb: FormBuilder = inject(FormBuilder);
   protected form!: FormGroup;
   protected enviando: boolean = false;
-  private servicioUsuario: UsuarioService = inject(UsuarioService)
-  private router: Router = inject(Router)
+  protected mensajeError!: string;
+  protected exito: boolean = false;
 
   register(): void {
     this.enviando = true;
@@ -46,16 +51,20 @@ export class RegisterComponent implements OnInit {
 
 
     if (this.form.valid) {
+      this.mensajeError = "";
       this.enviando = false;
       this.servicioUsuario.registrarse(usuario).subscribe({
         next: (data: any) => {
           if (data.exito) {
+            this.exito = data.exito
             setTimeout(()=>{
               this.router.navigate(['/login']);
             }, 2500)
           }
         },
-        error: (error) => console.log(error),
+        error: (e) => {
+          this.mensajeError = e.error.mensaje
+        },
         complete: () => this.enviando = false
       })
     } else {
