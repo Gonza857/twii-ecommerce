@@ -31,13 +31,15 @@ export class LoginComponent implements OnInit {
       this.enviando = false
       this.servicioUsuario.iniciarSesion({email, contrasena}).subscribe({
         next: (data: any) => {
-          this.exito = data.exito;
-          setTimeout(()=>{
-            this.router.navigate(['/']);
-          }, 2500)
+          if (data.exito) {
+            this.exito = data.exito;
+            setTimeout(()=>{
+              this.router.navigate(['/']);
+            }, 2500)
+          }
         },
         error: (error) => console.log(error),
-        complete: () => console.log("completado")
+        complete: () => this.enviando = false
       })
     } else {
       this.form.markAllAsTouched();

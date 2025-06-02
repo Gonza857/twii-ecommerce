@@ -46,10 +46,22 @@ class UsuarioService implements IUsuarioService {
     }
 
     public async registrarse(usuario: any): Promise<IResultadoAccion> {
-        return {
-            exito: true,
-            mensaje: "Te registraste correctamente.",
+        try {
+            await this.prisma.usuario.create({data: usuario})
+            return {
+                exito: true,
+                mensaje: "Te registraste correctamente.",
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                exito: false,
+                mensaje: "Error al registrarse",
+            }
         }
+
+
+
     }
 
 

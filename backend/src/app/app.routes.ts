@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {productoRouter} from "../routes/productos.route";
-import {usuariosRouter} from "../routes/usuarios.route";
+import {productoRouter} from "../routes/producto.route";
+import {usuariosRouter} from "../routes/usuario.route";
 
 export class AppRoutes {
     static getRoutes(): Router {

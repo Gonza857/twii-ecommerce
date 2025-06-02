@@ -17,5 +17,9 @@ export class UsuarioService {
     return this.http.post<boolean>(`${this.apiUrl}/login`, datos);
   }
 
+  public registrarse (datos: any): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/register`, datos);
+  }
+
 
 }

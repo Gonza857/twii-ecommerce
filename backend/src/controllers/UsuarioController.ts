@@ -18,7 +18,7 @@ class UsuarioController {
 
     public iniciarSesion = async (_req: Request<{}, {}, IUsuarioLogin>, res: Response): Promise<void> => {
         const body = _req.body
-        let resultadoValidacion = this.validarFormatoUsuario(usuarioSchema, body);
+        let resultadoValidacion = this.validarFormatoUsuario(usuarioSchema, body, true);
         if (typeof resultadoValidacion === "boolean") {
             res.status(400).send();
             return;
@@ -34,7 +34,20 @@ class UsuarioController {
     }
 
     public registrarse = async (_req: Request<{}, {}, IUsuarioLogin>, res: Response) : Promise<void> => {
+        const body = _req.body
+        let resultadoValidacion = this.validarFormatoUsuario(usuarioSchema, body, false);
+        if (typeof resultadoValidacion === "boolean") {
+            res.status(400).send();
+            return;
+        }
 
+        try {
+            const resultado = await this.usuarioService.registrarse(resultadoValidacion);
+            res.status(200).json(resultado)
+        } catch (e) {
+            console.log(e)
+            res.status(400).send()
+        }
     }
 
     public obtenerUsuarioPorId = async (_req: Request<{ id: string }>, res: Response): Promise<void> => {
@@ -47,10 +60,11 @@ class UsuarioController {
 
     private validarFormatoUsuario (
         usuarioSchema: ZodSchema,
-        cuerpo: IUsuarioLogin
+        cuerpo: IUsuarioLogin,
+        partial: boolean,
     ): IUsuarioLogin | boolean {
         try {
-            return validate(usuarioSchema, cuerpo);
+            return validate(usuarioSchema, cuerpo, {partial: partial});
         } catch (e) {
             console.log(e)
             return false;
