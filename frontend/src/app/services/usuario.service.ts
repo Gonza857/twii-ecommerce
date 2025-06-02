@@ -9,8 +9,16 @@ export class UsuarioService {
   private apiUrl: string = "http://localhost:3000/api/usuario";
   private readonly http: HttpClient = inject(HttpClient);
 
-  testearAPI (): Observable<string> {
+  public testearAPI(): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}`);
+  }
+
+  public iniciarSesion(datos: any): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/login`, datos);
+  }
+
+  public registrarse (datos: any): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/register`, datos);
   }
 
 

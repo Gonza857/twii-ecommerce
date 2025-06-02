@@ -1,6 +1,6 @@
-import {Server} from "./server/server";
+import {Server} from "./app/server";
 import {envConfig} from "./config/envConfig";
-import {AppRoutes} from "./routes/app.routes";
+import {AppRoutes} from "./app/app.routes";
 
 (async ()=>{
     main();

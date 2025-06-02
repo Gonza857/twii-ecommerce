@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {prisma} from "../prisma";
+import {prisma} from "../app/prisma";
 
 class ProductoController {
     constructor() {

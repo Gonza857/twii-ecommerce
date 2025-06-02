@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {productoRouter} from "./productos.route";
-import {usuariosRouter} from "./usuarios.route";
+import {productoRouter} from "../routes/producto.route";
+import {usuariosRouter} from "../routes/usuario.route";
 
 export class AppRoutes {
     static getRoutes(): Router {
@@ -12,3 +12,13 @@ export class AppRoutes {
         return router;
     }
 }
+
+
+
+
+
+
+
+
+
+

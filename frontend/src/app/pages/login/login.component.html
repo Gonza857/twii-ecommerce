@@ -1,0 +1,31 @@
+<div class="login-wrapper">
+  <p-card header="Iniciar sesión" class="login-card">
+    <form [formGroup]="form" class="col-12 d-flex flex-column gap-2 p-2">
+      <div class="row m-0 p-0">
+        <label for="email">Correo</label>
+        <input type="text" pInputText id="email" formControlName="email"/>
+        @if (form.get("email")?.hasError("required") && form.get("email")?.touched) {
+          <p class="text-danger">Este campo es requerido</p>
+        }
+      </div>
+
+      <div class="row col-12 m-0 p-0">
+        <label for="password">Contraseña</label>
+        <input id="password" pInputText formControlName="password"/>
+        @if (form.get("password")?.hasError("required") && form.get("password")?.touched) {
+          <p class="text-danger">Este campo es requerido</p>
+        }
+      </div>
+
+      @if(exito) {
+        <p-message severity="success" class="col-12">Iniciaste sesión correctamente. Redirigiendo...</p-message>
+      }
+
+      @if (this.enviando) {
+        <p-button label="Enviando..." fluid disabled></p-button>
+      } @else {
+        <p-button label="Iniciar sesión" fluid (onClick)="login()"></p-button>
+      }
+    </form>
+  </p-card>
+</div>

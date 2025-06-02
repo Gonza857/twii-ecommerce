@@ -33,8 +33,9 @@ Logíca del negocio
 
 Rutas de la aplicación
 - `app.routes.ts` es el principal
-- `productos.route.ts` es una ruta específica (subruta)
-- `usuarios.route.ts` _sin desarrollar aún
+- `producto.route.ts` 
+- `usuario.route.ts` 
+- TODO: terminar
 
 ### Server
 
@@ -69,4 +70,16 @@ En la carpeta /dist se encuentra todo el código transpilado a JS.
 Ejecutar el siguiente comando para pasar todo a JS. 
 ```bash
 npx tsc
+```
+
+## Prima
+
+Hacer pull de la BD
+```bash
+npx prisma db pull       
+```
+
+Generar archivo
+```bash
+npx prisma generate      
 ```

@@ -8,9 +8,26 @@ datasource db {
 }
 
 model producto {
-  id            Int     @id
+  id            Int     @id @default(autoincrement())
   nombre        String  @db.VarChar(50)
   descripcion   String
   clasificacion String  @db.VarChar(50)
   precio        Decimal @db.Decimal(10, 2)
+}
+
+model rol {
+  id      Int       @id
+  nombre  String    @unique @db.VarChar(255)
+  usuario usuario[]
+}
+
+model usuario {
+  id         Int     @id @default(autoincrement())
+  direccion  String? @db.VarChar(255)
+  apellido   String  @db.VarChar(100)
+  nombre     String  @db.VarChar(100)
+  email      String  @unique @db.VarChar(100)
+  contrasena String  @db.VarChar(255)
+  rolid      Int
+  rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }
