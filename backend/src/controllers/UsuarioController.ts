@@ -4,6 +4,7 @@ import UsuarioService from "../services/UsuarioService";
 import {usuarioSchema} from "../schemas/app.schemas";
 import {validate} from "../utils/zod-validator";
 import {ZodSchema} from "zod";
+import {CorreoExistenteException} from "../exceptions/UsuarioExceptions";
 
 class UsuarioController {
     private usuarioService!: UsuarioService;
@@ -46,7 +47,11 @@ class UsuarioController {
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)
-            res.status(400).send()
+            if (e instanceof CorreoExistenteException) {
+                res.status(409).json({ exito: false, mensaje: e.message });
+            } else {
+                res.status(400).send()
+            }
         }
     }
 

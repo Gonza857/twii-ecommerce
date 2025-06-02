@@ -4,5 +4,5 @@ export interface IUsuarioLogin {
     direccion?: string | null,
     nombre?: string,
     apellido?: string,
-    rolId?: number,
+    rol?: any,
 }

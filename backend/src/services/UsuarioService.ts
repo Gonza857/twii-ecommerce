@@ -1,5 +1,6 @@
 import {IUsuarioLogin} from "../models/usuario-model";
 import {PrismaClient} from "@prisma/client";
+import {CorreoExistenteException} from "../exceptions/UsuarioExceptions";
 
 interface IResultadoAccion {
     exito?: boolean;
@@ -10,7 +11,9 @@ interface IResultadoAccion {
 
 interface IUsuarioService {
     iniciarSesion(usuario: any): Promise<IResultadoAccion>;
+
     obtenerUsuarioPorId(id: string): Promise<IUsuarioLogin>
+
     registrarse(usuario: any): Promise<IResultadoAccion>;
 }
 
@@ -46,6 +49,11 @@ class UsuarioService implements IUsuarioService {
     }
 
     public async registrarse(usuario: any): Promise<IResultadoAccion> {
+        const usuarioBuscado = await this.buscarPorCorreo(usuario.email)
+        if (usuarioBuscado) throw new CorreoExistenteException("El correo ya existe.");
+
+        console.log("El correo no existe", usuario)
+
         try {
             await this.prisma.usuario.create({data: usuario})
             return {
@@ -59,9 +67,19 @@ class UsuarioService implements IUsuarioService {
                 mensaje: "Error al registrarse",
             }
         }
+    }
 
-
-
+    private async buscarPorCorreo(emailBuscado: string): Promise<IUsuarioLogin | null> {
+        try {
+            return await this.prisma.usuario.findUnique({
+                where: {
+                    email: emailBuscado
+                }
+            }) as IUsuarioLogin;
+        } catch (error) {
+            console.error(error);
+            return null
+        }
     }
 
 

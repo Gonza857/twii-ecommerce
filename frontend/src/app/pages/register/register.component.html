@@ -11,7 +11,7 @@
             name="nombre"
             formControlName="nombre"
             placeholder="Ingresa tu nombre"
-            class="w-full" />
+            class="w-full"/>
         </div>
 
         <div class="field">
@@ -22,7 +22,7 @@
             name="apellido"
             formControlName="apellido"
             placeholder="Ingresa tu apellido"
-            class="w-full" />
+            class="w-full"/>
         </div>
       </div>
 
@@ -35,7 +35,7 @@
           formControlName="email"
           type="email"
           placeholder="ejemplo@correo.com"
-          class="w-full" />
+          class="w-full"/>
       </div>
 
       <div class="field">
@@ -47,7 +47,7 @@
           formControlName="contrasena"
           type="password"
           placeholder="Ingresa tu contraseña"
-          class="w-full" />
+          class="w-full"/>
         @if (form.get("cContrasena")?.hasError("mismatch")) {
           <p class="text-danger">Las contraseñas deben ser iguales</p>
         }
@@ -62,7 +62,7 @@
           formControlName="cContrasena"
           type="password"
           placeholder="Ingresa tu contraseña"
-          class="w-full" />
+          class="w-full"/>
         @if (form.get("cContrasena")?.hasError("mismatch")) {
           <p class="text-danger">Las contraseñas deben ser iguales</p>
         }
@@ -76,8 +76,21 @@
           name="direccion"
           formControlName="direccion"
           placeholder="Ingresa tu dirección (opcional)"
-          class="w-full" />
+          class="w-full"/>
       </div>
+
+
+      @if (mensajeError ?? false) {
+        <div class="field">
+          <p-message severity="error" class="col-12">{{ mensajeError }}</p-message>
+        </div>
+      }
+
+      @if (exito) {
+        <div class="field">
+          <p-message severity="success" class="col-12">Iniciaste sesión correctamente. Redirigiendo...</p-message>
+        </div>
+      }
 
       @if (this.enviando) {
         <p-button label="Enviando..." fluid disabled></p-button>
