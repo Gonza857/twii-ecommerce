@@ -22,7 +22,10 @@ const usuarioSchema = z.object({
     nombre: z.string(),
     apellido: z.string(),
     direccion: z.string().nullable(),
-    rol: z.string()
+    rol: z.object({
+        id: z.number(),
+        nombre: z.string()
+    })
 })
 
 export {

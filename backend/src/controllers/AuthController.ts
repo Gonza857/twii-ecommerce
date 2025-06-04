@@ -1,10 +1,9 @@
 import UsuarioService from "../services/UsuarioService";
 import AuthService from "../services/AuthService";
 import {Request, Response} from "express";
-import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
+import {ILogin, IRegister,} from "../models/usuario-model";
 import {loginSchema, registerSchema} from "../schemas/app.schemas";
 import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
-import {ZodSchema} from "zod";
 import {validate} from "../utils/zod-validator";
 
 class AuthController {

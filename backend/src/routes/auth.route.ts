@@ -1,7 +1,7 @@
 import {Router} from "express";
 import container from "../app/container";
 
-const authRouter: Router = Router()
+export const authRouter = Router()
 
 const authController = container.authController;
 

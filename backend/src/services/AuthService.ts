@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-import {IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
+import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
 import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
 import {IResultadoAccion} from "../models/main-models";
 import bcrypt from "bcrypt";
@@ -12,9 +12,12 @@ class AuthService {
     }
 
     public async iniciarSesion(usuario: any): Promise<IResultadoAccion> {
-        const usuarioEncontrado: IUsuarioLogin | null = await this.prisma.usuario.findUnique({
+        const usuarioEncontrado = await this.prisma.usuario.findUnique({
             where: {
                 email: usuario.email
+            },
+            include: {
+                rol: true,
             }
         })
 
@@ -31,7 +34,7 @@ class AuthService {
         }
     }
 
-    public async registrarse(usuarioNuevo: IRegister,  usuarioExistente: IUsuarioLogin): Promise<IResultadoAccion> {
+    public async registrarse(usuarioNuevo: IRegister,  usuarioExistente: IUsuario | null): Promise<IResultadoAccion> {
         if (usuarioExistente) throw new CorreoExistenteException("El correo ya existe.");
 
         usuarioNuevo.contrasena = await this.cifrarContrasena(usuarioNuevo.contrasena);

@@ -18,7 +18,7 @@ const authService: AuthService = new AuthService(prisma);
 // Controladores -> Recbien petición y la pasan al servicio
 
 const productoController: ProductoController = new ProductoController()
-const usuarioController: UsuarioController = new UsuarioController(usuarioService, authService)
+const usuarioController: UsuarioController = new UsuarioController(usuarioService)
 const authController: AuthController = new AuthController(usuarioService, authService)
 
 

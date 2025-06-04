@@ -1,5 +1,5 @@
-import {Request, RequestHandler, Response} from "express";
-import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
+import {Request, Response} from "express";
+import {IUsuario} from "../models/usuario-model";
 import UsuarioService from "../services/UsuarioService";
 
 class UsuarioController {
@@ -12,7 +12,6 @@ class UsuarioController {
     public async getResultadoTest(_req: Request, res: Response) {
         res.status(200).json("Hola desde Usuario Controller (BACKEND)")
     }
-
 
     public obtenerUsuarioPorId = async (_req: Request, res: Response): Promise<void> => {
         const {id} = _req.params
