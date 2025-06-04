@@ -1,4 +1,4 @@
-import { ZodSchema, ZodTypeAny, ZodObject } from 'zod';
+import {ZodSchema, ZodTypeAny, ZodObject, ZodError} from 'zod';
 
 type ValidateOptions = {
     partial?: boolean;
@@ -6,19 +6,14 @@ type ValidateOptions = {
 
 export function validate<T extends ZodTypeAny>(
     schema: T,
-    input: unknown,
-    options?: ValidateOptions
-) {
-    const effectiveSchema = options?.partial
-        ? (schema instanceof ZodObject ? schema.partial() : schema)
-        : schema;
-
-    const result = effectiveSchema.safeParse(input);
-
-    if (!result.success) {
-        // Podés customizar el error, loguear o tirar un error HTTP
-        throw new Error(JSON.stringify(result.error.format()));
+    data: unknown
+): ReturnType<T["parse"]> {
+    try {
+        return schema.parse(data);
+    } catch (e) {
+        if (e instanceof ZodError) {
+            throw new Error("Error de validación de datos.");
+        }
+        throw e;
     }
-
-    return result.data;
 }

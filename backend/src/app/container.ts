@@ -3,6 +3,8 @@ import UsuarioController from "../controllers/UsuarioController";
 import UsuarioService from "../services/UsuarioService";
 import ProductoService from "../services/ProductoService";
 import {prisma} from "./prisma";
+import AuthService from "../services/AuthService";
+import AuthController from "../controllers/AuthController";
 
 // Repositorios -> Lógica para comunicarse con la base de datos
 // const pruebaRepository: PruebaRepository = new PruebaRepository()
@@ -11,16 +13,19 @@ import {prisma} from "./prisma";
 // const pruebaService: PruebaService = new PruebaService(pruebaRepository)
 const usuarioService: UsuarioService = new UsuarioService(prisma)
 const productoService: ProductoService = new ProductoService()
+const authService: AuthService = new AuthService(prisma);
 
 // Controladores -> Recbien petición y la pasan al servicio
 
 const productoController: ProductoController = new ProductoController()
-const usuarioController: UsuarioController = new UsuarioController(usuarioService)
+const usuarioController: UsuarioController = new UsuarioController(usuarioService, authService)
+const authController: AuthController = new AuthController(usuarioService, authService)
 
 
 const container = {
     productoController,
-    usuarioController
+    usuarioController,
+    authController,
 }
 
 export default container;
