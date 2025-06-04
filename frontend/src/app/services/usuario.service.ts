@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 })
 export class UsuarioService {
   private apiUrl: string = "http://localhost:3000/api/usuario";
+  private apiAuthUrl: string = "http://localhost:3000/api/auth";
   private readonly http: HttpClient = inject(HttpClient);
 
   public testearAPI(): Observable<string> {
@@ -14,11 +15,11 @@ export class UsuarioService {
   }
 
   public iniciarSesion(datos: any): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/login`, datos);
+    return this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos);
   }
 
   public registrarse (datos: any): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/register`, datos);
+    return this.http.post<boolean>(`${this.apiAuthUrl}/register`, datos);
   }
 
 

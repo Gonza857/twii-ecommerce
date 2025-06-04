@@ -1,4 +1,4 @@
-import {IUsuarioLogin} from "../models/usuario-model";
+import {ILogin, IUsuario, IUsuarioLogin} from "../models/usuario-model";
 import {PrismaClient} from "@prisma/client";
 import {
     CorreoExistenteException,
@@ -12,11 +12,10 @@ interface IResultadoAccion {
     data?: any;
 }
 
-
 interface IUsuarioService {
     iniciarSesion(usuario: any): Promise<IResultadoAccion>;
 
-    obtenerUsuarioPorId(id: string): Promise<IUsuarioLogin>
+    obtenerUsuarioPorId(id: string): Promise<IUsuario | null>
 
     registrarse(usuario: any): Promise<IResultadoAccion>;
 }
@@ -48,9 +47,30 @@ class UsuarioService implements IUsuarioService {
         }
     }
 
-    public async obtenerUsuarioPorId(id: string): Promise<IUsuarioLogin> {
+    public async obtenerUsuarioPorId(id: string): Promise<IUsuario | null> {
         // Lógica para buscar usuario en la BD
-        return {email: "test@test.com", contrasena: "passsword"}
+        const usuario = await this.prisma.usuario.findUnique({
+            where: {
+                id: Number(id)
+            },
+            include: {
+                rol: true
+            }
+        });
+
+        if (!usuario) return null;
+
+        return {
+            email: usuario.email,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            direccion: usuario.direccion,
+            rol: usuario.rol,
+        };
+    }
+
+    public async obtenerUsuarioPorCorreo (email: string): Promise<IUsuario | null> {
+        return await this.buscarPorCorreo(email);
     }
 
     public async registrarse(usuario: any): Promise<IResultadoAccion> {
@@ -74,13 +94,16 @@ class UsuarioService implements IUsuarioService {
         }
     }
 
-    private async buscarPorCorreo(emailBuscado: string): Promise<IUsuarioLogin | null> {
+    private async buscarPorCorreo(emailBuscado: string): Promise<IUsuario | null> {
         try {
             return await this.prisma.usuario.findUnique({
                 where: {
                     email: emailBuscado
+                },
+                include: {
+                    rol: true
                 }
-            }) as IUsuarioLogin;
+            });
         } catch (error) {
             console.error(error);
             return null
