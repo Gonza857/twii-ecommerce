@@ -5,11 +5,11 @@ import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {UsuarioService} from '../../services/usuario.service';
 import {MessageModule} from 'primeng/message';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CardModule, InputTextModule, ButtonModule, ReactiveFormsModule, MessageModule],
+  imports: [FormsModule, CardModule, InputTextModule, ButtonModule, ReactiveFormsModule, MessageModule, RouterLink],
   templateUrl: './login.component.html',
   standalone: true,
   styleUrl: './login.component.scss'

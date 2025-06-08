@@ -5,15 +5,16 @@ import ProductoService from "../services/ProductoService";
 import {prisma} from "./prisma";
 import AuthService from "../services/AuthService";
 import AuthController from "../controllers/AuthController";
+import {IUsuarioRepository} from "../models/repositories-interfaces";
+import UsuarioRepository from "../repositories/UsuarioRepository";
 
 // Repositorios -> Lógica para comunicarse con la base de datos
-// const pruebaRepository: PruebaRepository = new PruebaRepository()
+const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma);
 
 // Servicios -> logica de negocio
-// const pruebaService: PruebaService = new PruebaService(pruebaRepository)
-const usuarioService: UsuarioService = new UsuarioService(prisma)
+const usuarioService: UsuarioService = new UsuarioService(usuarioRepository)
 const productoService: ProductoService = new ProductoService()
-const authService: AuthService = new AuthService(prisma);
+const authService: AuthService = new AuthService(usuarioRepository);
 
 // Controladores -> Recbien petición y la pasan al servicio
 

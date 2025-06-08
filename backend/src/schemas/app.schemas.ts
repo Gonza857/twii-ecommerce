@@ -6,18 +6,24 @@ const registerSchema = z.object({
     nombre: z.string(),
     apellido: z.string(),
     direccion: z.string(),
-    rol: z.preprocess(
+    rolid: z.preprocess(
         (val) => (val === undefined ? 2 : val),
         z.number()
     ),
 })
 
+const recoverSchema = z.object({
+    email: z.string().email(),
+})
+
 const loginSchema = z.object({
+    id: z.number().optional(),
     email: z.string().email(),
     contrasena: z.string().min(6),
 })
 
 const usuarioSchema = z.object({
+    id: z.number().optional(),
     email: z.string().email(),
     nombre: z.string(),
     apellido: z.string(),
@@ -31,5 +37,6 @@ const usuarioSchema = z.object({
 export {
     registerSchema,
     loginSchema,
-    usuarioSchema
+    usuarioSchema,
+    recoverSchema
 }

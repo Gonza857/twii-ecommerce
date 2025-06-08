@@ -1,25 +1,19 @@
-import {PrismaClient} from "@prisma/client";
-import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
+import {ILogin, IRegister} from "../models/usuario-model";
 import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
 import {IResultadoAccion} from "../models/main-models";
 import bcrypt from "bcrypt";
+import {IAuthService} from "../models/services-interfaces";
+import {IUsuarioRepository} from "../models/repositories-interfaces";
 
-class AuthService {
-    private readonly prisma!: PrismaClient;
+class AuthService implements IAuthService {
+    private readonly usuarioRepository!: IUsuarioRepository;
 
-    constructor(prisma: PrismaClient) {
-        this.prisma = prisma;
+    constructor(usuarioRepository: IUsuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
     public async iniciarSesion(usuario: any): Promise<IResultadoAccion> {
-        const usuarioEncontrado = await this.prisma.usuario.findUnique({
-            where: {
-                email: usuario.email
-            },
-            include: {
-                rol: true,
-            }
-        })
+        const usuarioEncontrado: ILogin | null = await this.usuarioRepository.obtenerPorEmail(usuario.email)
 
         if (!usuarioEncontrado)
             throw new DatosIncorrectoException("Datos incorrectos.")
@@ -27,31 +21,20 @@ class AuthService {
         if (!await this.verificarContrasena(usuario.contrasena, usuarioEncontrado.contrasena))
             throw new DatosIncorrectoException("Datos incorrectos.")
 
-
         return {
             exito: true,
             mensaje: "Se inició sesión correctamente.",
         }
     }
 
-    public async registrarse(usuarioNuevo: IRegister,  usuarioExistente: IUsuario | null): Promise<IResultadoAccion> {
-        if (usuarioExistente) throw new CorreoExistenteException("El correo ya existe.");
+    public async registrarse(usuario: IRegister, encontrado: ILogin): Promise<IResultadoAccion> {
+        if (encontrado != null) throw new CorreoExistenteException("El correo ya existe.");
 
-        usuarioNuevo.contrasena = await this.cifrarContrasena(usuarioNuevo.contrasena);
-
-        const dataParaCrear = {
-            email: usuarioNuevo.email,
-            contrasena: usuarioNuevo.contrasena,
-            nombre: usuarioNuevo.nombre,
-            apellido: usuarioNuevo.apellido,
-            direccion: usuarioNuevo.direccion,
-            rol: {
-                connect: { id: usuarioNuevo.rol }  // Aquí pasás el número como conexión
-            }
-        };
+        usuario.contrasena = await this.cifrarContrasena(usuario.contrasena);
 
         try {
-            await this.prisma.usuario.create({data: dataParaCrear})
+            await this.usuarioRepository.crear(usuario);
+            console.log("Creado!")
             return {
                 exito: true,
                 mensaje: "Te registraste correctamente.",
@@ -65,6 +48,19 @@ class AuthService {
         }
     }
 
+    recuperarContrasena = async (email: string): Promise<IResultadoAccion> => {
+        const usuarioBuscado = await this.usuarioRepository.obtenerPorEmail(email);
+
+        if (!usuarioBuscado) throw new DatosIncorrectoException("Datos incorrectos.")
+
+        return {
+            exito: true,
+            mensaje: "Recuperar OK",
+            data: usuarioBuscado.email
+        }
+
+    }
+
     private cifrarContrasena = async (plainPassword: string): Promise<string> => {
         const saltRounds = 10;
         return await bcrypt.hash(plainPassword, saltRounds);
@@ -76,6 +72,8 @@ class AuthService {
     ): Promise<boolean> => {
         return await bcrypt.compare(plainPassword, hashedPassword);
     };
+
+
 }
 
 export default AuthService

@@ -1,0 +1,40 @@
+<main class="bor1 styledMain d-flex justify-content-center align-items-center vh-100 bg-dark">
+  <div class="recovery-container bg-light p-4 shadow-lg rounded col-3">
+    <h2 class="text-center mb-3 text-dark">¿Olvidaste tu contraseña?</h2>
+    <p class="text-center mb-4 text-muted">Ingresá tu correo y te enviaremos instrucciones para recuperarla.</p>
+
+    <form [formGroup]="form" class="d-flex flex-column gap-3">
+      <div class="form-group">
+        <label for="email" class="form-label mb-2">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          placeholder="usuario@correo.com"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': form.get('email')?.invalid && form.get('email')?.touched }"
+        />
+        @if (form.get("email")?.hasError("required") && form.get("email")?.touched) {
+          <div class="invalid-feedback">Este campo es requerido</div>
+        }
+        @if (form.get("email")?.hasError("email") && form.get("email")?.touched) {
+          <div class="invalid-feedback">Ingresa un formato de correo válido</div>
+        }
+      </div>
+
+      <div class="d-grid gap-2 mt-3">
+        @if (this.enviando) {
+          <button type="button" class="btn btn-primary" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Enviando...
+          </button>
+        } @else {
+          <button type="submit" class="btn btn-primary" (click)="enviar()" [disabled]="form.invalid">
+            Enviar
+          </button>
+        }
+      </div>
+    </form>
+  </div>
+</main>

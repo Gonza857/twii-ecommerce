@@ -2,6 +2,12 @@ import {inject, Injectable, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
+interface algo {
+  exito?: boolean,
+  mensaje?: string,
+  data?: any
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +27,15 @@ export class UsuarioService {
   public registrarse (datos: any): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiAuthUrl}/register`, datos);
   }
+
+  public recuperar (email: string): Observable<algo> {
+    return this.http.post<algo>(`${this.apiAuthUrl}/recuperar`, {email});
+  }
+
+  public cambiarContrasena (datos: any): Observable<algo> {
+    return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
+  }
+
 
 
 }

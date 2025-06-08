@@ -1,0 +1,10 @@
+.change-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--surface-ground); /* Un color de fondo suave de PrimeNG */
+}
+
+.field {
+  margin-bottom: 1.5rem; /* Espaciado entre campos */
+}

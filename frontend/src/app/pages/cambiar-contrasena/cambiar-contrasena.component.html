@@ -1,0 +1,61 @@
+<main class="login-wrapper d-flex justify-content-center align-items-center vh-100 bg-dark">
+  <div class="bg-light p-4 shadow-lg rounded col-12 col-sm-8 col-md-6 col-lg-5 col-xl-3">
+    <h2 class="text-center mb-4">Cambiar Contraseña</h2>
+    <form class="col-12 d-flex flex-column gap-3 p-0" [formGroup]="form">
+      <div class="form-group mb-3">
+        <label for="contrasena">Nueva Contraseña</label>
+        <input
+          fluid
+          pInputText
+          id="contrasena"
+          formControlName="contrasena"
+          type="password"
+        />
+        @if (form.get("contrasena")?.hasError("required") && form.get("contrasena")?.touched) {
+          <p class="text-danger">Este campo es requerido</p>
+        }
+        @if (form.get("contrasena")?.hasError("mismatch")) {
+          <p class="text-danger">Las contraseñas deben ser iguales</p>
+        }
+        @if (form.get('contrasena')?.errors?.['minlength']) {
+          <p class="text-danger">La contraseña debe tener al menos 6 caracteres.</p>
+        }
+      </div>
+
+      <div class="form-group mb-3">
+      <label for="cContrasena">Confirmar Contraseña</label>
+        <input
+          fluid
+          pInputText
+          id="cContrasena"
+          formControlName="cContrasena"
+          type="password"
+          class="bor1"
+        />
+        @if (form.get("cContrasena")?.hasError("mismatch")) {
+          <p class="text-danger">Las contraseñas deben ser iguales</p>
+        }
+      </div>
+
+      @if (exito) {
+        <div class="alert alert-success text-center" role="alert">
+          Redirigiendo al inicio de sesión...
+        </div>
+      }
+
+      @if (mensajeError ?? false) {
+        <div class="field">
+          <p-message severity="error" class="col-12">{{ mensajeError }}</p-message>
+        </div>
+      }
+
+      <div>
+        @if (this.enviando) {
+          <p-button label="Actualizando..." fluid disabled></p-button>
+        } @else {
+          <p-button label="Guardar Contraseña" fluid (onClick)="enviar()"></p-button>
+        }
+      </div>
+    </form>
+  </div>
+</main>

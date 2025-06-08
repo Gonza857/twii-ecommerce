@@ -13,7 +13,7 @@ class UsuarioController {
         res.status(200).json("Hola desde Usuario Controller (BACKEND)")
     }
 
-    public obtenerUsuarioPorId = async (_req: Request, res: Response): Promise<void> => {
+    public obtenerUsuarioPorId = async (_req: Request, res: Response) => {
         const {id} = _req.params
         // Validar que no sea undefined o nulo..
         // Convertir a numero...
