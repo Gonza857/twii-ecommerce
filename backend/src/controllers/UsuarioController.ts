@@ -1,11 +1,12 @@
 import {Request, Response} from "express";
 import {IUsuario} from "../models/usuario-model";
 import UsuarioService from "../services/UsuarioService";
+import {IUsuarioService} from "../models/services-interfaces";
 
 class UsuarioController {
-    private usuarioService!: UsuarioService;
+    private usuarioService!: IUsuarioService;
 
-    constructor(usuarioService: UsuarioService) {
+    constructor(usuarioService: IUsuarioService) {
         this.usuarioService = usuarioService;
     }
 
@@ -13,7 +14,7 @@ class UsuarioController {
         res.status(200).json("Hola desde Usuario Controller (BACKEND)")
     }
 
-    public obtenerUsuarioPorId = async (_req: Request, res: Response): Promise<void> => {
+    public obtenerUsuarioPorId = async (_req: Request, res: Response) => {
         const {id} = _req.params
         // Validar que no sea undefined o nulo..
         // Convertir a numero...

@@ -3,7 +3,7 @@ import {prisma} from "../app/prisma";
 
 class ProductoController {
     constructor() {
-        console.log("Producto Controller");
+
     }
 
     public async getProductos (_req: Request, res: Response) {

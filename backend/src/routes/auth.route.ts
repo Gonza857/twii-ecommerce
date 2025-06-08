@@ -8,3 +8,4 @@ const authController = container.authController;
 authRouter.post("/login", authController.iniciarSesion)
 authRouter.post("/register", authController.registrarse)
 authRouter.post("/recuperar", authController.recuperarContrasena)
+authRouter.post("/cambiar", authController.cambiar);

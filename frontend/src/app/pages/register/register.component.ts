@@ -51,9 +51,12 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.form.valid) {
+      console.log("Form valido")
       this.enviando = false;
       this.servicioUsuario.registrarse(usuario).subscribe({
         next: (data: any) => {
+          console.log("Exito pa")
+          console.log(data)
           if (data.exito) {
             this.exito = data.exito
             setTimeout(()=>{
@@ -62,6 +65,7 @@ export class RegisterComponent implements OnInit {
           }
         },
         error: (e) => {
+          console.log(e)
           this.mensajeError = e.error.mensaje
         },
         complete: () => this.enviando = false

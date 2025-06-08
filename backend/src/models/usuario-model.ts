@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {loginSchema, registerSchema, usuarioSchema} from "../schemas/app.schemas";
+import {changePasswordSchema, loginSchema, recoverSchema, registerSchema, usuarioSchema} from "../schemas/app.schemas";
 
 export interface IUsuarioLogin {
     email: string,
@@ -13,3 +13,5 @@ export interface IUsuarioLogin {
 export type ILogin = z.infer<typeof loginSchema>;
 export type IRegister = z.infer<typeof registerSchema>;
 export type IUsuario = z.infer<typeof usuarioSchema>;
+export type IRecover = z.infer<typeof recoverSchema>;
+export type IChangePassword = z.infer<typeof changePasswordSchema>;

@@ -5,15 +5,21 @@ import ProductoService from "../services/ProductoService";
 import {prisma} from "./prisma";
 import AuthService from "../services/AuthService";
 import AuthController from "../controllers/AuthController";
+import {IUsuarioRepository} from "../models/repositories-interfaces";
+import UsuarioRepository from "../repositories/UsuarioRepository";
+import MailerService from "../services/MailerService";
+import {IAuthService, IMailerService, IUsuarioService} from "../models/services-interfaces";
+
+// Infra -> independiente de la lógica de negocio
+const mailerService: IMailerService = new MailerService();
 
 // Repositorios -> Lógica para comunicarse con la base de datos
-// const pruebaRepository: PruebaRepository = new PruebaRepository()
+const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma);
 
 // Servicios -> logica de negocio
-// const pruebaService: PruebaService = new PruebaService(pruebaRepository)
-const usuarioService: UsuarioService = new UsuarioService(prisma)
-const productoService: ProductoService = new ProductoService()
-const authService: AuthService = new AuthService(prisma);
+const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository)
+const productoService: ProductoService = new ProductoService() // pasar tipo a interface
+const authService: IAuthService = new AuthService(usuarioRepository, mailerService);
 
 // Controladores -> Recbien petición y la pasan al servicio
 
