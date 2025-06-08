@@ -19,7 +19,7 @@ class AuthService implements IAuthService {
         if (!usuario)
             throw new DatosIncorrectoException("Datos incorrectos.")
 
-        if (!await this.verificarContrasena(usuario.contrasena, inputContrasena))
+        if (!await this.verificarContrasena(inputContrasena, usuario.contrasena))
             throw new DatosIncorrectoException("Datos incorrectos.")
 
         return {
@@ -69,6 +69,7 @@ class AuthService implements IAuthService {
 
     public async cambiarContrasena(usuario: IUsuario | null, contrasenaNueva: string): Promise<IResultadoAccion> {
         if (!usuario) throw new DatosIncorrectoException("Datos incorrectos.")
+        console.log("Contraseña entrante", contrasenaNueva);
         contrasenaNueva = await this.cifrarContrasena(contrasenaNueva)
         return {
             exito: true,

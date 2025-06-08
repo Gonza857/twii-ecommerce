@@ -30,8 +30,7 @@ export const routes: Routes = [
   },
   {
     path: "admin",
-    loadComponent: () =>
-      import("./pages/admin/admin.component")
-        .then(c => c.AdminComponent)
+    loadChildren: () =>
+      import("./admin/admin-routing.module").then(m => m.AdminRoutingModule)
   }
 ];

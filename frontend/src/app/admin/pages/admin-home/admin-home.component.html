@@ -1,0 +1,33 @@
+<router-outlet>
+  <div class="container mt-4">
+    <h2>Lista de Usuarios</h2>
+    <table class="table table-striped table-hover table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Email</th>
+        <th scope="col">Direccion</th>
+        <!--      <th scope="col">Acciones</th>-->
+      </tr>
+      </thead>
+      <tbody>
+        @for (usuario of this.usuarios; track usuario.id) {
+          <tr>
+            <th scope="row">{{ usuario.id }}</th>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.apellido }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.direccion }}</td>
+            <!--        <td>-->
+            <!--          <button class="btn btn-sm btn-info me-2">Ver</button>-->
+            <!--          <button class="btn btn-sm btn-warning me-2">Editar</button>-->
+            <!--          <button class="btn btn-sm btn-danger">Eliminar</button>-->
+            <!--        </td>-->
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</router-outlet>

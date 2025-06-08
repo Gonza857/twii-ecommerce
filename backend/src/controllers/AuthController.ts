@@ -6,6 +6,7 @@ import {validate} from "../utils/zod-validator";
 import {IAuthService, IUsuarioService} from "../models/services-interfaces";
 import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
+import {AuthenticatedRequest} from "../models/main-models";
 
 
 class AuthController {
@@ -38,7 +39,7 @@ class AuthController {
         try {
             const resultado = await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
             const token = generarToken({id: resultado.data})
-            res.cookie("access-token", token, generateCookie())
+            res.cookie("access-token", token, generateCookie());
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)
@@ -72,6 +73,12 @@ class AuthController {
                 res.status(500).send({mensaje: "Ocurrió un error al procesar tu solicitud."})
             }
         }
+    }
+
+    public validar = async (_req: AuthenticatedRequest, res: Response) => {
+        const usuario = await this.usuarioService.obtenerUsuarioPorId(_req.user);
+        if (!usuario) return res.status(401).send();
+        res.status(200).json(usuario)
     }
 
     public cambiar = async (_req: Request, res: Response) => {

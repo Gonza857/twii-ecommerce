@@ -41,6 +41,14 @@ class UsuarioRepository implements IUsuarioRepository {
             }
         })
     }
+
+    async obtenerTodos(): Promise<IUsuario[]> {
+        return this.prisma.usuario.findMany({
+            include: {
+                rol: true
+            }
+        });
+    }
 }
 
 export default UsuarioRepository;

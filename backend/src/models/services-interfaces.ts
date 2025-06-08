@@ -13,6 +13,7 @@ export interface IUsuarioService {
     obtenerUsuarioPorCorreo (email: string): Promise<ILogin | null>
     actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion>
     guardar(usuario: IRegister): Promise<IResultadoAccion>
+    obtenerTodos(): Promise<IUsuario[]>
 }
 
 export interface IMailerService {
