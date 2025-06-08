@@ -23,7 +23,7 @@ export const routes: Routes = [
         .then(c => c.RecuperarContrasenaComponent)
   },
   {
-    path: 'cambiar-contrasena/:id',
+    path: 'cambiar-contrasena/:token',
     loadComponent: () =>
       import("./pages/cambiar-contrasena/cambiar-contrasena.component")
         .then(c => c.CambiarContrasenaComponent)

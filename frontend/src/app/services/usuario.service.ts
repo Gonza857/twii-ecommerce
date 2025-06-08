@@ -21,7 +21,10 @@ export class UsuarioService {
   }
 
   public iniciarSesion(datos: any): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos);
+    const credenciales = {
+      withCredentials: true
+    }
+    return this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos, credenciales);
   }
 
   public registrarse (datos: any): Observable<boolean> {
@@ -33,6 +36,7 @@ export class UsuarioService {
   }
 
   public cambiarContrasena (datos: any): Observable<algo> {
+    console.log("le pego a", `${this.apiAuthUrl}/cambiar`)
     return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
   }
 

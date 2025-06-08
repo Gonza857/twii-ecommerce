@@ -35,7 +35,7 @@ export class CambiarContrasenaComponent implements OnInit {
   private readonly toast: MessageService = inject(MessageService)
   private fb: FormBuilder = inject(FormBuilder);
   protected form!: FormGroup;
-  private usuarioId!: string | null;
+  protected token!: string | null;
   protected enviando: boolean = false;
   protected mensajeError!: string;
   protected exito: boolean = false;
@@ -44,15 +44,16 @@ export class CambiarContrasenaComponent implements OnInit {
     const esFormularioValido = this.validarFormulario()
 
     const c = this.form.get("contrasena")?.value
-    const cc = this.form.get("cContrasena")?.value
     const data = {
-      c, cc, id: this.usuarioId
+      contrasena: c, token: this.token
     }
 
     if (esFormularioValido) {
       this.enviando = true;
       this.servicioUsuario.cambiarContrasena(data).subscribe({
         next: (data: any) => {
+          console.log("next", data )
+          this.exito = data.exito;
           if (data.exito) {
             this.exito = true;
             this.toast.add({
@@ -66,16 +67,18 @@ export class CambiarContrasenaComponent implements OnInit {
           }
         },
         error: (error: any) => {
-
+          console.log(error)
         },
         complete: () => {
+          console.log("completado")
           this.enviando = false;
         }
       })
     } else {
       this.form.markAllAsTouched()
-      this.enviando = false;
     }
+
+    this.enviando = false;
 
   }
 
@@ -90,7 +93,7 @@ export class CambiarContrasenaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuarioId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.token = this.activatedRoute.snapshot.paramMap.get('token');
     this.form = this.fb.group({
       contrasena: ['xdxdxd1', [Validators.required, Validators.minLength(6)]],
       cContrasena: ['xdxdxd1', [Validators.required, Validators.minLength(6)]],

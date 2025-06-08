@@ -4,12 +4,9 @@ import {
     CorreoExistenteException,
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
-import bcrypt from "bcrypt";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
 import {IResultadoAccion} from "../models/main-models";
 import {IUsuarioService} from "../models/services-interfaces"
-
-
 
 class UsuarioService implements IUsuarioService {
     private usuarioRepository!: IUsuarioRepository;
@@ -32,8 +29,17 @@ class UsuarioService implements IUsuarioService {
 
     public async obtenerUsuarioPorCorreo (email: string): Promise<ILogin | null> {
         if (email.length < 1) throw new DatosIncorrectoException("E-mail incorrecto.");
-        return await this.usuarioRepository.obtenerPorEmail(email)
+        return await this.usuarioRepository.obtenerPorEmail(email);
 
+    }
+
+    async actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion> {
+        console.log(`cambiando pass al id: ${id} nueva pass ${contrasena}`);
+        await this.usuarioRepository.actualizarContrasena(Number(id), contrasena);
+        return {
+            exito: true,
+            mensaje: "Contraseña actualizada correctamente.",
+        }
     }
 
 }

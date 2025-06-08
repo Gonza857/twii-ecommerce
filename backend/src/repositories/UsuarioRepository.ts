@@ -32,6 +32,15 @@ class UsuarioRepository implements IUsuarioRepository {
     async crear(usuario: any): Promise<void> {
         await this.prisma.usuario.create({data: usuario})
     }
+
+    async actualizarContrasena(id: number, contrasena: string) {
+        await this.prisma.usuario.update({
+            where: { id },
+            data: {
+                contrasena: contrasena
+            }
+        })
+    }
 }
 
 export default UsuarioRepository;

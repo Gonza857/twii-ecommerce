@@ -1,11 +1,12 @@
 import {Request, Response} from "express";
 import {IUsuario} from "../models/usuario-model";
 import UsuarioService from "../services/UsuarioService";
+import {IUsuarioService} from "../models/services-interfaces";
 
 class UsuarioController {
-    private usuarioService!: UsuarioService;
+    private usuarioService!: IUsuarioService;
 
-    constructor(usuarioService: UsuarioService) {
+    constructor(usuarioService: IUsuarioService) {
         this.usuarioService = usuarioService;
     }
 

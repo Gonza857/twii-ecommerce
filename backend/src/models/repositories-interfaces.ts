@@ -4,4 +4,5 @@ export interface IUsuarioRepository {
     obtenerPorEmail(email: string): Promise<ILogin | null>;
     obtenerPorId(id: number): Promise<IUsuario | null>;
     crear (usuario: IRegister): Promise<void>;
+    actualizarContrasena(id: number, contrasena: string): Promise<void>;
 }

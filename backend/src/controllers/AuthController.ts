@@ -1,17 +1,20 @@
 import UsuarioService from "../services/UsuarioService";
 import AuthService from "../services/AuthService";
 import {Request, Response} from "express";
-import {ILogin, IRecover, IRegister,} from "../models/usuario-model";
-import {loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
+import {IChangePassword, ILogin, IRecover, IRegister,} from "../models/usuario-model";
+import {changePasswordSchema, loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
 import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
 import {validate} from "../utils/zod-validator";
-import {IAuthService} from "../models/services-interfaces";
+import {IAuthService, IUsuarioService} from "../models/services-interfaces";
+import {generarToken, verificarToken} from "../utils/jwt";
+import {generateCookie} from "../utils/cookies";
+import {JwtPayload} from "jsonwebtoken";
 
 class AuthController {
-    private usuarioService!: UsuarioService;
+    private usuarioService!: IUsuarioService;
     private authService!: IAuthService;
 
-    constructor(usuarioService: UsuarioService, authService: IAuthService) {
+    constructor(usuarioService: IUsuarioService, authService: IAuthService) {
         this.usuarioService = usuarioService;
         this.authService = authService;
     }
@@ -25,6 +28,8 @@ class AuthController {
             return;
         }
 
+        // const tokenExistente = verificarToken(_req.cookies["access-token"]);
+
         const usuarioDB = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
         if (!usuarioDB) {
@@ -34,6 +39,8 @@ class AuthController {
 
         try {
             const resultado = await this.authService.iniciarSesion(datos);
+            const token = generarToken({id: resultado.data})
+            res.cookie("access-token", token, generateCookie())
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)
@@ -47,23 +54,19 @@ class AuthController {
     }
 
     public recuperarContrasena = async (_req: Request, res: Response) => {
-        console.log("Recuperando contraseña...")
-        console.log("Body", _req.body);
         let datos: IRecover;
         try {
             datos = validate(recoverSchema, _req.body);
         } catch (e) {
-            console.log(e)
             res.status(400).send();
             return;
         }
 
         const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
-        console.log(usuarioBuscado)
 
         try {
-            await this.authService.recuperarContrasena(datos.email);
-            res.status(200).json(usuarioBuscado?.id)
+            const resultado = await this.authService.recuperarContrasena(usuarioBuscado);
+            res.status(200).json(resultado)
         } catch (e) {
             console.log(e);
             if (e instanceof CorreoExistenteException) {
@@ -74,16 +77,36 @@ class AuthController {
         }
     }
 
-    public cambiar = async (_req: Request, res: Response): Promise<void> => {
-        console.log("body", _req.body);
-        res.status(200).json({
-            exito: true,
-            mensaje: "Contraseña cambiada correctamente",
-        });
+    public cambiar = async (_req: Request, res: Response) => {
+        let datos: IChangePassword
+        try {
+            datos = validate(changePasswordSchema, _req.body);
+        } catch (e) {
+            res.status(400).send();
+            return;
+        }
+
+        let valorToken!: any;
+        try {
+            valorToken = verificarToken(datos.token);
+        } catch (e) {
+            res.status(400).send();
+            return;
+        }
+
+        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(valorToken.id)
+
+        try {
+            let resultadoCambio = await this.authService.cambiarContrasena(usuarioBuscado, datos.contrasena);
+            resultadoCambio = await this.usuarioService.actualizarContrasena(valorToken.id, resultadoCambio.data)
+            res.status(200).json(resultadoCambio);
+        } catch (e) {
+            res.status(400).send();
+            return;
+        }
     }
 
     public registrarse = async (_req: Request, res: Response) => {
-        console.log("Registrando")
         let datos: IRegister;
         try {
             datos = validate(registerSchema, _req.body);

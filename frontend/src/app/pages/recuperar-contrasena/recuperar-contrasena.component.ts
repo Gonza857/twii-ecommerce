@@ -24,16 +24,16 @@ export class RecuperarContrasenaComponent implements OnInit {
   private readonly servicioUsuario: UsuarioService = inject(UsuarioService)
   private readonly router: Router = inject(Router)
   protected enviando: boolean = false;
+  protected exito: boolean = false;
 
   protected enviar = () => {
     this.enviando = true;
     const email: string = this.form.get("email")?.value;
     if (this.form.valid) {
-      console.log("form valido")
       this.servicioUsuario.recuperar(email).subscribe({
-        next: (result) => {
-          console.log("resultado de back", result)
-          this.router.navigate([`/cambiar-contrasena`, result])
+        next: (result: any) => {
+          this.exito = result.exito
+          // this.router.navigate([`/cambiar-contrasena`, result])
         },
         error: error => {
           console.log(error)

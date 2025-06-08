@@ -23,6 +23,12 @@
         }
       </div>
 
+      @if(exito) {
+        <div class="alert alert-success text-center" role="alert">
+          Se ha enviado un correo de recuperación. Revisa tu bandeja de entrada.
+        </div>
+      }
+
       <div class="d-grid gap-2 mt-3">
         @if (this.enviando) {
           <button type="button" class="btn btn-primary" disabled>
