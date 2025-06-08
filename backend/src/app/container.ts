@@ -19,7 +19,7 @@ const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma);
 // Servicios -> logica de negocio
 const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository)
 const productoService: ProductoService = new ProductoService() // pasar tipo a interface
-const authService: IAuthService = new AuthService(usuarioRepository, mailerService);
+const authService: IAuthService = new AuthService(mailerService);
 
 // Controladores -> Recbien petición y la pasan al servicio
 

@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg bg-info-subtle" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Admin E-Commerce</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" [routerLink]="'/'">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/cuenta/login'">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/'">Cliente</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Usuarios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Pedidos</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet>
+  <main class="styledMain">
+    <div class="container mt-4">
+      <h2>Lista de Usuarios</h2>
+      <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Email</th>
+          <th scope="col">Direccion</th>
+          <!--      <th scope="col">Acciones</th>-->
+        </tr>
+        </thead>
+        <tbody>
+          @for (usuario of this.usuarios; track usuario.id) {
+            <tr>
+              <th scope="row">{{ usuario.id }}</th>
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.apellido }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.direccion }}</td>
+              <!--        <td>-->
+              <!--          <button class="btn btn-sm btn-info me-2">Ver</button>-->
+              <!--          <button class="btn btn-sm btn-warning me-2">Editar</button>-->
+              <!--          <button class="btn btn-sm btn-danger">Eliminar</button>-->
+              <!--        </td>-->
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </main>
+</router-outlet>
+<footer>Template admin footer</footer>

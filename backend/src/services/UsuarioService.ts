@@ -1,7 +1,5 @@
-import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
-import {PrismaClient} from "@prisma/client";
+import {ILogin, IRegister, IUsuario} from "../models/usuario-model";
 import {
-    CorreoExistenteException,
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
@@ -41,12 +39,15 @@ class UsuarioService implements IUsuarioService {
     }
 
     async actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion> {
-        console.log(`cambiando pass al id: ${id} nueva pass ${contrasena}`);
         await this.usuarioRepository.actualizarContrasena(Number(id), contrasena);
         return {
             exito: true,
             mensaje: "Contraseña actualizada correctamente.",
         }
+    }
+
+    async obtenerTodos(): Promise<IUsuario[]> {
+        return await this.usuarioRepository.obtenerTodos()
     }
 
 }

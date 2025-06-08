@@ -5,4 +5,5 @@ export interface IUsuarioRepository {
     obtenerPorId(id: number): Promise<IUsuario | null>;
     crear (usuario: IRegister): Promise<void>;
     actualizarContrasena(id: number, contrasena: string): Promise<void>;
+    obtenerTodos(): Promise<IUsuario[]>
 }

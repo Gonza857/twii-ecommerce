@@ -19,13 +19,13 @@ export class Server {
     }
 
     async start() {
+        this.app.use(cookieParser())
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(cors({
             origin: 'http://localhost:4200',
             credentials: true
         }))
-        this.app.use(cookieParser())
         this.app.use(this.routes)
 
         const callback = () => console.log(`Escuchando en el puerto ${this.puerto}`)

@@ -5,6 +5,92 @@ Proyecto demo e-commerce Full-Stack
 - Prisma
 - PostgreSQL
 
+
+---
+
+## ✅ Endpoints de autenticación
+
+### POST /auth/login
+
+**Descripción:** Inicia sesión con email y contraseña.
+
+**Autenticación:** ❌ No requerida
+
+**Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "password": "123456"
+}
+```
+
+---
+
+### POST /auth/login
+
+**Descripción:** Inicia sesión con email y contraseña.
+
+**Autenticación:** ❌ No requerida
+
+**Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "contrasena": "123456"
+}
+```
+
+--- 
+
+### POST /auth/register
+
+**Descripción:** Registrarse.
+
+**Autenticación:** ❌ No requerida
+
+**Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "password": "123456",
+  "nombre": "Gonzalo",
+  "apellido": "Ramos",
+  "direccion": "Casa 123",
+}
+```
+
+--- 
+
+### POST /auth/recuperar
+
+**Descripción:** Enviar correo electrónico para recuperar cuenta.
+
+**Autenticación:** ❌ No requerida
+
+**Body:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+}
+```
+
+--- 
+
+### POST /auth/cambiar
+
+**Descripción:** Cambiar contraseña.
+
+**Autenticación:** ❌ No requerida
+
+**Body:**
+```json
+{
+  "token": "string jwt",
+  "password": "nueva contrasena"
+}
+```
+
+
 ## Iniciar servidor para Backend
 
 Para iniciar servidor local:
@@ -15,56 +101,8 @@ npm run dev
 
 Una vez el servidor este corriendo, se escucharán las peticiones a `http://localhost:3000/`
 
-## Partes del proyecto
 
-### Config
-
-Configuración de variables de entorno.
-
-### Controllers
-
-Controladores
-
-### Models
-
-Logíca del negocio
-
-### Routes
-
-Rutas de la aplicación
-- `app.routes.ts` es el principal
-- `producto.route.ts` 
-- `usuario.route.ts` 
-- TODO: terminar
-
-### Server
-
-Archivo de configuración del servidor Express
-- Middlewares 
-  - `espress.json()` | Parsear cuerpo de solicitudes a JSON
-  - express.urlencoded({ extended: true }) | Parsear cuerpo de solicitudes HTTP
-  - cors() | Permitir peticiones se dominios cruzados
-  - this.routes() | Enrutado actual de la aplicación
-
-### Types
-
-Tipos e interfaces del backend
-
-### Index.ts
-
-Punto de entrada
-
-### Prisma.ts
-
-Configuración de Prisma (ORM)
-
-## Generalidades
-
-El backend usa el entorno de ejecución de Node JS. Usa como framework Express para el servidor.
-
-Con nodemon hacemos que el server se reinicie cuando hacemos cambios.
-
-Por su configuración transpila automaticamente el TS.
+## Transpilar .TS a .JS
 
 En la carpeta /dist se encuentra todo el código transpilado a JS.
 Ejecutar el siguiente comando para pasar todo a JS. 
@@ -72,7 +110,7 @@ Ejecutar el siguiente comando para pasar todo a JS.
 npx tsc
 ```
 
-## Prima
+## Prisma
 
 Hacer pull de la BD
 ```bash

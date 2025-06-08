@@ -12,7 +12,7 @@ interface algo {
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl: string = "http://localhost:3000/api/usuario";
+  private apiUrl: string = "http://localhost:3000/api";
   private apiAuthUrl: string = "http://localhost:3000/api/auth";
   private readonly http: HttpClient = inject(HttpClient);
 
@@ -36,9 +36,23 @@ export class UsuarioService {
   }
 
   public cambiarContrasena (datos: any): Observable<algo> {
-    console.log("le pego a", `${this.apiAuthUrl}/cambiar`)
     return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
   }
+
+  public obtenerUsuarioActual (): Observable<algo> {
+    const credenciales = {
+      withCredentials: true
+    }
+    return this.http.get<algo>(`${this.apiAuthUrl}/validar`, credenciales);
+  }
+
+  public obtenerUsuarios (): Observable<algo> {
+    const credenciales = {
+      withCredentials: true
+    }
+    return this.http.get<algo>(`${this.apiUrl}/usuarios`, credenciales);
+  }
+
 
 
 
