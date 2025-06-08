@@ -1,5 +1,3 @@
-import UsuarioService from "../services/UsuarioService";
-import AuthService from "../services/AuthService";
 import {Request, Response} from "express";
 import {IChangePassword, ILogin, IRecover, IRegister,} from "../models/usuario-model";
 import {changePasswordSchema, loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
@@ -8,7 +6,7 @@ import {validate} from "../utils/zod-validator";
 import {IAuthService, IUsuarioService} from "../models/services-interfaces";
 import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
-import {JwtPayload} from "jsonwebtoken";
+
 
 class AuthController {
     private usuarioService!: IUsuarioService;
@@ -19,26 +17,26 @@ class AuthController {
         this.authService = authService;
     }
 
+    private enviarErrorGenerico = (mensaje?: string | null) => {
+        return {
+            mensaje: mensaje ?? "¡Ocurrió un error!",
+            exito: false,
+        }
+    }
+
     public iniciarSesion = async (_req: Request, res: Response) => {
         let datos: ILogin;
         try {
             datos = validate(loginSchema, _req.body);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).json(this.enviarErrorGenerico());
             return;
         }
-
-        // const tokenExistente = verificarToken(_req.cookies["access-token"]);
 
         const usuarioDB = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
-        if (!usuarioDB) {
-            res.status(401).send({mensaje: "Datos incorrectos."})
-            return;
-        }
-
         try {
-            const resultado = await this.authService.iniciarSesion(datos);
+            const resultado = await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
             const token = generarToken({id: resultado.data})
             res.cookie("access-token", token, generateCookie())
             res.status(200).json(resultado)
@@ -68,7 +66,6 @@ class AuthController {
             const resultado = await this.authService.recuperarContrasena(usuarioBuscado);
             res.status(200).json(resultado)
         } catch (e) {
-            console.log(e);
             if (e instanceof CorreoExistenteException) {
                 res.status(409).json({mensaje: e.message});
             } else {
@@ -82,7 +79,7 @@ class AuthController {
         try {
             datos = validate(changePasswordSchema, _req.body);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).json(this.enviarErrorGenerico());
             return;
         }
 
@@ -90,7 +87,7 @@ class AuthController {
         try {
             valorToken = verificarToken(datos.token);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).json(this.enviarErrorGenerico());
             return;
         }
 
@@ -101,7 +98,7 @@ class AuthController {
             resultadoCambio = await this.usuarioService.actualizarContrasena(valorToken.id, resultadoCambio.data)
             res.status(200).json(resultadoCambio);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).json(this.enviarErrorGenerico());
             return;
         }
     }
@@ -111,21 +108,22 @@ class AuthController {
         try {
             datos = validate(registerSchema, _req.body);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).json(this.enviarErrorGenerico());
             return;
         }
 
         const usuarioExistente = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
         try {
-            const resultado = await this.authService.registrarse(datos, usuarioExistente);
+            const {data: usuarioValidado} = await this.authService.registrarse(datos, usuarioExistente);
+            const resultado = await this.usuarioService.guardar(usuarioValidado)
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)
             if (e instanceof CorreoExistenteException) {
                 res.status(409).json({mensaje: e.message});
             } else {
-                res.status(500).send({mensaje: "Ocurrió un error al procesar tu solicitud."})
+                res.status(400).json(this.enviarErrorGenerico());
             }
         }
     }

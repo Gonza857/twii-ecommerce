@@ -27,10 +27,17 @@ class UsuarioService implements IUsuarioService {
         return usuario;
     }
 
+    public async guardar(usuario: IRegister): Promise<IResultadoAccion> {
+        await this.usuarioRepository.crear(usuario);
+        return {
+            exito: true,
+            mensaje: "Te registraste correctamente.",
+        }
+    }
+
     public async obtenerUsuarioPorCorreo (email: string): Promise<ILogin | null> {
         if (email.length < 1) throw new DatosIncorrectoException("E-mail incorrecto.");
         return await this.usuarioRepository.obtenerPorEmail(email);
-
     }
 
     async actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion> {
