@@ -1,5 +1,3 @@
-import UsuarioService from "../services/UsuarioService";
-import AuthService from "../services/AuthService";
 import {Request, Response} from "express";
 import {IChangePassword, ILogin, IRecover, IRegister,} from "../models/usuario-model";
 import {changePasswordSchema, loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
