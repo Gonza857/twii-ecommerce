@@ -41,6 +41,7 @@ export class CambiarContrasenaComponent implements OnInit {
   protected exito: boolean = false;
 
   protected enviar = () => {
+    this.mensajeError =  "";
     const esFormularioValido = this.validarFormulario()
 
     const c = this.form.get("contrasena")?.value
@@ -52,7 +53,6 @@ export class CambiarContrasenaComponent implements OnInit {
       this.enviando = true;
       this.servicioUsuario.cambiarContrasena(data).subscribe({
         next: (data: any) => {
-          console.log("next", data )
           this.exito = data.exito;
           if (data.exito) {
             this.exito = true;
@@ -67,10 +67,10 @@ export class CambiarContrasenaComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.log(error)
+          this.enviando = false;
+          this.mensajeError = error.error.mensaje;
         },
         complete: () => {
-          console.log("completado")
           this.enviando = false;
         }
       })

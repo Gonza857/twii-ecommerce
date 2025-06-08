@@ -27,5 +27,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./pages/cambiar-contrasena/cambiar-contrasena.component")
         .then(c => c.CambiarContrasenaComponent)
+  },
+  {
+    path: "admin",
+    loadComponent: () =>
+      import("./pages/admin/admin.component")
+        .then(c => c.AdminComponent)
   }
 ];
