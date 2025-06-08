@@ -4,9 +4,9 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {CardModule} from 'primeng/card';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
-import {UsuarioService} from '../../services/usuario.service';
 import {Router} from '@angular/router';
 import {Message, MessageModule} from 'primeng/message';
+import {UsuarioService} from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-register',

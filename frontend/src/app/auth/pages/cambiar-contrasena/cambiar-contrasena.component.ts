@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UsuarioService} from '../../services/usuario.service';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,6 +8,7 @@ import {CardModule} from 'primeng/card';
 import {FloatLabelModule} from 'primeng/floatlabel';
 import {Message} from 'primeng/message';
 import {MessageService} from 'primeng/api';
+import {UsuarioService} from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-cambiar-contrasena',

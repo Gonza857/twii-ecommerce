@@ -1,11 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {UsuarioService} from '../../../services/usuario.service';
-import {RouterOutlet} from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    RouterLink
   ],
   templateUrl: './admin-home.component.html',
   standalone: true,

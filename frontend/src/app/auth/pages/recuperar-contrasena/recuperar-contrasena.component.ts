@@ -1,10 +1,10 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UsuarioService} from '../../services/usuario.service';
 import {ButtonModule} from 'primeng/button';
 import {Router} from '@angular/router';
 import {InputText} from 'primeng/inputtext';
 import {NgClass} from '@angular/common';
+import {UsuarioService} from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-recuperar-contrasena',

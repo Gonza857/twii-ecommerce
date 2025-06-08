@@ -3,9 +3,9 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {CardModule} from 'primeng/card';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
-import {UsuarioService} from '../../services/usuario.service';
 import {MessageModule} from 'primeng/message';
 import {Router, RouterLink} from '@angular/router';
+import {UsuarioService} from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-login',
