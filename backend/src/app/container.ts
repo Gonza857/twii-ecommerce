@@ -1,3 +1,4 @@
+import { producto } from './../../node_modules/.prisma/client/index.d';
 import ProductoController from "../controllers/ProductoController";
 import UsuarioController from "../controllers/UsuarioController";
 import UsuarioService from "../services/UsuarioService";
@@ -9,21 +10,23 @@ import {IUsuarioRepository} from "../models/repositories-interfaces";
 import UsuarioRepository from "../repositories/UsuarioRepository";
 import MailerService from "../services/MailerService";
 import {IAuthService, IMailerService, IUsuarioService} from "../models/services-interfaces";
+import { ProductoRepository } from "../repositories/ProductoRepository";
 
 // Infra -> independiente de la lógica de negocio
 const mailerService: IMailerService = new MailerService();
 
 // Repositorios -> Lógica para comunicarse con la base de datos
 const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma);
+const productoRepository: ProductoRepository = new ProductoRepository(prisma);
 
 // Servicios -> logica de negocio
 const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository)
-const productoService: ProductoService = new ProductoService() // pasar tipo a interface
+const productoService: ProductoService = new ProductoService(productoRepository) // pasar tipo a interface
 const authService: IAuthService = new AuthService(usuarioRepository, mailerService);
 
 // Controladores -> Recbien petición y la pasan al servicio
 
-const productoController: ProductoController = new ProductoController()
+const productoController: ProductoController = new ProductoController(productoService)
 const usuarioController: UsuarioController = new UsuarioController(usuarioService)
 const authController: AuthController = new AuthController(usuarioService, authService)
 

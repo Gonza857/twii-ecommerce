@@ -1,0 +1,21 @@
+<h2>Productos disponibles</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Clasificación</th>
+      <th>Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let producto of productos">
+      <td>{{ producto.nombre }}</td>
+      <td>{{ producto.descripcion }}</td>
+      <td>{{ producto.clasificacion }}</td>
+      <td>{{ producto.precio | currency:'ARS' }}</td>
+    </tr>
+  </tbody>
+</table>
+

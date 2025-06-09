@@ -1,3 +1,4 @@
+import { Producto } from './producto-model';
 import {ILogin, IRegister, IUsuario} from "./usuario-model";
 
 export interface IUsuarioRepository {
@@ -5,4 +6,8 @@ export interface IUsuarioRepository {
     obtenerPorId(id: number): Promise<IUsuario | null>;
     crear (usuario: IRegister): Promise<void>;
     actualizarContrasena(id: number, contrasena: string): Promise<void>;
+}
+
+export interface IProductoRepository{
+    obtenerTodos(): Promise<Producto[]>
 }

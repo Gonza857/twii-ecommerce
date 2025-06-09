@@ -7,14 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model producto {
-  id            Int     @id @default(autoincrement())
-  nombre        String  @db.VarChar(50)
-  descripcion   String
-  clasificacion String  @db.VarChar(50)
-  precio        Decimal @db.Decimal(10, 2)
-}
-
 model rol {
   id      Int       @id
   nombre  String    @unique @db.VarChar(255)
@@ -30,4 +22,12 @@ model usuario {
   contrasena String  @db.VarChar(255)
   rolid      Int
   rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
+}
+
+model producto {
+  id            Int     @id @default(autoincrement())
+  nombre        String  @db.VarChar(50)
+  descripcion   String
+  clasificacion String  @db.VarChar(50)
+  precio        Decimal @db.Decimal(10, 2)
 }
