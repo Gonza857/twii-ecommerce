@@ -1,4 +1,5 @@
 import {IResultadoAccion} from "./main-models";
+import { Producto } from "./producto-model";
 import {ILogin, IRegister, IUsuario} from "./usuario-model";
 
 export interface IAuthService {
@@ -21,4 +22,14 @@ export interface IUsuarioService {
 
 export interface IMailerService {
     enviarCorreo(to: string, subject: string, html: string): any
+}
+
+export interface IProductoService {
+    obtenerTodos(): Promise<Producto[]>
+    obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]>
+
 }
