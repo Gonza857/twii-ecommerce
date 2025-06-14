@@ -27,6 +27,14 @@ export class UsuarioService {
     return this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos, credenciales);
   }
 
+  public reenviarCorreo(id: number): Observable<algo> {
+    return this.http.get(`${this.apiAuthUrl}/reenviar-confirmacion/${id}`)
+  }
+
+  public confirmarCuenta (token: string): Observable<algo> {
+    return this.http.get(`${this.apiAuthUrl}/confirmar-cuenta/${token}`)
+  }
+
   public registrarse (datos: any): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiAuthUrl}/register`, datos);
   }

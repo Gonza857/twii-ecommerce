@@ -20,8 +20,23 @@ class AuthController {
         this.authService = authService;
     }
 
-    private enviarErrorGenerico = (mensaje?: string | null): string => {
-        return mensaje ?? "¡Ocurrió un error!"
+    private enviarErrorGenerico = (mensaje?: string | null) => {
+        return {
+            error: mensaje ?? "¡Ocurrió un error!"
+        }
+    }
+
+    private enviarErrorConDatos = (mensaje?: string | null, data?: any) => {
+        return {
+            error: this.enviarErrorGenerico(mensaje).error,
+            data: data,
+        }
+    }
+
+    private enviarExito = (mensaje?: string | null) => {
+        return {
+            mensaje: mensaje ?? "Proceso realizado correctamente!",
+        }
     }
 
     public iniciarSesion = async (_req: Request, res: Response) => {
@@ -39,9 +54,9 @@ class AuthController {
             await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
         } catch (e) {
             if (e instanceof DatosIncorrectoException) {
-                res.status(401).send("Email o contraseña incorrectos.");
+                res.status(401).json(this.enviarErrorGenerico("Email o contraseña incorrectos."));
             } else {
-                res.status(401).send(this.enviarErrorGenerico())
+                res.status(401).json(this.enviarErrorGenerico())
             }
             return;
         }
@@ -49,13 +64,15 @@ class AuthController {
         try {
             await this.usuarioService.verificarCuentaValidada(usuarioDB?.id);
         } catch (e) {
-            res.status(403).send("Cuenta no verificada. Revisa tu correo electrónico.")
+            res.status(403).json(
+                this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuarioDB?.id)
+            )
             return;
         }
 
         const token = generarToken({id: usuarioDB?.id})
         res.cookie("access-token", token, generateCookie());
-        res.status(200).send()
+        res.status(200).json("Iniciaste sesión correctamente. Redirigiendo...")
     }
 
     public recuperarContrasena = async (_req: Request, res: Response) => {
@@ -115,20 +132,46 @@ class AuthController {
         }
     }
 
-    public confirmarCuenta = async (_req: Request, res: Response) => {
-        const {token} = _req.params
-        if (!token) {
-             res.status(401).send(this.enviarErrorGenerico());
+    public reenviarConfirmacion = async (_req: Request, res: Response) => {
+        const {id} = _req.params
+
+        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(id)
+
+        if (!usuarioBuscado) {
+            res.status(403).json(this.enviarErrorGenerico());
             return;
         }
 
-        const data: any = verificarToken(token);
+        const token = generarToken({id: usuarioBuscado.id})
 
         try {
-            await this.usuarioService.cambiarEstadoCuenta(data.email)
-            res.status(200).send("Cuenta confirmada correctamente")
+            const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
+            res.status(200).json(this.enviarExito(mensaje));
         } catch (e) {
-            res.status(400).send(this.enviarErrorGenerico())
+            res.status(400).json(this.enviarErrorGenerico());
+        }
+    }
+
+    public confirmarCuenta = async (_req: Request, res: Response) => {
+        const {token} = _req.params
+        if (!token) {
+             res.status(400).send(this.enviarErrorGenerico());
+            return;
+        }
+
+        let data: any;
+        try {
+            data = verificarToken(token);
+        } catch (e) {
+            res.status(401).json(this.enviarErrorGenerico());
+            return;
+        }
+
+        try {
+            const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
+            res.status(200).json(this.enviarExito(mensaje))
+        } catch (e) {
+            res.status(500).json(this.enviarErrorGenerico())
         }
     }
 

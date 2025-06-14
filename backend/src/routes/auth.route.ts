@@ -145,7 +145,65 @@ authRouter.post("/cambiar", authController.cambiar);
 
 authRouter.post("/confirmar", authController.confirmarCuenta);
 
-authRouter.get("/validar-confirmacion", authController.confirmarCuenta);
+/**
+ * @openapi
+ * /api/auth/confirmar/{token}:
+ *   get:
+ *     summary: Confirma la cuenta del usuario usando un token
+ *     tags:
+ *       - Auth
+ *     parameters:
+ *       - name: token
+ *         in: path
+ *         required: true
+ *         description: Token de confirmación enviado por correo
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Cuenta confirmada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Cuenta confirmada exitosamente
+ *       400:
+ *         description: Token faltante o inválido en la URL
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Token requerido
+ *       401:
+ *         description: Token inválido o expirado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Token inválido o expirado
+ *       500:
+ *         description: No se pudo cambiar el estado de la cuenta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: No se pudo confirmar la cuenta. Intente más tarde
+ */
+authRouter.get("/confirmar-cuenta/:token", authController.confirmarCuenta);
+
+authRouter.get("/reenviar-confirmacion/:id", authController.reenviarConfirmacion);
 
 /**
  * @openapi

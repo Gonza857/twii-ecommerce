@@ -47,10 +47,11 @@ class UsuarioService implements IUsuarioService {
         }
     }
 
-    async cambiarEstadoCuenta (email: string) {
-        const usuario = await this.usuarioRepository.obtenerPorEmail(email);
+    async cambiarEstadoCuenta (id: string) {
+        const usuario = await this.usuarioRepository.obtenerPorId(Number(id));
         if (!usuario) throw new DatosIncorrectoException("Ocurrió un error");
         await this.usuarioRepository.actualizarEstado(true, usuario?.id)
+        return "Cuenta confirmada correctamente";
     }
 
     async obtenerTodos(): Promise<IUsuario[]> {

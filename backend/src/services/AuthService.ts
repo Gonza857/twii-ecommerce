@@ -17,7 +17,7 @@ class AuthService implements IAuthService {
             throw new DatosIncorrectoException("Datos incorrectos.")
 
         if (!await this.verificarContrasena(inputContrasena, usuario.contrasena))
-            throw new DatosIncorrectoException("Datos incorrectos.")
+            throw new DatosIncorrectoException("Datos incorrectos.");
 
         return {
             exito: true,
@@ -41,6 +41,7 @@ class AuthService implements IAuthService {
     public async enviarCorreoConfirmacion(correo: string, token: string) {
         if (correo.length === 0 || token.length === 0) throw new DatosIncorrectoException("Error al enviar correo electrónico de confirmación")
         await this.mailerService.enviarCorreo(correo, "Confirmación de cuenta", getConfirmAccountHTML(token))
+        return "Correo enviado correctamente."
     }
 
 
@@ -216,7 +217,7 @@ const getConfirmAccountHTML = (token: string) => {
         <img src="https://via.placeholder.com/100" alt="Logo" class="logo">
         <h1>¡Bienvenido!</h1>
         <p>Gracias por registrarte. Por favor confirma tu cuenta haciendo clic en el botón de abajo:</p>
-        <a href="http://localhost:4200/cuenta/confirmar/${token}" class="button">Confirmar cuenta</a>
+        <a href="http://localhost:4200/cuenta/realizar-confirmacion/${token}" class="button">Confirmar cuenta</a>
         <p class="footer">Si no creaste esta cuenta, puedes ignorar este mensaje.</p>
     </div>
 </body>
