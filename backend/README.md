@@ -5,7 +5,6 @@ Proyecto demo e-commerce Full-Stack
 - Prisma
 - PostgreSQL
 - 
----
 
 ## Iniciar servidor para Backend
 
