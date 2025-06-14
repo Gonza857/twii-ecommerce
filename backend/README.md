@@ -4,7 +4,6 @@ Proyecto demo e-commerce Full-Stack
 - Node JS con Express
 - Prisma
 - PostgreSQL
-- 
 
 ## Iniciar servidor para Backend
 
