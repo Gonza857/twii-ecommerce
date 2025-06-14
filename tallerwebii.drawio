@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2025-06-14T12:17:56.885Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.6.1 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="miTBEBavKBahcjhQ3uxQ" version="24.6.1" type="device">
+<mxfile host="Electron" modified="2025-06-14T19:20:42.492Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.6.1 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="HYFB1Ocw5N9pbTBLPrla" version="24.6.1" type="device">
   <diagram name="Página-1" id="ThdajDoEAy1brUTI8LhU">
-    <mxGraphModel dx="3716" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3881" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -266,7 +266,12 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-14" target="zSVXyzECH_tFBk147lPa-26">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1570" y="565" />
+              <mxPoint x="-1570" y="395" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-14" value="Confirmó?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="-1740.14" y="515" width="100" height="100" as="geometry" />
@@ -304,17 +309,17 @@
         <mxCell id="zSVXyzECH_tFBk147lPa-31" value="NO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="-1230.14" y="615" width="40" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="zSVXyzECH_tFBk147lPa-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-32" target="zSVXyzECH_tFBk147lPa-42">
+        <mxCell id="zSVXyzECH_tFBk147lPa-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-32" target="zSVXyzECH_tFBk147lPa-42">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="zSVXyzECH_tFBk147lPa-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-32" target="zSVXyzECH_tFBk147lPa-46">
+        <mxCell id="zSVXyzECH_tFBk147lPa-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-32" target="zSVXyzECH_tFBk147lPa-46">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-32" value="Cuenta&lt;div&gt;confirmada?&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="-1280.14" y="685" width="100" height="100" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-34" value="NO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-1320.14" y="705" width="40" height="30" as="geometry" />
+          <mxGeometry x="-1230.14" y="785" width="40" height="30" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-28" target="zSVXyzECH_tFBk147lPa-32">
           <mxGeometry relative="1" as="geometry" />
@@ -322,19 +327,11 @@
         <mxCell id="zSVXyzECH_tFBk147lPa-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-5" target="zSVXyzECH_tFBk147lPa-8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="zSVXyzECH_tFBk147lPa-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-42">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-1230.14" y="645" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="-1410.14" y="645" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-42" value="/confirmar-cuenta" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-1470.14" y="705" width="120" height="60" as="geometry" />
+          <mxGeometry x="-1290.1399999999999" y="900" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-46" value="/" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-1290.14" y="855" width="120" height="60" as="geometry" />
+          <mxGeometry x="-1070.14" y="705" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-48" target="zSVXyzECH_tFBk147lPa-26">
           <mxGeometry relative="1" as="geometry">
@@ -372,7 +369,102 @@
           <mxGeometry x="-1010.14" y="485" width="40" height="30" as="geometry" />
         </mxCell>
         <mxCell id="zSVXyzECH_tFBk147lPa-61" value="SI" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-1230.14" y="785" width="30" height="30" as="geometry" />
+          <mxGeometry x="-1180.14" y="695" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-76" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-62" target="zSVXyzECH_tFBk147lPa-70">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-62" target="zSVXyzECH_tFBk147lPa-42">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1430" y="1020" />
+              <mxPoint x="-1230" y="1020" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-62" value="Confirmó&lt;div&gt;correo?&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1480" y="880" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-68" value="NO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-1430.1399999999999" y="980" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-69" value="SI" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-1430.1399999999999" y="490" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-70" value="/cuenta-confirmada" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1490" y="705" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-74" target="zSVXyzECH_tFBk147lPa-26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1430" y="395" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-74" value="Quiere&lt;div&gt;/login?&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1480" y="515" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-70" target="zSVXyzECH_tFBk147lPa-74">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-77" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-42" target="zSVXyzECH_tFBk147lPa-62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-78" value="SI" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-1430.14" y="850" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-81" value="FIN" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-840.1400000000001" y="685" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-46" target="zSVXyzECH_tFBk147lPa-81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-83" value="FIN" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-1740.14" y="685" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-84" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="zSVXyzECH_tFBk147lPa-74" target="zSVXyzECH_tFBk147lPa-83">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1530" y="565" />
+              <mxPoint x="-1530" y="735" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-85" value="NO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-1509.9999999999998" y="530" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-86" value="/register" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230.0000000000005" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-87" value="/login" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230.0000000000005" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-88" value="/confirmar-cuenta" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-89" value="/" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-90" value="/recuperar" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-91" value="/cuenta-confirmada" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2230" y="520" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-93" value="registrarse" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2090" y="218" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-94" value="pide correo para recuperar" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2090" y="285" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-95" value="loguearse" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2090" y="455" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-96" value="mensaje de cuenta confirmada OK" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2090" y="535" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zSVXyzECH_tFBk147lPa-97" value="mostrar que su cuenta debe ser confirmada" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2090" y="610" width="260" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
