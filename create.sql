@@ -9,20 +9,11 @@ CREATE TABLE usuario (
 	CONSTRAINT fk_rol_usuario FOREIGN KEY (rolId) REFERENCES Rol(id)
 );
 
+ALTER TABLE usuario
+ADD COLUMN validado BOOLEAN DEFAULT false;
+
 CREATE TABLE rol (
 	id INT NOT NULL PRIMARY KEY,
 	nombre VARCHAR(255) UNIQUE NOT NULL
 );
 
-CREATE TABLE usuario (
-	id INT NOT NULL PRIMARY KEY,
-	direccion VARCHAR(255),
-	apellido VARCHAR(100) NOT NULL,
-	nombre VARCHAR(100) NOT NULL,
-	email VARCHAR(100) UNIQUE NOT NULL,
-	contrasena VARCHAR(255) NOT NULL,
-	rolId INT NOT NULL,
-	CONSTRAINT fk_rol_usuario FOREIGN KEY (rolId) REFERENCES Rol(id)
-);
-
-SELECT * from producto;
