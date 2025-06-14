@@ -10,4 +10,9 @@ export interface IUsuarioRepository {
 
 export interface IProductoRepository{
     obtenerTodos(): Promise<Producto[]>
+    obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]>
 }

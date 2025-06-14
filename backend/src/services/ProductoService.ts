@@ -10,11 +10,19 @@ export class ProductoService implements IProductoService{
   
           this.productoRepository = productoRepository;
       }
+  
       
   async obtenerTodos(): Promise<Producto[]> {
     return await this.productoRepository.obtenerTodos();
   }
-  
+
+  async obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]> {
+    return await this.productoRepository.obtenerProductosFiltrados(filtros);
+  }
 }
 
 export default ProductoService;

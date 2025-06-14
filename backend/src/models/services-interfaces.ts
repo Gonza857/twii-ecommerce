@@ -22,4 +22,10 @@ export interface IMailerService {
 
 export interface IProductoService {
     obtenerTodos(): Promise<Producto[]>
+    obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]>
+
 }
