@@ -135,11 +135,13 @@ authRouter.post("/recuperar", authController.recuperarContrasena)
  *                  type: string
  *     responses:
  *       201:
- *         description: "Contraseña actualizada correctamente."
+ *         description: Contraseña actualizada correctamente.
  *       400:
  *         description: ¡Ocurrió un error!
  *       409:
  *          description: Correo inexistente
+ *       500:
+ *          description: No se pudo actualizar la contraseña
  */
 authRouter.post("/cambiar", authController.cambiar);
 
