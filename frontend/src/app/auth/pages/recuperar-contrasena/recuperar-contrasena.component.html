@@ -1,0 +1,50 @@
+<main class="styledMain d-flex justify-content-center align-items-center vh-100 bg-dark">
+    <p-card
+      header="Recuperar contraseña"
+      subheader="Introduce tu correo para enviarte un correo de recuperación"
+      class="col-11 col-sm-8 col-md-5 col-lg-4 col-xl-3"
+    >
+      <form [formGroup]="form" class="d-flex flex-column gap-3">
+        <div class="form-group">
+          <label for="email" class="form-label mb-2">Correo electrónico</label>
+          <input
+            id="email"
+            type="email"
+            pInputText
+            formControlName="email"
+            placeholder="usuario@correo.com"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': form.get('email')?.invalid && form.get('email')?.touched }"
+          />
+          @if (form.get("email")?.hasError("required") && form.get("email")?.touched) {
+            <div class="invalid-feedback">Este campo es requerido</div>
+          }
+          @if (form.get("email")?.hasError("email") && form.get("email")?.touched) {
+            <div class="invalid-feedback">Ingresa un formato de correo válido</div>
+          }
+        </div>
+
+        @if (mensaje.length > 0) {
+          <div class="field">
+            <p-message severity="success" class="col-12">
+              {{ mensaje }}
+            </p-message>
+          </div>
+        }
+
+
+        <p-button
+          type="submit"
+          [label]="!enviando ? 'Enviar correo' : 'Enviado'"
+          fluid
+          [disabled]="enviando || form.invalid"
+          [raised]="true"
+          severity="info"
+          [loading]="enviando"
+          loadingIcon="pi pi-spinner pi-spin"
+          (onClick)="enviar()"
+        />
+
+      </form>
+    </p-card>
+</main>

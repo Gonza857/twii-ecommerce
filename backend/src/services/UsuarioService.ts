@@ -1,7 +1,6 @@
-import {ILogin, IRegister, IUsuario, IUsuarioLogin} from "../models/usuario-model";
-import {PrismaClient} from "@prisma/client";
+import {ILogin, IRegister, IUsuario} from "../models/usuario-model";
 import {
-    CorreoExistenteException,
+    CuentaYaVerificadaException,
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
@@ -9,6 +8,7 @@ import {IResultadoAccion} from "../models/main-models";
 import {IUsuarioService} from "../models/services-interfaces"
 
 class UsuarioService implements IUsuarioService {
+
     private usuarioRepository!: IUsuarioRepository;
 
     constructor(usuarioRepository: IUsuarioRepository) {
@@ -41,12 +41,31 @@ class UsuarioService implements IUsuarioService {
     }
 
     async actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion> {
-        console.log(`cambiando pass al id: ${id} nueva pass ${contrasena}`);
         await this.usuarioRepository.actualizarContrasena(Number(id), contrasena);
         return {
             exito: true,
             mensaje: "Contraseña actualizada correctamente.",
         }
+    }
+
+    async cambiarEstadoCuenta (id: string) {
+        const usuario = await this.usuarioRepository.obtenerPorId(Number(id));
+        if (usuario?.validado) {
+            throw new CuentaYaVerificadaException("El usuario ya está validado")
+        }
+        if (!usuario) throw new DatosIncorrectoException("Ocurrió un error");
+        await this.usuarioRepository.actualizarEstado(true, usuario?.id)
+        return "Cuenta confirmada correctamente";
+    }
+
+    async obtenerTodos(): Promise<IUsuario[]> {
+        return await this.usuarioRepository.obtenerTodos()
+    }
+
+    async verificarCuentaValidada(id: number | undefined): Promise<void> {
+        if (!id) throw new Error("error amigo")
+        const usuario = await this.usuarioRepository.obtenerPorId(id)
+        if (!usuario?.validado) throw new Error("error amigo: no validado")
     }
 
 }

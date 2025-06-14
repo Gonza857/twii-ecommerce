@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
-import { IUsuario} from "../models/usuario-model";
+import {IUsuario} from "../models/usuario-model";
 
 class UsuarioRepository implements IUsuarioRepository {
     private readonly prisma!: PrismaClient;
@@ -35,11 +35,28 @@ class UsuarioRepository implements IUsuarioRepository {
 
     async actualizarContrasena(id: number, contrasena: string) {
         await this.prisma.usuario.update({
-            where: { id },
+            where: {id},
             data: {
                 contrasena: contrasena
             }
         })
+    }
+
+    async actualizarEstado(estado: boolean = false, id: number) {
+        await this.prisma.usuario.update({
+            where: {id},
+            data: {
+                validado: estado
+            }
+        })
+    }
+
+    async obtenerTodos(): Promise<IUsuario[]> {
+        return this.prisma.usuario.findMany({
+            include: {
+                rol: true
+            }
+        });
     }
 }
 

@@ -15,4 +15,6 @@ export interface IProductoRepository{
         precioMin?: number;
         precioMax?: number;
     }): Promise<Producto[]>
+    obtenerTodos(): Promise<IUsuario[]>
+    actualizarEstado(estado: boolean, id: number | undefined): Promise<void>
 }
