@@ -129,9 +129,9 @@ class AuthController {
         try {
             let resultadoCambio = await this.authService.cambiarContrasena(usuarioBuscado, datos.contrasena);
             resultadoCambio = await this.usuarioService.actualizarContrasena(valorToken.id, resultadoCambio.data)
-            res.status(200).send(resultadoCambio.mensaje)
+            res.status(200).json(this.enviarExito(resultadoCambio.mensaje))
         } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
+            res.status(500).json(this.enviarErrorGenerico());
         }
     }
 
@@ -154,7 +154,7 @@ class AuthController {
 
         try {
             const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
-            res.status(204).json(this.enviarExito(mensaje));
+            res.status(200).json(this.enviarExito(mensaje));
         } catch (e) {
             res.status(500).json(this.enviarErrorGenerico(" Error al intentar reenviar el correo"));
         }

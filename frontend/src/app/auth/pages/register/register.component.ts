@@ -4,22 +4,23 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {CardModule} from 'primeng/card';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Message, MessageModule} from 'primeng/message';
 import {UsuarioService} from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-register',
-  imports: [
-    FormsModule,
-    CardModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    Message,
-    MessageModule
-  ],
+    imports: [
+        FormsModule,
+        CardModule,
+        InputTextModule,
+        PasswordModule,
+        ButtonModule,
+        ReactiveFormsModule,
+        Message,
+        MessageModule,
+        RouterLink
+    ],
   templateUrl: './register.component.html',
   standalone: true,
   styleUrl: './register.component.scss'

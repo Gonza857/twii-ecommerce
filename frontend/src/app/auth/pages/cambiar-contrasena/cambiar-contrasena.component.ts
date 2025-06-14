@@ -53,33 +53,27 @@ export class CambiarContrasenaComponent implements OnInit {
       this.enviando = true;
       this.servicioUsuario.cambiarContrasena(data).subscribe({
         next: (data: any) => {
-          this.exito = data.exito;
-          if (data.exito) {
-            this.exito = true;
-            this.toast.add({
-              severity: 'success', // Tipo de mensaje (success, info, warn, error)
-              summary: 'Éxito',    // Título del toast
-              detail: data.mensaje, // Contenido del mensaje
-            });
-            setTimeout(()=>{
-              this.router.navigate(["/login"])
-            }, 1500)
-          }
+          this.enviando = false;
+          this.exito = true;
+          this.toast.add({
+            severity: 'success', // Tipo de mensaje (success, info, warn, error)
+            summary: 'Éxito',    // Título del toast
+            detail: data.mensaje, // Contenido del mensaje
+          });
+          setTimeout(()=>{
+            this.router.navigate(["/cuenta/login"])
+          }, 5500)
         },
         error: (error: any) => {
           this.enviando = false;
           this.mensajeError = error.error.mensaje;
         },
         complete: () => {
-          this.enviando = false;
         }
       })
     } else {
       this.form.markAllAsTouched()
     }
-
-    this.enviando = false;
-
   }
 
   private validarFormulario = () => {

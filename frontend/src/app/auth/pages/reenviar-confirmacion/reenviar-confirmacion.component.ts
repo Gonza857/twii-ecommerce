@@ -1,10 +1,17 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {UsuarioService} from '../../../services/usuario.service';
+import {Message} from "primeng/message";
+import {Card} from "primeng/card";
+import {Button} from "primeng/button";
 
 @Component({
   selector: 'app-confirmar-cuenta',
-  imports: [],
+  imports: [
+    Message,
+    Card,
+    Button
+  ],
   templateUrl: './reenviar-confirmacion.component.html',
   standalone: true,
   styleUrl: './reenviar-confirmacion.component.scss'
@@ -13,6 +20,7 @@ import {UsuarioService} from '../../../services/usuario.service';
 export class ReenviarConfirmacionComponent implements OnInit {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly servicioUsuario: UsuarioService = inject(UsuarioService)
+  private readonly router: Router = inject(Router);
   protected userId!: number;
   protected exito: boolean = false;
   protected mensaje!: string;
@@ -27,9 +35,11 @@ export class ReenviarConfirmacionComponent implements OnInit {
       next: (data: any) => {
         this.mensaje = data.mensaje
         this.exito = true;
-
       },
       error: (e) => {
+        if (e.status === 409) {
+          this.router.navigate(['/cuenta/login']);
+        }
         this.exito = false;
         this.mensajeError = e.error.error
       },
