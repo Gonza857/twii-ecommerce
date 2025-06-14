@@ -9,3 +9,9 @@ export class DatosIncorrectoException extends Error {
         super(props);
     }
 }
+
+export class CuentaYaVerificadaException extends Error {
+    constructor(props: string | undefined) {
+        super();
+    }
+}

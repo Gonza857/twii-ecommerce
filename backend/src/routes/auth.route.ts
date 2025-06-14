@@ -170,6 +170,8 @@ authRouter.post("/confirmar", authController.confirmarCuenta);
  *                 message:
  *                   type: string
  *                   example: Cuenta confirmada exitosamente
+ *       202:
+ *          description: La cuenta ya estaba confirmada
  *       400:
  *         description: Token faltante o inválido en la URL
  *         content:
@@ -203,12 +205,68 @@ authRouter.post("/confirmar", authController.confirmarCuenta);
  */
 authRouter.get("/confirmar-cuenta/:token", authController.confirmarCuenta);
 
+/**
+ * @openapi
+ * /api/auth/reenviar-confirmacion/{id}:
+ *   get:
+ *     summary: Reenviar correo de verificación de cuenta
+ *     tags:
+ *       - Auth
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Correo de confirmación reenviado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Correo enviado correctamente
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Usuario no encontrado
+ *       409:
+ *         description: El usuario ya tiene la cuenta verificada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: El usuario ya tiene la cuenta verificada
+ *       500:
+ *         description: Error al intentar reenviar el correo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al intentar reenviar el correo
+ */
 authRouter.get("/reenviar-confirmacion/:id", authController.reenviarConfirmacion);
 
 /**
  * @openapi
  * /api/auth/validar:
- *   post:
+ *   get:
  *     summary: Obtener usuario según sesión
  *     tags:
  *       - Auth
