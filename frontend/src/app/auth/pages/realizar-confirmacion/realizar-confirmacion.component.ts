@@ -20,11 +20,9 @@ export class RealizarConfirmacionComponent implements OnInit{
     if (this.token == null) return;
     this.usuarioService.confirmarCuenta(this.token).subscribe({
       next: (data) => {
-        console.log("todo ok", data)
         this.router.navigate(["/cuenta/confirmada"])
       },
       error: (e) => {
-        console.log(e)
         if (e.status === 400 || e.status === 401) {
 
         }

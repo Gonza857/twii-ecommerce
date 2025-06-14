@@ -1,14 +1,17 @@
 import {Request, Response} from "express";
 import {IChangePassword, ILogin, IRecover, IRegister,} from "../models/usuario-model";
 import {changePasswordSchema, loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
-import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
+import {
+    CorreoExistenteException,
+    CuentaYaVerificadaException,
+    DatosIncorrectoException
+} from "../exceptions/UsuarioExceptions";
 import {validate} from "../utils/zod-validator";
 import {IAuthService, IUsuarioService} from "../models/services-interfaces";
 import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
 import {AuthenticatedRequest} from "../models/main-models";
 import {JwtPayload} from "jsonwebtoken";
-
 
 
 class AuthController {
@@ -138,7 +141,12 @@ class AuthController {
         const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(id)
 
         if (!usuarioBuscado) {
-            res.status(403).json(this.enviarErrorGenerico());
+            res.status(404).json(this.enviarErrorGenerico());
+            return;
+        }
+
+        if (usuarioBuscado.validado) {
+            res.status(409).json(this.enviarExito("El usuario ya tiene la cuenta verificada"));
             return;
         }
 
@@ -146,16 +154,16 @@ class AuthController {
 
         try {
             const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
-            res.status(200).json(this.enviarExito(mensaje));
+            res.status(204).json(this.enviarExito(mensaje));
         } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
+            res.status(500).json(this.enviarErrorGenerico(" Error al intentar reenviar el correo"));
         }
     }
 
     public confirmarCuenta = async (_req: Request, res: Response) => {
         const {token} = _req.params
         if (!token) {
-             res.status(400).send(this.enviarErrorGenerico());
+            res.status(400).send(this.enviarErrorGenerico());
             return;
         }
 
@@ -171,7 +179,11 @@ class AuthController {
             const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
             res.status(200).json(this.enviarExito(mensaje))
         } catch (e) {
-            res.status(500).json(this.enviarErrorGenerico())
+            if (e instanceof CuentaYaVerificadaException) {
+                res.status(202).send();
+            } else {
+                res.status(500).json(this.enviarErrorGenerico())
+            }
         }
     }
 

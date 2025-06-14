@@ -1,5 +1,6 @@
 import {ILogin, IRegister, IUsuario} from "../models/usuario-model";
 import {
+    CuentaYaVerificadaException,
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
@@ -49,6 +50,9 @@ class UsuarioService implements IUsuarioService {
 
     async cambiarEstadoCuenta (id: string) {
         const usuario = await this.usuarioRepository.obtenerPorId(Number(id));
+        if (usuario?.validado) {
+            throw new CuentaYaVerificadaException("El usuario ya está validado")
+        }
         if (!usuario) throw new DatosIncorrectoException("Ocurrió un error");
         await this.usuarioRepository.actualizarEstado(true, usuario?.id)
         return "Cuenta confirmada correctamente";
