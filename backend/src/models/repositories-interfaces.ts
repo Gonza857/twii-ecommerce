@@ -6,6 +6,8 @@ export interface IUsuarioRepository {
     obtenerPorId(id: number): Promise<IUsuario | null>;
     crear (usuario: IRegister): Promise<void>;
     actualizarContrasena(id: number, contrasena: string): Promise<void>;
+    obtenerTodos(): Promise<IUsuario[]>
+    actualizarEstado(estado: boolean, id: number | undefined): Promise<void>
 }
 
 export interface IProductoRepository{
@@ -15,6 +17,4 @@ export interface IProductoRepository{
         precioMin?: number;
         precioMax?: number;
     }): Promise<Producto[]>
-    obtenerTodos(): Promise<IUsuario[]>
-    actualizarEstado(estado: boolean, id: number | undefined): Promise<void>
 }

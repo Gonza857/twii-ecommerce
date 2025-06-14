@@ -4,21 +4,16 @@ export const routes: Routes = [
   {
     path: "",
     loadChildren: () =>
-      import("./customer/customer-routing.module").then(m => m.CustomerRoutingModule)
+      import("./modules/customer/customer-routing.module").then(m => m.CustomerRoutingModule)
   },
   {
     path: "admin",
     loadChildren: () =>
-      import("./admin/admin-routing.module").then(m => m.AdminRoutingModule)
+      import("./modules/admin/admin-routing.module").then(m => m.AdminRoutingModule)
   },
-  { 
-    path: "productos",
-    loadComponent: () =>
-      import("./pages/visualizacion-productos/lista-productos/visualizacion-productos.component")
-        .then(c => c.ListaProductosComponent)
-  },
+  {
     path: "cuenta",
     loadChildren: () =>
-      import("./auth/auth-routing.module").then(m => m.AuthRoutingModule)
+      import("./modules/auth/auth-routing.module").then(m => m.AuthRoutingModule)
   }
 ];

@@ -7,11 +7,11 @@ import {RouterLink, RouterOutlet} from '@angular/router';
     RouterLink,
     RouterOutlet
   ],
-  templateUrl: './home.component.html',
+  templateUrl: './customer-layout.component.html',
   standalone: true,
-  styleUrl: './home.component.scss'
+  styleUrl: './customer-layout.component.scss'
 })
-export class HomeComponent {
+export class CustomerLayoutComponent {
   title = 'frontend';
 
 }
