@@ -283,25 +283,9 @@ authRouter.get("/reenviar-confirmacion/:id", authController.reenviarConfirmacion
  *     responses:
  *       200:
  *         description: Usuario autenticado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 nombre:
- *                   type: string
- *                 email:
- *                   type: string
- *                 rol:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     nombre:
- *                       type: string
- *       401:
+ *       405:
  *         description: No autorizado (token inválido o ausente)
+ *       403:
+ *          description: Usuario no validado
  */
 authRouter.get("/validar", authMiddleware, authController.validar as RequestHandler);
