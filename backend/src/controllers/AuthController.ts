@@ -104,6 +104,7 @@ class AuthController {
     public validar = async (_req: AuthenticatedRequest, res: Response) => {
         const usuario = await this.usuarioService.obtenerUsuarioPorId(_req.user);
         if (!usuario) return res.status(404).send(this.enviarErrorGenerico());
+        if (!usuario.validado) return res.status(403).json(this.enviarErrorGenerico())
         res.status(200).json(usuario)
     }
 

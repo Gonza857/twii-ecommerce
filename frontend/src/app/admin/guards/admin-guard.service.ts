@@ -23,7 +23,9 @@ export class AdminGuardService implements CanActivate {
           }
         }),
         catchError(error => {
-          console.error(error);
+          if (error.status == 403) {
+            this.router.navigate(['/cuenta/login']);
+          }
           this.router.navigate(['/']);
           return of(false);
         })
