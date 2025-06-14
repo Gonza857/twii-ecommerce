@@ -6,6 +6,7 @@ export interface IAuthService {
     registrarse(usuarioNuevo: IRegister, usuarioExistente: ILogin | null): Promise<IResultadoAccion>,
     recuperarContrasena(usuario: ILogin | null): Promise<IResultadoAccion>
     cambiarContrasena(usuario: IUsuario | null, contrasenaNueva: string): Promise<IResultadoAccion>
+    enviarCorreoConfirmacion(correo: string, token: string): Promise<string>
 }
 
 export interface IUsuarioService {
@@ -14,6 +15,8 @@ export interface IUsuarioService {
     actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion>
     guardar(usuario: IRegister): Promise<IResultadoAccion>
     obtenerTodos(): Promise<IUsuario[]>
+    cambiarEstadoCuenta(email: string): Promise<string>
+    verificarCuentaValidada(id: number | undefined): Promise<void>
 }
 
 export interface IMailerService {

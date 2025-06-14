@@ -10,6 +10,7 @@ const registerSchema = z.object({
         (val) => (val === undefined ? 2 : val),
         z.number()
     ),
+    validado: z.boolean().default(false),
 })
 
 const recoverSchema = z.object({
@@ -28,7 +29,7 @@ const loginSchema = z.object({
 })
 
 const usuarioSchema = z.object({
-    id: z.number().optional(),
+    id: z.number(),
     email: z.string().email(),
     nombre: z.string(),
     apellido: z.string(),
@@ -36,7 +37,8 @@ const usuarioSchema = z.object({
     rol: z.object({
         id: z.number(),
         nombre: z.string()
-    })
+    }),
+    validado: z.boolean().nullable()
 })
 
 export {

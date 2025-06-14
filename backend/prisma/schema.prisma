@@ -29,5 +29,6 @@ model usuario {
   email      String  @unique @db.VarChar(100)
   contrasena String  @db.VarChar(255)
   rolid      Int
+  validado   Boolean @default(false)
   rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }

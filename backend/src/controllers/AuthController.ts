@@ -7,6 +7,8 @@ import {IAuthService, IUsuarioService} from "../models/services-interfaces";
 import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
 import {AuthenticatedRequest} from "../models/main-models";
+import {JwtPayload} from "jsonwebtoken";
+
 
 
 class AuthController {
@@ -20,8 +22,20 @@ class AuthController {
 
     private enviarErrorGenerico = (mensaje?: string | null) => {
         return {
-            mensaje: mensaje ?? "¡Ocurrió un error!",
-            exito: false,
+            error: mensaje ?? "¡Ocurrió un error!"
+        }
+    }
+
+    private enviarErrorConDatos = (mensaje?: string | null, data?: any) => {
+        return {
+            error: this.enviarErrorGenerico(mensaje).error,
+            data: data,
+        }
+    }
+
+    private enviarExito = (mensaje?: string | null) => {
+        return {
+            mensaje: mensaje ?? "Proceso realizado correctamente!",
         }
     }
 
@@ -37,19 +51,28 @@ class AuthController {
         const usuarioDB = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
         try {
-            const resultado = await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
-            const token = generarToken({id: resultado.data})
-            res.cookie("access-token", token, generateCookie());
-            res.status(200).json(resultado)
+            await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
         } catch (e) {
-            console.log(e)
             if (e instanceof DatosIncorrectoException) {
-                res.status(401).send({mensaje: e.message});
+                res.status(401).json(this.enviarErrorGenerico("Email o contraseña incorrectos."));
             } else {
-                res.status(401).send({mensaje: "Datos incorrectos."})
+                res.status(401).json(this.enviarErrorGenerico())
             }
-
+            return;
         }
+
+        try {
+            await this.usuarioService.verificarCuentaValidada(usuarioDB?.id);
+        } catch (e) {
+            res.status(403).json(
+                this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuarioDB?.id)
+            )
+            return;
+        }
+
+        const token = generarToken({id: usuarioDB?.id})
+        res.cookie("access-token", token, generateCookie());
+        res.status(200).json("Iniciaste sesión correctamente. Redirigiendo...")
     }
 
     public recuperarContrasena = async (_req: Request, res: Response) => {
@@ -57,27 +80,27 @@ class AuthController {
         try {
             datos = validate(recoverSchema, _req.body);
         } catch (e) {
-            res.status(400).send();
+            res.status(400).send(this.enviarErrorGenerico());
             return;
         }
 
         const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
         try {
-            const resultado = await this.authService.recuperarContrasena(usuarioBuscado);
-            res.status(200).json(resultado)
+            await this.authService.recuperarContrasena(usuarioBuscado);
+            res.status(200).send("Correo de recuperación enviado correctamente.")
         } catch (e) {
             if (e instanceof CorreoExistenteException) {
                 res.status(409).json({mensaje: e.message});
             } else {
-                res.status(500).send({mensaje: "Ocurrió un error al procesar tu solicitud."})
+                res.status(400).send(this.enviarErrorGenerico())
             }
         }
     }
 
     public validar = async (_req: AuthenticatedRequest, res: Response) => {
         const usuario = await this.usuarioService.obtenerUsuarioPorId(_req.user);
-        if (!usuario) return res.status(401).send();
+        if (!usuario) return res.status(404).send(this.enviarErrorGenerico());
         res.status(200).json(usuario)
     }
 
@@ -103,10 +126,52 @@ class AuthController {
         try {
             let resultadoCambio = await this.authService.cambiarContrasena(usuarioBuscado, datos.contrasena);
             resultadoCambio = await this.usuarioService.actualizarContrasena(valorToken.id, resultadoCambio.data)
-            res.status(200).json(resultadoCambio);
+            res.status(200).send(resultadoCambio.mensaje)
         } catch (e) {
             res.status(400).json(this.enviarErrorGenerico());
+        }
+    }
+
+    public reenviarConfirmacion = async (_req: Request, res: Response) => {
+        const {id} = _req.params
+
+        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(id)
+
+        if (!usuarioBuscado) {
+            res.status(403).json(this.enviarErrorGenerico());
             return;
+        }
+
+        const token = generarToken({id: usuarioBuscado.id})
+
+        try {
+            const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
+            res.status(200).json(this.enviarExito(mensaje));
+        } catch (e) {
+            res.status(400).json(this.enviarErrorGenerico());
+        }
+    }
+
+    public confirmarCuenta = async (_req: Request, res: Response) => {
+        const {token} = _req.params
+        if (!token) {
+             res.status(400).send(this.enviarErrorGenerico());
+            return;
+        }
+
+        let data: any;
+        try {
+            data = verificarToken(token);
+        } catch (e) {
+            res.status(401).json(this.enviarErrorGenerico());
+            return;
+        }
+
+        try {
+            const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
+            res.status(200).json(this.enviarExito(mensaje))
+        } catch (e) {
+            res.status(500).json(this.enviarErrorGenerico())
         }
     }
 
@@ -124,6 +189,8 @@ class AuthController {
         try {
             const {data: usuarioValidado} = await this.authService.registrarse(datos, usuarioExistente);
             const resultado = await this.usuarioService.guardar(usuarioValidado)
+            const token = generarToken({id: resultado.data})
+            await this.authService.enviarCorreoConfirmacion(datos.email, token)
             res.status(200).json(resultado)
         } catch (e) {
             console.log(e)

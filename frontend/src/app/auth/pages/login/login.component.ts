@@ -34,14 +34,23 @@ export class LoginComponent implements OnInit {
       this.enviando = false
       this.servicioUsuario.iniciarSesion({email, contrasena}).subscribe({
         next: (data: any) => {
-          if (data.exito) {
-            this.exito = data.exito;
-            setTimeout(() => {
-              this.router.navigate(['/']);
-            }, 2500)
-          }
+          this.exito = true;
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 2500)
         },
-        error: (e) => this.mensajeError = e.error.mensaje
+        error: (e) => {
+          console.log(e)
+          if (e.status === 400 || e.status === 401) {
+            this.mensajeError = e.error.error
+            this.exito = false;
+
+          } else if (e.status === 403) {
+            this.router.navigate(['/cuenta/confirmacion', e.error.data]);
+          }
+          this.enviando = false;
+
+        }
         ,
         complete: () => this.enviando = false
       })
@@ -55,8 +64,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      email: ['test@test.com', [Validators.required, Validators.email]],
-      password: ['tester', [Validators.required]],
+      email: ['gonzaloalexramos@gmail.com', [Validators.required, Validators.email]],
+      password: ['gonzalo', [Validators.required]],
     })
   }
 }

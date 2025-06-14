@@ -1,6 +1,7 @@
 import express, {Router} from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser";
+import {setupSwagger} from "../config/swagger";
 
 interface Options {
     puerto: number,
@@ -26,6 +27,7 @@ export class Server {
             origin: 'http://localhost:4200',
             credentials: true
         }))
+        setupSwagger(this.app)
         this.app.use(this.routes)
 
         const callback = () => console.log(`Escuchando en el puerto ${this.puerto}`)

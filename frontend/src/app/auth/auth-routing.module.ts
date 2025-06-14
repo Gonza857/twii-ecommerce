@@ -17,6 +17,24 @@ const routes: Routes = [
         .then(c => c.RecuperarContrasenaComponent)
   },
   {
+    path: 'confirmacion/:id',
+    loadComponent: () =>
+      import("./pages/reenviar-confirmacion/reenviar-confirmacion.component")
+        .then(c => c.ReenviarConfirmacionComponent)
+  },
+  {
+    path: 'realizar-confirmacion/:token',
+    loadComponent: () =>
+      import("./pages/realizar-confirmacion/realizar-confirmacion.component")
+        .then(c => c.RealizarConfirmacionComponent)
+  },
+  {
+    path: 'confirmada',
+    loadComponent: () =>
+      import("./pages/cuenta-confirmada/cuenta-confirmada.component")
+        .then(c => c.CuentaConfirmadaComponent)
+  },
+  {
     path: 'cambiar-contrasena/:token',
     loadComponent: () =>
       import("../auth/pages/cambiar-contrasena/cambiar-contrasena.component")
