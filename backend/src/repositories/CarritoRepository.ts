@@ -32,6 +32,10 @@ class CarritoRepository implements ICarritoRepository {
         productoId: number,
         cantidad: number
     ): Promise<ICarrito | null> {
+        const producto = this.prisma.producto.findUnique({
+            where: { id: productoId }
+        });
+
         return this.prisma.carrito.update({
             where: { id },
             data: {
