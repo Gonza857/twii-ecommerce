@@ -1,4 +1,5 @@
 import { IResultadoAccion } from './main-models';
+import { Producto } from './producto-model';
 import { ILogin, IRegister, IUsuario } from './usuario-model';
 
 export interface IAuthService {
@@ -55,4 +56,13 @@ export interface ICarritoService {
     ): Promise<any>;
     eliminarProductoDelCarrito(id: number, productoId: number): Promise<any>;
     vaciarCarrito(id: number): Promise<any>;
+}
+
+export interface IProductoService {
+    obtenerTodos(): Promise<Producto[]>;
+    obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]>;
 }

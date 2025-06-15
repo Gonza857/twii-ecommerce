@@ -15,5 +15,8 @@ import {ToastModule} from 'primeng/toast';
   providers: [MessageService]
 })
 export class AppComponent {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
 
 }

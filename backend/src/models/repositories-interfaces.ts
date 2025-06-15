@@ -1,4 +1,5 @@
 import { Carrito } from './carrito-model';
+import { Producto } from './producto-model';
 import { ICarrito, ILogin, IRegister, IUsuario } from './usuario-model';
 
 export interface IUsuarioRepository {
@@ -7,7 +8,7 @@ export interface IUsuarioRepository {
     crear(usuario: IRegister): Promise<void>;
     actualizarContrasena(id: number, contrasena: string): Promise<void>;
     obtenerTodos(): Promise<IUsuario[]>;
-    actualizarEstado(estado: boolean, id: number): Promise<void>;
+    actualizarEstado(estado: boolean, id: number | undefined): Promise<void>;
 }
 
 export interface ICarritoRepository {
@@ -22,4 +23,13 @@ export interface ICarritoRepository {
         productoId: number
     ): Promise<ICarrito | null>;
     vaciarCarrito(id: number): Promise<ICarrito | null>;
+}
+
+export interface IProductoRepository {
+    obtenerTodos(): Promise<Producto[]>;
+    obtenerProductosFiltrados(filtros: {
+        clasificacion?: string;
+        precioMin?: number;
+        precioMax?: number;
+    }): Promise<Producto[]>;
 }

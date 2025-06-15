@@ -1,11 +1,9 @@
-import {Router} from "express";
-import ProductoController from "../controllers/ProductoController";
+import { Router } from 'express';
+import container from "../app/container";
+import ProductoController from '../controllers/ProductoController';
 
-export const productoRouter = Router();
+export const productosRouter = Router();
+const productoController: ProductoController = container.productoController;
 
-const productoController = new ProductoController();
-
-// Controladores
-
-productoRouter.get('/', productoController.getProductos);
+productosRouter.get('/', (req, res) => productoController.getProductos(req, res));
 

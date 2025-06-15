@@ -1,0 +1,53 @@
+<h2>Productos disponibles</h2>
+
+<div class="layout-productos">
+
+  <aside class="sidebar-filtros">
+    <section class="filtros-clasificacion">
+      <h3>Filtrar por clasificación</h3>
+
+      <div class="filtros-botones">
+        <button (click)="filtrarPorClasificacion('')" [class.activo]="!clasificacionSeleccionada">Todos</button>
+        <button (click)="filtrarPorClasificacion('bebidas')"
+          [class.activo]="clasificacionSeleccionada === 'bebidas'">Bebidas</button>
+        <button (click)="filtrarPorClasificacion('limpieza')"
+          [class.activo]="clasificacionSeleccionada === 'limpieza'">Limpieza</button>
+        <button (click)="filtrarPorClasificacion('almacén')"
+          [class.activo]="clasificacionSeleccionada === 'almacén'">Almacén</button>
+      </div>
+    </section>
+
+    <section class="filtros-precio">
+      <h3>Filtrar por precio</h3>
+
+      <div class="filtro">
+        <label>Precio mínimo</label>
+        <input type="number" [(ngModel)]="precioMin" />
+      </div>
+
+      <div class="filtro">
+        <label>Precio máximo</label>
+        <input type="number" [(ngModel)]="precioMax" />
+      </div>
+
+      <button (click)="aplicarFiltroPrecio()">Aplicar precio</button>
+
+      <p *ngIf="errorPrecio" class="error">{{ errorPrecio }}</p>
+    </section>
+      <div class="filtros-precio">
+              <button (click)="limpiarFiltro()">Borrar filtros</button>
+
+      </div>
+  </aside>
+
+  <main class="productos-listado">
+  <div class="productos-grid">
+    <div *ngFor="let producto of productos" class="producto-card">
+      <h3>{{ producto.nombre }}</h3>
+      <p>{{ producto.descripcion }}</p>
+      <span class="clasificacion">{{ producto.clasificacion }}</span>
+      <p class="precio">{{ producto.precio | currency:'ARS' }}</p>
+    </div>
+  </div>
+  </main>
+</div>
