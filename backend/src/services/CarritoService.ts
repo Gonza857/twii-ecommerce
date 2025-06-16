@@ -1,4 +1,4 @@
-import { ILogin, IRegister, IUsuario } from '../models/usuario-model';
+import { ICarrito, ILogin, IRegister, IUsuario } from '../models/usuario-model';
 import { DatosIncorrectoException } from '../exceptions/UsuarioExceptions';
 import {
     ICarritoRepository,
@@ -19,11 +19,13 @@ class CarritoService implements ICarritoService {
         this.carritoRepository = carritoRepository;
     }
 
-    public async obtenerCarritoPorUsuario(id: number): Promise<Carrito | null> {
+    public async obtenerCarritoPorUsuario(
+        id: number
+    ): Promise<ICarrito | null> {
         return await this.carritoRepository.obtenerCarritoPorUsuario(id);
     }
 
-    public async agregarProductoAlCarrito(
+    /*public async agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
@@ -42,7 +44,7 @@ class CarritoService implements ICarritoService {
             id,
             productoId
         );
-    }
+    }*/
 
     public async vaciarCarrito(id: number): Promise<any> {
         return await this.carritoRepository.vaciarCarrito(id);

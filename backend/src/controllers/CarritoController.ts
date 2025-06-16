@@ -5,6 +5,7 @@ import {
     IUsuarioService
 } from '../models/services-interfaces';
 import { AuthenticatedRequest } from '../models/main-models';
+import { ca } from 'zod/v4/locales';
 
 export class CarritoController {
     private carritoService!: ICarritoService;
@@ -29,7 +30,7 @@ export class CarritoController {
         }
     };
 
-    public agregarProductoAlCarrito = async (
+    /*public agregarProductoAlCarrito = async (
         _req: AuthenticatedRequest,
         res: Response
     ) => {
@@ -68,7 +69,7 @@ export class CarritoController {
         } catch (e) {
             res.status(500).json({ message: 'Error', error: e });
         }
-    };
+    };*/
 
     public vaciarCarrito = async (
         _req: AuthenticatedRequest,

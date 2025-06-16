@@ -27,7 +27,7 @@ class CarritoRepository implements ICarritoRepository {
         });
     }
 
-    agregarProductoAlCarrito(
+    /*agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
@@ -77,7 +77,7 @@ class CarritoRepository implements ICarritoRepository {
                 }
             }
         });
-    }
+    }*/
 
     vaciarCarrito(id: number): Promise<ICarrito | null> {
         return this.prisma.carrito.update({

@@ -13,15 +13,15 @@ export interface IUsuarioRepository {
 
 export interface ICarritoRepository {
     obtenerCarritoPorUsuario(id: number): Promise<ICarrito | null>;
-    agregarProductoAlCarrito(
+    /*agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
-    ): Promise<ICarrito | null>;
-    eliminarProductoDelCarrito(
+    ): Promise<ICarrito | null>;*/
+    /*eliminarProductoDelCarrito(
         id: number,
         productoId: number
-    ): Promise<ICarrito | null>;
+    ): Promise<ICarrito | null>;*/
     vaciarCarrito(id: number): Promise<ICarrito | null>;
 }
 

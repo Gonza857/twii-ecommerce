@@ -14,7 +14,7 @@ carritoRouter.get(
     carritoController.obtenerCarritoPorUsuario
 );
 
-carritoRouter.post(
+/*carritoRouter.post(
     '/:id/agregar',
     authMiddleware,
     carritoController.agregarProductoAlCarrito
@@ -24,7 +24,7 @@ carritoRouter.delete(
     '/:id/eliminar',
     authMiddleware,
     carritoController.eliminarProductoDelCarrito
-);
+);*/
 
 carritoRouter.patch(
     '/:id/vaciar',
