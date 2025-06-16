@@ -38,12 +38,12 @@ export interface IMailerService {
 
 export interface ICarritoService {
     obtenerCarritoPorUsuario(id: number): Promise<any>;
-    /*agregarProductoAlCarrito(
+    agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
     ): Promise<any>;
-    eliminarProductoDelCarrito(id: number, productoId: number): Promise<any>;*/
+    eliminarProductoDelCarrito(id: number, productoId: number): Promise<any>;
     vaciarCarrito(id: number): Promise<any>;
 }
 

@@ -19,17 +19,15 @@ class CarritoService implements ICarritoService {
         this.carritoRepository = carritoRepository;
     }
 
-    public async obtenerCarritoPorUsuario(
-        id: number
-    ): Promise<ICarrito | null> {
+    public async obtenerCarritoPorUsuario(id: number): Promise<ICarrito> {
         return await this.carritoRepository.obtenerCarritoPorUsuario(id);
     }
 
-    /*public async agregarProductoAlCarrito(
+    public async agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
-    ): Promise<Carrito | null> {
+    ): Promise<ICarrito> {
         return await this.carritoRepository.agregarProductoAlCarrito(
             id,
             productoId,
@@ -39,14 +37,14 @@ class CarritoService implements ICarritoService {
     public async eliminarProductoDelCarrito(
         id: number,
         productoId: number
-    ): Promise<Carrito | null> {
+    ): Promise<ICarrito> {
         return await this.carritoRepository.eliminarProductoDelCarrito(
             id,
             productoId
         );
-    }*/
+    }
 
-    public async vaciarCarrito(id: number): Promise<any> {
+    public async vaciarCarrito(id: number): Promise<ICarrito> {
         return await this.carritoRepository.vaciarCarrito(id);
     }
 }
