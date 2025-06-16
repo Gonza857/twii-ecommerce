@@ -1,15 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Producto, ProductoService } from '../../../services/producto.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {
+  Producto,
+  ProductoService,
+} from '../../../../services/producto.service';
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
   imports: [CommonModule, FormsModule],
   templateUrl: './visualizacion-productos.component.html',
-  styleUrls: ['./visualizacion-productos.component.scss']
+  styleUrls: ['./visualizacion-productos.component.scss'],
 })
 export class ListaProductosComponent implements OnInit {
   productos: Producto[] = [];
@@ -18,7 +21,7 @@ export class ListaProductosComponent implements OnInit {
   precioMax: number | null = null;
   errorPrecio: string = '';
 
-  constructor(private productoService: ProductoService) { }
+  constructor(private productoService: ProductoService) {}
 
   ngOnInit(): void {
     const filtrosGuardados = localStorage.getItem('filtrosProductos');
@@ -30,11 +33,11 @@ export class ListaProductosComponent implements OnInit {
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
 
-      this.productoService.obtenerFiltrados(filtros).subscribe(data => {
+      this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
         this.productos = data;
       });
     } else {
-      this.productoService.obtenerProductos().subscribe(data => {
+      this.productoService.obtenerProductos().subscribe((data) => {
         this.productos = data;
       });
     }
@@ -83,7 +86,7 @@ export class ListaProductosComponent implements OnInit {
 
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
 
-    this.productoService.obtenerFiltrados(filtros).subscribe(data => {
+    this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
       this.productos = data;
     });
   }
