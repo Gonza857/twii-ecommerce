@@ -8,13 +8,13 @@ datasource db {
 }
 
 model producto {
-  id                  Int     @id @default(autoincrement())
-  nombre              String  @db.VarChar(50)
-  descripcion         String
-  clasificacion       String  @db.VarChar(50)
-  precio              Decimal @db.Decimal(10, 2)
-  imagen              String? @db.VarChar(255)
-  carrito_productos   carrito_producto[]
+  id                Int                @id @default(autoincrement())
+  nombre            String             @db.VarChar(50)
+  descripcion       String
+  clasificacion     String             @db.VarChar(50)
+  precio            Decimal            @db.Decimal(10, 2)
+  imagen            String?            @db.VarChar(255)
+  carrito_productos carrito_producto[]
 }
 
 model rol {
@@ -36,16 +36,16 @@ model usuario {
 }
 
 model carrito {
-  id        Int @id @default(autoincrement())
-  productos carrito_producto[]
+  id        Int                @id @default(autoincrement())
   usuarioid Int
+  productos carrito_producto[]
 }
 
 model carrito_producto {
-  id         Int @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   cantidad   Int
   carritoid  Int
-  carrito    carrito @relation(fields: [carritoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_carrito_producto")
   productoid Int
+  carrito    carrito  @relation(fields: [carritoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_carrito_producto")
   producto   producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_carrito_producto")
 }
