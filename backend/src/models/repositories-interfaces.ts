@@ -12,17 +12,17 @@ export interface IUsuarioRepository {
 }
 
 export interface ICarritoRepository {
-    obtenerCarritoPorUsuario(id: number): Promise<ICarrito | null>;
-    /*agregarProductoAlCarrito(
+    obtenerCarritoPorUsuario(id: number): Promise<ICarrito>;
+    agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
-    ): Promise<ICarrito | null>;*/
-    /*eliminarProductoDelCarrito(
+    ): Promise<ICarrito>;
+    eliminarProductoDelCarrito(
         id: number,
         productoId: number
-    ): Promise<ICarrito | null>;*/
-    vaciarCarrito(id: number): Promise<ICarrito | null>;
+    ): Promise<ICarrito>;
+    vaciarCarrito(id: number): Promise<ICarrito>;
 }
 
 export interface IProductoRepository {

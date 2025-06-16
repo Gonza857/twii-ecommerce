@@ -14,8 +14,13 @@ class CarritoRepository implements ICarritoRepository {
         this.prisma = prisma;
     }
 
-    async obtenerCarritoPorUsuario(id: number): Promise<ICarrito | null> {
-        return this.prisma.carrito.findFirst({
+    /**
+     * Obtiene el carrito de un usuario por su ID o crea uno si no existe.
+     * @param id - ID del usuario.
+     * @return El carrito del usuario.
+     */
+    async obtenerCarritoPorUsuario(id: number): Promise<ICarrito> {
+        let carrito = await this.prisma.carrito.findFirst({
             where: { usuarioid: id },
             include: {
                 productos: {
@@ -25,47 +30,94 @@ class CarritoRepository implements ICarritoRepository {
                 }
             }
         });
+
+        if (!carrito) {
+            // Si no se encuentra un carrito, se crea uno nuevo para el usuario
+            carrito = await this.prisma.carrito.create({
+                data: {
+                    usuarioid: id,
+                    productos: {
+                        create: []
+                    }
+                },
+                include: {
+                    productos: {
+                        include: {
+                            producto: true
+                        }
+                    }
+                }
+            });
+        }
+
+        return carrito;
     }
 
-    /*agregarProductoAlCarrito(
+    /**
+     * Agrega un producto al carrito del usuario.
+     * @param id - ID del usuario.
+     * @param productoId - ID del producto a agregar.
+     * @param cantidad - Cantidad del producto a agregar.
+     * @return El carrito actualizado o null si no se encuentra.
+     */
+    async agregarProductoAlCarrito(
         id: number,
         productoId: number,
         cantidad: number
-    ): Promise<ICarrito | null> {
-        const producto = this.prisma.producto.findUnique({
-            where: { id: productoId }
+    ): Promise<ICarrito> {
+        const carrito = await this.obtenerCarritoPorUsuario(id);
+
+        const productoEnCarrito = await this.prisma.carrito_producto.findFirst({
+            where: { carritoid: carrito.id, productoid: productoId }
         });
 
-        return this.prisma.carrito.update({
-            where: { id },
-            data: {
-                productos: {
-                    create: {
-                        productoid,
-                        cantidad
-                    }
+        if (productoEnCarrito) {
+            // El producto ya existe en el carrito, se actualiza la cantidad
+            await this.prisma.carrito_producto.update({
+                where: { id: productoEnCarrito.id },
+                data: {
+                    cantidad
                 }
-            },
-            include: {
-                productos: {
-                    include: {
-                        producto: true
-                    }
+            });
+        } else {
+            // El producto no existe en el carrito, se crea una nueva entrada
+            await this.prisma.carrito_producto.create({
+                data: {
+                    productoid: productoId,
+                    carritoid: carrito.id,
+                    cantidad
                 }
-            }
-        });
+            });
+        }
+
+        return carrito;
     }
 
-    eliminarProductoDelCarrito(
+    /**
+     * Elimina un producto del carrito del usuario.
+     * @param id - ID del usuario.
+     * @param productoId - ID del producto a eliminar.
+     * @return El carrito actualizado o null si no se encuentra.
+     */
+    async eliminarProductoDelCarrito(
         id: number,
         productoId: number
-    ): Promise<ICarrito | null> {
-        return this.prisma.carrito.update({
+    ): Promise<ICarrito> {
+        const carrito = await this.obtenerCarritoPorUsuario(id);
+
+        const productoEnCarrito = await this.prisma.carrito_producto.findFirst({
+            where: { carritoid: carrito.id, productoid: productoId }
+        });
+
+        if (!productoEnCarrito)
+            throw new Error('Producto no encontrado en el carrito');
+
+        return await this.prisma.carrito.update({
             where: { id },
             data: {
                 productos: {
                     delete: {
-                        productoId
+                        id: productoId
                     }
                 }
             },
@@ -77,11 +129,18 @@ class CarritoRepository implements ICarritoRepository {
                 }
             }
         });
-    }*/
+    }
 
-    vaciarCarrito(id: number): Promise<ICarrito | null> {
-        return this.prisma.carrito.update({
-            where: { id },
+    /**
+     * Vacía el carrito del usuario.
+     * @param id - ID del usuario.
+     * @return El carrito actualizado.
+     */
+    async vaciarCarrito(id: number): Promise<ICarrito> {
+        const carrito = await this.obtenerCarritoPorUsuario(id);
+
+        return await this.prisma.carrito.update({
+            where: { id: carrito.id },
             data: {
                 productos: {
                     deleteMany: {}

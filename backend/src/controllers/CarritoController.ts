@@ -30,7 +30,7 @@ export class CarritoController {
         }
     };
 
-    /*public agregarProductoAlCarrito = async (
+    public agregarProductoAlCarrito = async (
         _req: AuthenticatedRequest,
         res: Response
     ) => {
@@ -69,7 +69,7 @@ export class CarritoController {
         } catch (e) {
             res.status(500).json({ message: 'Error', error: e });
         }
-    };*/
+    };
 
     public vaciarCarrito = async (
         _req: AuthenticatedRequest,
