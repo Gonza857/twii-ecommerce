@@ -1,0 +1,15 @@
+<div *ngIf="(carrito$() || []).length === 0" class="text-center mt-4">
+  <p>No hay productos en el carrito.</p>
+  <a pButton type="button" class="p-button" [routerLink]="['/productos']">Explorar productos</a>
+</div>
+
+<ng-container *ngFor="let item of carrito$()">
+  <app-carrito-item [item]="item" [usuarioId]="usuarioId"></app-carrito-item>
+</ng-container>
+
+<div class="mt-4">
+  <h3>Total: ${{ total$() }}</h3>
+  <a pButton type="button" class="w-full mt-2 p-button" [routerLink]="['/carrito']">Ver Carrito</a>
+  <button pButton type="button" class="w-full mt-2 p-button-success">Finalizar compra</button>
+
+</div>
