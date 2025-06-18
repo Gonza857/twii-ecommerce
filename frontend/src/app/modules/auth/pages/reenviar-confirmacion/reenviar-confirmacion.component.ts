@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Message} from "primeng/message";
-import {Card} from "primeng/card";
-import {Button} from "primeng/button";
-import {UsuarioService} from '../../../../services/usuario.service';
-=======
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/message';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { UsuarioService } from '../../../../services/usuario.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
 
 @Component({
   selector: 'app-confirmar-cuenta',

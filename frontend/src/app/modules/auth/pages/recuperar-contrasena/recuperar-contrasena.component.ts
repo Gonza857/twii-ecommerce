@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ButtonModule} from 'primeng/button';
-import {Router} from '@angular/router';
-import {InputText} from 'primeng/inputtext';
-import {NgClass} from '@angular/common';
-import {Card} from 'primeng/card';
-import {Message} from "primeng/message";
-import {UsuarioService} from '../../../../services/usuario.service';
-=======
 import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -23,7 +12,6 @@ import { NgClass } from '@angular/common';
 import { Card } from 'primeng/card';
 import { Message } from 'primeng/message';
 import { UsuarioService } from '../../../../services/usuario.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
 
 @Component({
   selector: 'app-recuperar-contrasena',

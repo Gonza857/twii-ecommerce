@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CardModule} from 'primeng/card';
-import {InputTextModule} from 'primeng/inputtext';
-import {ButtonModule} from 'primeng/button';
-import {MessageModule} from 'primeng/message';
-import {Router, RouterLink} from '@angular/router';
-import {PasswordModule} from "primeng/password";
-import {UsuarioService} from '../../../../services/usuario.service';
-=======
 import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -22,9 +11,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { Router, RouterLink } from '@angular/router';
-import { Password, PasswordModule } from 'primeng/password';
+import { PasswordModule } from 'primeng/password';
 import { UsuarioService } from '../../../../services/usuario.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
 
 @Component({
   selector: 'app-login',

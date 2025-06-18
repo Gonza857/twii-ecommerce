@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import {Component, inject, OnInit} from '@angular/core';
-import {ButtonModule} from 'primeng/button';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CardModule} from 'primeng/card';
-import {InputTextModule} from 'primeng/inputtext';
-import {PasswordModule} from 'primeng/password';
-import {Router, RouterLink} from '@angular/router';
-import {Message, MessageModule} from 'primeng/message';
-import {UsuarioService} from '../../../../services/usuario.service';
-=======
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import {
@@ -24,7 +13,7 @@ import { PasswordModule } from 'primeng/password';
 import { Router, RouterLink } from '@angular/router';
 import { Message, MessageModule } from 'primeng/message';
 import { UsuarioService } from '../../../../services/usuario.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
+
 
 @Component({
   selector: 'app-register',
@@ -79,7 +68,6 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.form.valid) {
-<<<<<<< HEAD
       this.enviando = false;
       this.servicioUsuario.registrarse(usuario).subscribe({
         next: (data: any) => {
@@ -88,20 +76,6 @@ export class RegisterComponent implements OnInit {
           setTimeout(()=>{
             this.router.navigate(['/cuenta/login']);
           }, 2500)
-=======
-      console.log('Form valido');
-      this.enviando = false;
-      this.servicioUsuario.registrarse(usuario).subscribe({
-        next: (data: any) => {
-          console.log('Exito pa');
-          console.log(data);
-          if (data.exito) {
-            this.exito = data.exito;
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 2500);
-          }
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
         },
         error: (e) => {
           console.log(e);

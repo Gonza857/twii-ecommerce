@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-import {inject, Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
-import {catchError, map, Observable, of} from "rxjs";
-import {UsuarioService} from '../../../services/usuario.service';
-=======
 import { inject, Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { UsuarioService } from '../../../services/usuario.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 import { Producto } from './producto-model';
-import {ILogin, IRegister, IUsuario} from "./usuario-model";
+import {ICarrito, ILogin, IRegister, IUsuario} from "./usuario-model";
 
 export interface IUsuarioRepository {
     obtenerPorEmail(email: string): Promise<ILogin | null>;

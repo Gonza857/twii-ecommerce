@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
-import {Producto, ProductoService} from '../../../../services/producto.service';
-=======
+
 import {
   Producto,
   ProductoService,
 } from '../../../../services/producto.service';
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
 
 @Component({
   standalone: true,
@@ -35,20 +32,11 @@ export class ListaProductosComponent implements OnInit {
       this.clasificacionSeleccionada = filtros.clasificacion || '';
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
-
-<<<<<<< HEAD
       this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
         this.productos = data;
       });
     } else {
       this.productoService.obtenerProductos().subscribe((data:any) => {
-=======
-      this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
-        this.productos = data;
-      });
-    } else {
-      this.productoService.obtenerProductos().subscribe((data) => {
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
         this.productos = data;
       });
     }
@@ -96,12 +84,7 @@ export class ListaProductosComponent implements OnInit {
     }
 
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
-
-<<<<<<< HEAD
     this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
-=======
-    this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
->>>>>>> 53cfc9e56ef3721878bb0f73ccdf13e171cacee9
       this.productos = data;
     });
   }
