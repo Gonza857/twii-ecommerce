@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model producto {
+  id                  Int     @id @default(autoincrement())
+  nombre              String  @db.VarChar(50)
+  descripcion         String
+  clasificacion       String  @db.VarChar(50)
+  precio              Decimal @db.Decimal(10, 2)
+  imagen              String? @db.VarChar(255)
+  carrito_productos   carrito_producto[]
+}
+
 model rol {
   id      Int       @id
   nombre  String    @unique @db.VarChar(255)
@@ -25,10 +35,17 @@ model usuario {
   rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }
 
-model producto {
-  id            Int     @id @default(autoincrement())
-  nombre        String  @db.VarChar(50)
-  descripcion   String
-  clasificacion String  @db.VarChar(50)
-  precio        Decimal @db.Decimal(10, 2)
+model carrito {
+  id        Int @id @default(autoincrement())
+  productos carrito_producto[]
+  usuarioid Int
+}
+
+model carrito_producto {
+  id         Int @id @default(autoincrement())
+  cantidad   Int
+  carritoid  Int
+  carrito    carrito @relation(fields: [carritoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_carrito_producto")
+  productoid Int
+  producto   producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_carrito_producto")
 }
