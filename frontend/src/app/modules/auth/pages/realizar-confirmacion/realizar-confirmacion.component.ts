@@ -1,6 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UsuarioService} from '../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario.service';
+
 
 @Component({
   selector: 'app-realizar-confirmacion',
@@ -19,7 +20,7 @@ export class RealizarConfirmacionComponent implements OnInit{
     this.token = this.activatedRoute.snapshot.paramMap.get("token")
     if (this.token == null) return;
     this.usuarioService.confirmarCuenta(this.token).subscribe({
-      next: (data) => {
+      next: () => {
         this.router.navigate(["/cuenta/confirmada"])
       },
       error: (e) => {

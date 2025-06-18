@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {IUsuarioRepository} from "../models/repositories-interfaces";
-import {IUsuario} from "../models/usuario-model";
+import {IRegister, IUsuario} from "../models/usuario-model";
 
 class UsuarioRepository implements IUsuarioRepository {
     private readonly prisma!: PrismaClient;
@@ -29,8 +29,9 @@ class UsuarioRepository implements IUsuarioRepository {
         });
     }
 
-    async crear(usuario: any): Promise<void> {
-        await this.prisma.usuario.create({data: usuario})
+    async crear(usuario: IRegister): Promise<number | null> {
+        const usuarioCreado = await this.prisma.usuario.create({data: usuario});
+        return usuarioCreado.id;
     }
 
     async actualizarContrasena(id: number, contrasena: string) {

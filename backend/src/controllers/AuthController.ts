@@ -153,6 +153,8 @@ class AuthController {
 
         const token = generarToken({id: usuarioBuscado.id})
 
+        console.log("token de reenvio", token)
+
         try {
             const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
             res.status(200).json(this.enviarExito(mensaje));
@@ -168,6 +170,8 @@ class AuthController {
             return;
         }
 
+        console.log("token", token)
+
         let data: any;
         try {
             data = verificarToken(token);
@@ -176,10 +180,13 @@ class AuthController {
             return;
         }
 
+        console.log("Data del token", data)
+
         try {
             const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
             res.status(200).json(this.enviarExito(mensaje))
         } catch (e) {
+            console.log(e)
             if (e instanceof CuentaYaVerificadaException) {
                 res.status(202).send();
             } else {
@@ -200,13 +207,16 @@ class AuthController {
         const usuarioExistente = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
 
         try {
-            const {data: usuarioValidado} = await this.authService.registrarse(datos, usuarioExistente);
-            const resultado = await this.usuarioService.guardar(usuarioValidado)
-            const token = generarToken({id: resultado.data})
+            const usuarioConPassHash: IRegister = await this.authService.registrarse(datos, usuarioExistente);
+
+            const idUsuarioCreado = await this.usuarioService.guardar(usuarioConPassHash);
+
+            const token = generarToken({id: idUsuarioCreado});
+
             await this.authService.enviarCorreoConfirmacion(datos.email, token)
-            res.status(200).json(resultado)
+
+            res.status(200).json(this.enviarExito())
         } catch (e) {
-            console.log(e)
             if (e instanceof CorreoExistenteException) {
                 res.status(409).json({mensaje: e.message});
             } else {

@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Producto, ProductoService } from '../../../services/producto.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {Producto, ProductoService} from '../../../../services/producto.service';
 
 @Component({
   standalone: true,
@@ -30,11 +29,11 @@ export class ListaProductosComponent implements OnInit {
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
 
-      this.productoService.obtenerFiltrados(filtros).subscribe(data => {
+      this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
         this.productos = data;
       });
     } else {
-      this.productoService.obtenerProductos().subscribe(data => {
+      this.productoService.obtenerProductos().subscribe((data:any) => {
         this.productos = data;
       });
     }
@@ -83,7 +82,7 @@ export class ListaProductosComponent implements OnInit {
 
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
 
-    this.productoService.obtenerFiltrados(filtros).subscribe(data => {
+    this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
       this.productos = data;
     });
   }

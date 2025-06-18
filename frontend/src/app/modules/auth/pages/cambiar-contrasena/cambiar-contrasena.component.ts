@@ -8,7 +8,7 @@ import {CardModule} from 'primeng/card';
 import {FloatLabelModule} from 'primeng/floatlabel';
 import {Message} from 'primeng/message';
 import {MessageService} from 'primeng/api';
-import {UsuarioService} from '../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario.service';
 
 @Component({
   selector: 'app-cambiar-contrasena',

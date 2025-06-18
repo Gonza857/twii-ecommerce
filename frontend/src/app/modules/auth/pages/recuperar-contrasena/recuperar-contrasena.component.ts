@@ -4,9 +4,9 @@ import {ButtonModule} from 'primeng/button';
 import {Router} from '@angular/router';
 import {InputText} from 'primeng/inputtext';
 import {NgClass} from '@angular/common';
-import {UsuarioService} from '../../../services/usuario.service';
 import {Card} from 'primeng/card';
 import {Message} from "primeng/message";
+import {UsuarioService} from '../../../../services/usuario.service';
 
 @Component({
   selector: 'app-recuperar-contrasena',

@@ -5,8 +5,8 @@ import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
 import {Router, RouterLink} from '@angular/router';
-import {UsuarioService} from '../../../services/usuario.service';
-import {Password, PasswordModule} from "primeng/password";
+import {PasswordModule} from "primeng/password";
+import {UsuarioService} from '../../../../services/usuario.service';
 
 @Component({
     selector: 'app-login',

@@ -1,9 +1,9 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UsuarioService} from '../../../services/usuario.service';
 import {Message} from "primeng/message";
 import {Card} from "primeng/card";
 import {Button} from "primeng/button";
+import {UsuarioService} from '../../../../services/usuario.service';
 
 @Component({
   selector: 'app-confirmar-cuenta',

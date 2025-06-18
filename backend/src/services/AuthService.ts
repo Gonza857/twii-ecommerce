@@ -26,15 +26,10 @@ class AuthService implements IAuthService {
         }
     }
 
-    public async registrarse(usuario: IRegister, encontrado: ILogin): Promise<IResultadoAccion> {
+    public async registrarse(usuario: IRegister, encontrado: ILogin): Promise<IRegister> {
         if (encontrado != null) throw new CorreoExistenteException("El correo ya existe.");
         usuario.contrasena = await this.cifrarContrasena(usuario.contrasena);
-
-        return {
-            exito: true,
-            mensaje: "",
-            data: usuario
-        }
+        return usuario
 
     }
 

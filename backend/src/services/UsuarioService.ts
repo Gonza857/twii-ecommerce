@@ -27,12 +27,8 @@ class UsuarioService implements IUsuarioService {
         return usuario;
     }
 
-    public async guardar(usuario: IRegister): Promise<IResultadoAccion> {
-        await this.usuarioRepository.crear(usuario);
-        return {
-            exito: true,
-            mensaje: "Te registraste correctamente.",
-        }
+    public async guardar(usuario: IRegister): Promise<number | null> {
+        return await this.usuarioRepository.crear(usuario);
     }
 
     public async obtenerUsuarioPorCorreo (email: string): Promise<ILogin | null> {
