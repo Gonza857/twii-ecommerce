@@ -6,3 +6,90 @@
 .styledMain {
   min-height: 100dvh;
 }
+
+// COLORES DE FONDO
+.bg-principal {
+  background-color: #1e1e2f !important;
+}
+
+.bg-secundario {
+  background-color: #2a2a44 !important;
+}
+
+.bg-exito {
+  background-color: #2ecc71 !important;
+}
+
+.bg-error {
+  background-color: #ff6b6b !important;
+}
+
+.bg-primario {
+  background-color: #4f52ff !important;
+}
+
+.bg-primario-hover:hover {
+  background-color: #373acb !important;
+}
+
+// COLORES DE TEXTO
+.text-claro {
+  color: #e0e0e0 !important;
+}
+
+.text-secundario {
+  color: #cfd1f7 !important;
+}
+
+.text-suave {
+  color: #888888 !important;
+}
+
+.text-exito {
+  color: #2ecc71 !important;
+}
+
+.text-error {
+  color: #ff6b6b !important;
+}
+
+.text-primario {
+  color: #4f52ff !important;
+}
+
+// BORDES Y DIVISORES
+.border-suave {
+  border: 1px solid #444466 !important;
+}
+
+// BOTONES PERSONALIZADOS
+.btn-primario {
+  background-color: #4f52ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #373acb;
+  }
+}
+
+.btn-error {
+  background-color: #ff5c5c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #cc4848;
+  }
+}
+

@@ -6,11 +6,15 @@ import {
   Producto,
   ProductoService,
 } from '../../../../services/producto.service';
+import {PrimeTemplate} from "primeng/api";
+import {Card, CardModule} from "primeng/card";
+import {ButtonDirective} from "primeng/button";
+import {Skeleton, SkeletonModule} from "primeng/skeleton";
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })
@@ -32,13 +36,18 @@ export class ListaProductosComponent implements OnInit {
       this.clasificacionSeleccionada = filtros.clasificacion || '';
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
-      this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
-        this.productos = data;
-      });
+      setTimeout(()=>{
+        this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
+          this.productos = data;
+        });
+      }, 1000)
+
     } else {
-      this.productoService.obtenerProductos().subscribe((data:any) => {
-        this.productos = data;
-      });
+      setTimeout(()=>{
+        this.productoService.obtenerProductos().subscribe((data:any) => {
+          this.productos = data;
+        });
+      }, 1000)
     }
   }
 
