@@ -55,6 +55,7 @@ class AuthController {
 
         try {
             await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
+            res.status(200).send();
         } catch (e) {
             if (e instanceof DatosIncorrectoException) {
                 res.status(401).json(this.enviarErrorGenerico("Email o contraseña incorrectos."));
@@ -170,8 +171,6 @@ class AuthController {
             return;
         }
 
-        console.log("token", token)
-
         let data: any;
         try {
             data = verificarToken(token);
@@ -179,8 +178,6 @@ class AuthController {
             res.status(401).json(this.enviarErrorGenerico());
             return;
         }
-
-        console.log("Data del token", data)
 
         try {
             const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
