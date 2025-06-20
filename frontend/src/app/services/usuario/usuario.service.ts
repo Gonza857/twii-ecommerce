@@ -1,6 +1,7 @@
 import {inject, Injectable, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {UsuarioLoginRest} from './interfaces/usuario.interface.rest';
 
 interface algo {
   exito?: boolean,
@@ -20,7 +21,7 @@ export class UsuarioService {
     return this.http.get<string>(`${this.apiUrl}`);
   }
 
-  public iniciarSesion(datos: any): Observable<boolean> {
+  public iniciarSesion(datos: UsuarioLoginRest): Observable<boolean> {
     const credenciales = {
       withCredentials: true
     }

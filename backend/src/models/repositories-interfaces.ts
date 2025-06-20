@@ -1,14 +1,5 @@
 import { Producto } from './producto-model';
-import {ICarrito, ILogin, IRegister, IUsuario} from "./usuario-model";
-
-export interface IUsuarioRepository {
-    obtenerPorEmail(email: string): Promise<ILogin | null>;
-    obtenerPorId(id: number): Promise<IUsuario | null>;
-    crear (usuario: IRegister): Promise<number | null>;
-    actualizarContrasena(id: number, contrasena: string): Promise<void>;
-    obtenerTodos(): Promise<IUsuario[]>;
-    actualizarEstado(estado: boolean, id: number | undefined): Promise<void>;
-}
+import {ICarrito} from "./usuario-model";
 
 export interface ICarritoRepository {
     obtenerCarritoPorUsuario(id: number): Promise<ICarrito>;

@@ -6,6 +6,6 @@ export const generarToken = (payload: object): string => {
     return jwt.sign(payload, SECRET_KEY, { expiresIn: '14d' });
 };
 
-export const verificarToken = (token: string) => {
-    return jwt.verify(token, SECRET_KEY);
+export const verificarToken = <T = object>(token: string) => {
+    return jwt.verify(token, SECRET_KEY) as T;
 };

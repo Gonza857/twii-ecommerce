@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
-import {IUsuarioRepository} from "../models/repositories-interfaces";
-import {IRegister, IUsuario} from "../models/usuario-model";
+import {Usuario, UsuarioRegisterDTO} from "../models/usuario-model";
+import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
 
 class UsuarioRepository implements IUsuarioRepository {
     private readonly prisma!: PrismaClient;
@@ -9,7 +9,7 @@ class UsuarioRepository implements IUsuarioRepository {
         this.prisma = prisma;
     }
 
-    async obtenerPorEmail(email: string) {
+    async obtenerPorEmailParaLogin(email: string) {
         return this.prisma.usuario.findUnique({
             where: {email},
             select: {
@@ -20,7 +20,7 @@ class UsuarioRepository implements IUsuarioRepository {
         });
     }
 
-    async obtenerPorId(id: number): Promise<IUsuario | null> {
+    async obtenerPorId(id: number): Promise<Usuario | null> {
         return this.prisma.usuario.findUnique({
             where: {id},
             include: {
@@ -29,7 +29,7 @@ class UsuarioRepository implements IUsuarioRepository {
         });
     }
 
-    async crear(usuario: IRegister): Promise<number | null> {
+    async crear(usuario: UsuarioRegisterDTO): Promise<number | null> {
         const usuarioCreado = await this.prisma.usuario.create({data: usuario});
         return usuarioCreado.id;
     }
@@ -52,7 +52,7 @@ class UsuarioRepository implements IUsuarioRepository {
         })
     }
 
-    async obtenerTodos(): Promise<IUsuario[]> {
+    async obtenerTodos(): Promise<Usuario[]> {
         return this.prisma.usuario.findMany({
             include: {
                 rol: true
