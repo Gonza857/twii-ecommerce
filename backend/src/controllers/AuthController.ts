@@ -76,7 +76,7 @@ class AuthController {
         const [resultado, error] = await safe(
             this.usuarioService.verificarCuentaValidada(usuario!.id)
         );
-        if (errorIniciarSesion) return res.status(403).json(
+        if (error) return res.status(403).json(
             this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuario!.id)
         )
 
