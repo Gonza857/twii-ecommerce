@@ -12,7 +12,7 @@ import UsuarioRepository from '../repositories/UsuarioRepository';
 import MailerService from '../services/MailerService';
 import {
     ICarritoService,
-    IMailerService,
+    IMailerService, IProductoService,
 } from '../models/services-interfaces';
 import CarritoRepository from '../repositories/CarritoRepository';
 import CarritoService from '../services/CarritoService';
@@ -21,6 +21,7 @@ import { ProductoRepository } from '../repositories/ProductoRepository';
 import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
 import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
 import {IAuthService} from "../models/interfaces/auth.service.interface";
+import {IProductoRepository} from "../models/interfaces/producto.repository.interface";
 
 // Infra -> independiente de la lógica de negocio
 const mailerService: IMailerService = new MailerService();
@@ -28,14 +29,12 @@ const mailerService: IMailerService = new MailerService();
 // Repositorios -> Lógica para comunicarse con la base de datos
 const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma);
 const carritoRepository: ICarritoRepository = new CarritoRepository(prisma);
-const productoRepository: ProductoRepository = new ProductoRepository(prisma);
+const productoRepository: IProductoRepository = new ProductoRepository(prisma);
 
 // Servicios -> logica de negocio
 const carritoService: ICarritoService = new CarritoService(carritoRepository);
 const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository);
-const productoService: ProductoService = new ProductoService(
-    productoRepository
-); // pasar tipo a interface
+const productoService: IProductoService = new ProductoService(productoRepository); // pasar tipo a interface
 const authService: IAuthService = new AuthService(mailerService);
 
 // Controladores -> Recbien petición y la pasan al servicio

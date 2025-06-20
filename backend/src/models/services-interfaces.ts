@@ -1,5 +1,4 @@
-import { Producto } from './producto-model';
-
+import {Producto} from "./entities/producto";
 
 export interface IMailerService {
     enviarCorreo(to: string, subject: string, html: string): any;
@@ -17,6 +16,7 @@ export interface ICarritoService {
 }
 
 export interface IProductoService {
+    obtenerPorId(id: number): Promise<Producto | null>;
     obtenerTodos(): Promise<Producto[]>;
     obtenerProductosFiltrados(filtros: {
         clasificacion?: string;

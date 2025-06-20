@@ -1,4 +1,3 @@
-import { Producto } from './producto-model';
 import {ICarrito} from "./usuario-model";
 
 export interface ICarritoRepository {
@@ -15,11 +14,3 @@ export interface ICarritoRepository {
     vaciarCarrito(id: number): Promise<ICarrito>;
 }
 
-export interface IProductoRepository {
-    obtenerTodos(): Promise<Producto[]>;
-    obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
-        precioMin?: number;
-        precioMax?: number;
-    }): Promise<Producto[]>;
-}

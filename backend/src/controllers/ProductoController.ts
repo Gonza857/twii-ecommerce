@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import { prisma } from "../app/prisma";
-import { IProductoService } from '../models/services-interfaces';
+import {Request, Response} from 'express';
+import {IProductoService} from '../models/services-interfaces';
+import {safe} from "../utils/safe";
 
 class ProductoController {
-    private productoService!: IProductoService;
+    private readonly productoService!: IProductoService;
 
     constructor(productoService: IProductoService) {
         this.productoService = productoService;
     }
 
-    async getProductos(req: Request, res: Response): Promise<void> {
+    public getProductos = async (req: Request, res: Response) => {
         try {
             const filtros = {
                 clasificacion: req.query.clasificacion as string,
@@ -26,8 +26,23 @@ class ProductoController {
 
             res.status(200).json(productos);
         } catch (error) {
-            res.status(500).json({ message: 'Error al obtener productos', error });
+            res.status(500).json({message: 'Error al obtener productos', error});
         }
+    }
+
+    public obtenerPorId = async (_req: Request, res: Response) => {
+        const {id} = _req.params;
+        if (isNaN(Number(id))) return res.status(500).json({mensaje: "NaN"})
+
+        const [producto, errorProducto] = await safe(
+            this.productoService.obtenerPorId(Number(id))
+        );
+        if (errorProducto) return res.status(500).json({mensaje: "errorProducto"});
+
+        if (!producto) return res.status(404).json(producto)
+
+        console.log("Retorno este producto", producto)
+        res.status(200).json(producto);
     }
 }
 

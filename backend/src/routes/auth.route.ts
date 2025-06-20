@@ -41,7 +41,6 @@ const authController = container.authController;
  *       403:
  *         description: "Cuenta no verificada. Revisa tu correo electrónico."
  */
-
 authRouter.post("/login", authController.iniciarSesion as RequestHandler)
 
 /**
@@ -144,8 +143,6 @@ authRouter.post("/recuperar", authController.recuperarContrasena as RequestHandl
  *          description: No se pudo actualizar la contraseña
  */
 authRouter.post("/cambiar", authController.cambiar as RequestHandler);
-
-// authRouter.post("/confirmar", authController.confirmarCuenta as RequestHandler);
 
 /**
  * @openapi

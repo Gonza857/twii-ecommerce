@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { IProductoService } from '../models/services-interfaces';
-import { Producto } from '../models/producto-model';
-import { IProductoRepository } from '../models/repositories-interfaces';
-import {undefined} from "zod";
+import {IProductoRepository} from "../models/interfaces/producto.repository.interface";
+import {Producto} from "../models/entities/producto";
 
 export class ProductoRepository implements IProductoRepository {
     private readonly prisma!: PrismaClient;
@@ -11,11 +9,11 @@ export class ProductoRepository implements IProductoRepository {
         this.prisma = prisma;
     }
 
-    async obtenerTodos(): Promise<Producto[]> {
+    public async obtenerTodos(): Promise<Producto[]> {
         return this.prisma.producto.findMany();
     }
 
-    async obtenerProductosFiltrados(filtros: {
+    public async obtenerProductosFiltrados(filtros: {
         clasificacion?: string;
         precioMin?: number;
         precioMax?: number;
@@ -45,5 +43,10 @@ export class ProductoRepository implements IProductoRepository {
         }
 
         return this.prisma.producto.findMany({where});
+    }
+
+    public async obtenerPorId(id: number): Promise<Producto | null> {
+        return this.prisma.producto.findUnique({where: {id}});
+
     }
 }
