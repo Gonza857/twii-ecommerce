@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
-import { UsuarioService } from '../../../services/usuario.service';
+import {UsuarioService} from '../../../services/usuario/usuario.service';
 
 @Injectable({
   providedIn: 'root',

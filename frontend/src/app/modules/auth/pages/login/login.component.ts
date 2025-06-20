@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
     this.mensajeError = '';
     const usuario = {
       email: this.form.get('email')?.value,
-      password: this.form.get('password')?.value
+      contrasena: this.form.get('password')?.value
     }
     const usuarioRest = UsuarioMapper.mapLoginToLoginRest(usuario)
 

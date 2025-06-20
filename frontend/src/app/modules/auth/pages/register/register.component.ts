@@ -12,7 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { Router, RouterLink } from '@angular/router';
 import { Message, MessageModule } from 'primeng/message';
-import { UsuarioService } from '../../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
 
 @Component({

@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-import {
-  Producto,
-  ProductoService,
-} from '../../../../services/producto.service';
 import {PrimeTemplate} from "primeng/api";
-import {Card, CardModule} from "primeng/card";
-import {ButtonDirective} from "primeng/button";
-import {Skeleton, SkeletonModule} from "primeng/skeleton";
+import {CardModule} from "primeng/card";
+import {SkeletonModule} from "primeng/skeleton";
+import {Producto, ProductoService} from '../../../../services/producto/producto.service';
 
 @Component({
   standalone: true,
