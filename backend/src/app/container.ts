@@ -7,20 +7,20 @@ import AuthService from '../services/AuthService';
 import AuthController from '../controllers/AuthController';
 import {
     ICarritoRepository,
-    IUsuarioRepository
 } from '../models/repositories-interfaces';
 import UsuarioRepository from '../repositories/UsuarioRepository';
 import MailerService from '../services/MailerService';
 import {
-    IAuthService,
     ICarritoService,
     IMailerService,
-    IUsuarioService
 } from '../models/services-interfaces';
 import CarritoRepository from '../repositories/CarritoRepository';
 import CarritoService from '../services/CarritoService';
 import CarritoController from '../controllers/CarritoController';
 import { ProductoRepository } from '../repositories/ProductoRepository';
+import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
+import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
+import {IAuthService} from "../models/interfaces/auth.service.interface";
 
 // Infra -> independiente de la lógica de negocio
 const mailerService: IMailerService = new MailerService();

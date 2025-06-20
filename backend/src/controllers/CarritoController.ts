@@ -1,11 +1,8 @@
 import { Request, Response } from 'express';
-import { IUsuario } from '../models/usuario-model';
 import {
     ICarritoService,
-    IUsuarioService
 } from '../models/services-interfaces';
 import { AuthenticatedRequest } from '../models/main-models';
-import { ca } from 'zod/v4/locales';
 
 export class CarritoController {
     private carritoService!: ICarritoService;

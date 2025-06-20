@@ -38,7 +38,7 @@ class AuthService implements IAuthService {
     public async recuperarContrasena(usuario: UsuarioLogin | null): Promise<IResultadoAccion> {
         if (!usuario) throw new DatosIncorrectoException("Datos incorrectos.")
 
-        const token = generarToken({id: usuario.id})
+        const token = generarToken({id: usuario.id, email: usuario.email})
 
         await this.mailerService.enviarCorreo(usuario.email, "Recuperación", getResetPasswordHTML(token))
 

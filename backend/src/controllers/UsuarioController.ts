@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {IUsuario} from "../models/usuario-model";
-import {IUsuarioService} from "../models/services-interfaces";
 import {AuthenticatedRequest} from "../models/main-models";
+import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
+import {Usuario} from "../models/usuario-model";
 
 class UsuarioController {
     private usuarioService!: IUsuarioService;
@@ -14,7 +14,7 @@ class UsuarioController {
         const {id} = _req.params
         // Validar que no sea undefined o nulo..
         // Convertir a numero...
-        const usuarioEncontrado: IUsuario | null = await this.usuarioService.obtenerUsuarioPorId(id)
+        const usuarioEncontrado: Usuario | null = await this.usuarioService.obtenerUsuarioPorId(id)
         res.status(200).json(usuarioEncontrado);
     }
 
@@ -22,7 +22,7 @@ class UsuarioController {
         // TODO: validar si tiene permiso con el rol y token...
         const usuario = await this.usuarioService.obtenerUsuarioPorId(_req.user);
         if (!usuario) return res.status(401).send();
-        const usuarios: IUsuario[] = await this.usuarioService.obtenerTodos();
+        const usuarios: Usuario[] = await this.usuarioService.obtenerTodos();
         res.status(200).json(usuarios);
     }
 

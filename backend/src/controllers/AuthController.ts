@@ -125,6 +125,7 @@ class AuthController {
         );
         if (errorTokenGenerado) return res.status(400).send(this.enviarErrorGenerico());
 
+
         // Buscar usuario por id del token
         const usuarioBuscado: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(tokenGenerado!.email)
 
@@ -139,6 +140,8 @@ class AuthController {
             this.usuarioService.actualizarContrasena(tokenGenerado!.id, contrasenaNueva!)
         );
         if (error) return res.status(500).send(this.enviarErrorGenerico());
+
+        res.status(201).json(this.enviarErrorGenerico(resultado?.mensaje))
     }
 
     public reenviarConfirmacion = async (_req: Request, res: Response) => {
@@ -197,7 +200,7 @@ class AuthController {
         const usuarioConPassHash: UsuarioRegisterDTO = await this.authService.registrarse(usuarioRegisterDTO!, usuarioExistente);
 
         // Crear usuario y obtener id
-        const [idUsuarioCreado, errorIdUsuarioCreado] = await safe<number>(
+        const [idUsuarioCreado, errorIdUsuarioCreado] = await safe<number | null>(
             this.usuarioService.guardar(usuarioConPassHash)
         );
         if (errorIdUsuarioCreado) return res.status(500).json(this.enviarErrorGenerico())

@@ -1,8 +1,4 @@
-import { IResultadoAccion } from './main-models';
 import { Producto } from './producto-model';
-
-
-
 
 
 export interface IMailerService {
