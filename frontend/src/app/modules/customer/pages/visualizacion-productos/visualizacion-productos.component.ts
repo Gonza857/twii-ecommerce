@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import {PrimeTemplate} from "primeng/api";
 import {CardModule} from "primeng/card";
 import {SkeletonModule} from "primeng/skeleton";
-import {Producto, ProductoService} from '../../../../services/producto/producto.service';
+import {ProductoService} from '../../../../services/producto/producto.service';
+import {Producto} from "../../../../services/producto/interfaces/producto.interface";
+import {RouterLink} from "@angular/router";
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule],
+  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule, RouterLink],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })

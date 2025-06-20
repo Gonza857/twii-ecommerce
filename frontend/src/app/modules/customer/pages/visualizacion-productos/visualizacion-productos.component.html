@@ -50,27 +50,56 @@
       @defer (when productos.length > 0) {
         @for (producto of productos; track producto.id) {
           <div class="col">
-            <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden">
-              <ng-template pTemplate="header">
-                <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                  <span class="text-white">Imagen del producto</span>
-                </div>
-              </ng-template>
+            <!-- Envolvemos todo con un enlace -->
+            <a
+              [routerLink]="['/producto', producto.id]"
+              class="text-decoration-none text-white"
+            >
+              <p-card
+                class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden position-relative"
+              >
+                <ng-template pTemplate="header">
+                  <div
+                    class="bg-secondary d-flex align-items-center justify-content-center"
+                    style="height: 200px;"
+                  >
+                    <img
+                      *ngIf="producto.imagen; else sinImagen"
+                      [src]="producto.imagen"
+                      alt="{{ producto.nombre }}"
+                      class="img-fluid w-100 h-100 object-fit-contain"
+                    />
+                    <ng-template #sinImagen>
+                      <span class="text-white">Imagen del producto</span>
+                    </ng-template>
+                  </div>
+                </ng-template>
 
-              <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
-                <div>
-                  <h5 class="card-title text-white">{{ producto.nombre }}</h5>
-                  <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
-                </div>
-                <p class="h5 text-success mt-auto text-secundario">{{ producto.precio | currency:'ARS' }}</p>
-              </div>
+                <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
+                  <div>
+                    <h5 class="card-title text-white">{{ producto.nombre }}</h5>
+                    <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
+                  </div>
 
-              <button class="col-12 btn-primario">
-                Agregar al carrito
-              </button>
-            </p-card>
+                  <p class="h5 text-success mt-auto text-secundario">
+                    {{ producto.precio.toString() | currency: 'ARS' }}
+                  </p>
+                </div>
+
+                <!-- Botón por fuera del link visualmente, pero posicionado adentro -->
+                <div class="pt-0 bg-transparent position-relative z-1">
+                  <button
+                    class="col-12 btn-primario"
+                    (click)="$event.stopPropagation(); $event.preventDefault();"
+                  >
+                    Agregar al carrito
+                  </button>
+                </div>
+              </p-card>
+            </a>
           </div>
         }
+
       } @placeholder {
         @for (n of [1, 2, 3, 4, 5 , 6, 7]; track n) {
           <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden">

@@ -5,7 +5,7 @@ class UsuarioMapper {
   static mapLoginToLoginRest (usuarioRest: UsuarioLogin): UsuarioLoginRest {
     return {
       email: usuarioRest.email,
-      contrasena: usuarioRest.password,
+      contrasena: usuarioRest.contrasena,
     }
   }
 

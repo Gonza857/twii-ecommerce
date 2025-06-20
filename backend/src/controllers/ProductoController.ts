@@ -41,7 +41,6 @@ class ProductoController {
 
         if (!producto) return res.status(404).json(producto)
 
-        console.log("Retorno este producto", producto)
         res.status(200).json(producto);
     }
 }
