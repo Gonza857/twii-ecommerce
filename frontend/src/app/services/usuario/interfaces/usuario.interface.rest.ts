@@ -16,6 +16,15 @@ export interface UsuarioRest {
   validado: boolean | null;
 }
 
+export interface UsuarioRegisterRest {
+  email: string;
+  nombre: string;
+  contrasena: string;
+  cContrasena: string;
+  apellido: string;
+  direccion: string | null;
+}
+
 export interface UsuarioRecuperarRest {
   contrasena: string;
   token: string;

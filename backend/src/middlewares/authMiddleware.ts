@@ -7,7 +7,6 @@ export const authMiddleware = async (
     res: Response,
     next: NextFunction
 ) => {
-    console.log("middleware ejecutado");
     try {
         const token = req.cookies['access-token'];
         if (!token) {
@@ -16,7 +15,6 @@ export const authMiddleware = async (
         }
 
         const payload: any = verificarToken(token);
-        console.log("payload", payload);
         req.user = payload.id ?? null;
     } catch (e) {
         req.user = null;

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import { CarritoService } from '../../../../../services/carrito.service';
 import { CarritoItemComponent } from '../carrito-item/carrito-item.component';
 import { RouterModule } from '@angular/router';
@@ -23,15 +23,20 @@ export class CarritoDrawerComponent implements OnInit {
   public usuarioId?: number;
   public usuarioLogueado = false;
 
+  constructor() {
+    effect(() => {
+      this.usuarioLogueado = this.usuarioService.usuario() != null;
+
+
+      if (this.usuarioLogueado) {
+        this.usuarioId = this.usuarioService.usuario()?.id;
+        this.carritoService.obtenerCarrito(this.usuarioId ?? 0);
+      }
+    })
+  }
+
   ngOnInit(): void {
-
     this.usuarioService.obtenerUsuarioActual();
-    this.usuarioLogueado = this.usuarioService.usuario() != null;
-
-    if (this.usuarioLogueado) {
-      this.usuarioId = this.usuarioService.usuario()?.id;
-      this.carritoService.obtenerCarrito(this.usuarioId ?? 0);
-    }
   }
 
   vaciarCarrito(): void {

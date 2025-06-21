@@ -20,12 +20,14 @@ export class ReenviarConfirmacionComponent implements OnInit {
   protected exito: boolean = false;
   protected mensaje!: string;
   protected mensajeError!: string;
+  protected enviando: boolean = false;
 
   constructor() {
     effect(() => {
       const resultado = this.servicioUsuario.respuestaServidor();
       if (!resultado) return;
 
+      this.enviando = false;
       this.exito = resultado.exito ?? false;
       if (resultado.exito) {
         this.mensaje = resultado.mensaje ?? "";
@@ -44,6 +46,7 @@ export class ReenviarConfirmacionComponent implements OnInit {
   }
 
   reenviarCorreo() {
+    this.enviando = true;
     this.servicioUsuario.reenviarCorreo(this.userId)
   }
 }

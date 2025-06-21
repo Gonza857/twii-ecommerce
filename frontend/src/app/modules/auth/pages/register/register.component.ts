@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import {Component, effect, inject, OnInit} from '@angular/core';
+import {ButtonModule} from 'primeng/button';
 import {
   FormBuilder,
   FormGroup,
@@ -7,12 +7,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { Router, RouterLink } from '@angular/router';
-import { Message, MessageModule } from 'primeng/message';
+import {CardModule} from 'primeng/card';
+import {InputTextModule} from 'primeng/inputtext';
+import {PasswordModule} from 'primeng/password';
+import {Router, RouterLink} from '@angular/router';
+import {Message, MessageModule} from 'primeng/message';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
+import {UsuarioRegister} from '../../../../services/usuario/interfaces/usuario.interface';
+import {StyleClass} from 'primeng/styleclass';
 
 
 @Component({
@@ -27,6 +29,7 @@ import {UsuarioService} from '../../../../services/usuario/usuario.service';
     Message,
     MessageModule,
     RouterLink,
+    StyleClass,
   ],
   templateUrl: './register.component.html',
   standalone: true,
@@ -41,53 +44,21 @@ export class RegisterComponent implements OnInit {
   protected mensajeError!: string;
   protected exito: boolean = false;
 
-  register(): void {
-    this.mensajeError = '';
-    this.enviando = true;
-
-    if (
-      this.form.get('cContrasena')?.value !== this.form.get('contrasena')?.value
-    ) {
+  constructor() {
+    effect(() => {
       this.enviando = false;
-      this.form.get('cContrasena')?.setErrors({ mismatch: true });
-      this.form.get('contrasena')?.setErrors({ mismatch: true });
-      return;
-    }
+      const resultado = this.servicioUsuario.respuestaServidor();
+      if (!resultado) return;
 
-    const campos: string[] = [
-      'email',
-      'contrasena',
-      'cContrasena',
-      'nombre',
-      'apellido',
-      'direccion',
-    ];
-    let usuario: any = {};
-    for (const campo of campos) {
-      usuario[campo] = this.form.get(campo)?.value;
-    }
-
-    if (this.form.valid) {
-      this.enviando = false;
-      this.servicioUsuario.registrarse(usuario).subscribe({
-        next: (data: any) => {
-          console.log("Server response", data)
-          this.exito = true
-          setTimeout(()=>{
-            this.router.navigate(['/cuenta/login']);
-          }, 2500)
-        },
-        error: (e) => {
-          console.log(e);
-          this.mensajeError = e.error.mensaje;
-        },
-        complete: () => (this.enviando = false),
-      });
-    } else {
-      this.form.markAllAsTouched();
-    }
-
-    this.enviando = false;
+      this.exito = resultado.exito ?? false
+      if (resultado.exito) {
+        setTimeout(() => {
+          this.router.navigate(['/cuenta/login']);
+        }, 2500)
+      } else {
+        this.mensajeError = resultado.mensaje ?? ""
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -100,4 +71,46 @@ export class RegisterComponent implements OnInit {
       direccion: ['Casa 123', [Validators.required]],
     });
   }
+
+  private validarContrasenas = (): boolean => {
+    if (this.form.get('cContrasena')?.value !== this.form.get('contrasena')?.value) {
+      this.form.get('cContrasena')?.setErrors({mismatch: true});
+      this.form.get('contrasena')?.setErrors({mismatch: true});
+      return false;
+    }
+    return true;
+  }
+
+  private convertirCampos = (): UsuarioRegister => {
+    return {
+      apellido: this.form.get("apellido")?.value,
+      nombre: this.form.get("nombre")?.value,
+      email: this.form.get("email")?.value,
+      contrasena: this.form.get("contrasena")?.value,
+      cContrasena: this.form.get("cContrasena")?.value,
+      direccion: this.form.get("direccion")?.value,
+    }
+  }
+
+  register(): void {
+    this.mensajeError = '';
+    this.enviando = true;
+
+    if (!this.validarContrasenas()) {
+      this.enviando = false;
+      return;
+    }
+
+    const usuarioRegister: UsuarioRegister = this.convertirCampos();
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.enviando = false;
+      return;
+    }
+
+    this.servicioUsuario.registrarse(usuarioRegister)
+  }
+
+
 }

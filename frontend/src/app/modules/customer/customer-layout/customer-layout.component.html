@@ -43,7 +43,7 @@
           </li>
         } @else {
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="'/cuenta/login'">Iniciar sesión</a>
+            <a class="nav-link" style="cursor: pointer;" routerLink="/cuenta/login">Iniciar sesión</a>
           </li>
         }
 
@@ -58,9 +58,9 @@
       </p-drawer>
   </div>
 
-<section class="bg-principal pb-5">
+<main class="styledMain bg-principal pb-5">
   <router-outlet></router-outlet>
-</section>
+</main>
 <footer class="footer-ecommerce">
   <div class="footer-content col-10 mx-auto">
     <!-- Proyecto -->

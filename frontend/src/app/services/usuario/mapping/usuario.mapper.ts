@@ -1,5 +1,10 @@
-import {UsuarioLoginRest, UsuarioRecuperarRest, UsuarioRest} from '../interfaces/usuario.interface.rest';
-import {Usuario, UsuarioLogin, UsuarioRecuperar} from '../interfaces/usuario.interface';
+import {
+  UsuarioLoginRest,
+  UsuarioRecuperarRest,
+  UsuarioRegisterRest,
+  UsuarioRest
+} from '../interfaces/usuario.interface.rest';
+import {Usuario, UsuarioLogin, UsuarioRecuperar, UsuarioRegister} from '../interfaces/usuario.interface';
 
 class UsuarioMapper {
   static mapLoginToLoginRest (usuarioRest: UsuarioLogin): UsuarioLoginRest {
@@ -37,6 +42,17 @@ class UsuarioMapper {
     return {
       contrasena: usuarioRecuperar.contrasena,
       token: usuarioRecuperar.token
+    }
+  }
+
+  static mapUsuarioRegisterToRest (usuarioRegister: UsuarioRegister): UsuarioRegisterRest {
+    return {
+      email: usuarioRegister.email,
+      apellido: usuarioRegister.apellido,
+      direccion: usuarioRegister.direccion,
+      contrasena: usuarioRegister.contrasena,
+      nombre: usuarioRegister.nombre,
+      cContrasena: usuarioRegister.cContrasena
     }
   }
 

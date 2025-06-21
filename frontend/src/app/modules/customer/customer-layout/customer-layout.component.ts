@@ -22,6 +22,7 @@ export class CustomerLayoutComponent implements OnInit{
   constructor() {
     effect(() => {
       this.carritoVisible = this.carritoService.drawerVisible();
+      this.usuarioActual = this.usuarioService.usuario();
     });
   }
 
@@ -34,7 +35,6 @@ export class CustomerLayoutComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.usuarioActual = this.usuarioService.usuario();
-
+    this.usuarioService.obtenerUsuarioActual();
   }
 }

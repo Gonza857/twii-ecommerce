@@ -46,21 +46,22 @@ export class LoginComponent implements OnInit {
       if (!resultado) return;
 
       this.enviando = false;
-
+      this.exito =  resultado.exito ?? false
       if (resultado.exito) {
-        this.exito = true;
         setTimeout(() => {
           this.router.navigate(['/']);
         }, 2500);
       } else {
-        this.exito = false;
         if (resultado.redireccion) {
           this.router.navigate(['/cuenta/confirmacion', resultado.data]);
         } else {
           this.mensajeError = resultado.mensaje ?? 'Error desconocido.';
         }
       }
+
+      queueMicrotask(() => this.servicioUsuario.limpiarRespuesta())
     });
+
   }
 
   ngOnInit(): void {
