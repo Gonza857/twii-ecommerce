@@ -2,9 +2,8 @@ import { usuario } from './../../node_modules/.prisma/client/index.d';
 import { PrismaClient } from '@prisma/client';
 import {
     ICarritoRepository,
-    IUsuarioRepository
 } from '../models/repositories-interfaces';
-import { ICarrito, IUsuario } from '../models/usuario-model';
+import { ICarrito } from '../models/usuario-model';
 import { Carrito } from '../models/carrito-model';
 import { Decimal } from '@prisma/client/runtime/binary';
 

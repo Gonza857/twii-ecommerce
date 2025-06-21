@@ -1,5 +1,9 @@
 import {Request, Response} from "express";
-import {IChangePassword, ILogin, IRecover, IRegister,} from "../models/usuario-model";
+import {
+    Usuario, UsuarioCambiarDTO,
+    UsuarioLogin,
+    UsuarioLoginDTO, UsuarioRecoverDTO, UsuarioRegisterDTO,
+} from "../models/usuario-model";
 import {changePasswordSchema, loginSchema, recoverSchema, registerSchema} from "../schemas/app.schemas";
 import {
     CorreoExistenteException,
@@ -7,12 +11,22 @@ import {
     DatosIncorrectoException
 } from "../exceptions/UsuarioExceptions";
 import {validate} from "../utils/zod-validator";
-import {IAuthService, IUsuarioService} from "../models/services-interfaces";
 import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
 import {AuthenticatedRequest} from "../models/main-models";
-import {JwtPayload} from "jsonwebtoken";
+import {safe, safeSync} from "../utils/safe";
+import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
+import {IAuthService} from "../models/interfaces/auth.service.interface";
 
+type BaseJwtPayload = {
+    iat?: number;
+    exp?: number;
+};
+
+type RecoverPasswordPayload = BaseJwtPayload & {
+    id: string;
+    email: string;
+};
 
 class AuthController {
     private usuarioService!: IUsuarioService;
@@ -43,62 +57,52 @@ class AuthController {
     }
 
     public iniciarSesion = async (_req: Request, res: Response) => {
-        let datos: ILogin;
-        try {
-            datos = validate(loginSchema, _req.body);
-        } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
-            return;
+        const [usuarioLoginDTO, errorUsuarioLoginDTO] = safeSync<UsuarioLoginDTO>(
+            () => validate(loginSchema, _req.body)
+        );
+        if (errorUsuarioLoginDTO) return res.status(400).send(this.enviarErrorGenerico());
+
+        const usuario: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioLoginDTO!.email)
+
+        const [resultadoIniciarSesion, errorIniciarSesion] = await safe(
+            this.authService.iniciarSesion(usuario, usuarioLoginDTO!.contrasena)
+        );
+        if (errorIniciarSesion) {
+            if (errorIniciarSesion instanceof DatosIncorrectoException)
+                return res.status(401).json(this.enviarErrorGenerico("Email o contraseña incorrectos."));
+            return res.status(401).send(this.enviarErrorGenerico())
         }
 
-        const usuarioDB = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
+        const [resultado, error] = await safe(
+            this.usuarioService.verificarCuentaValidada(usuario!.id)
+        );
+        if (error) return res.status(403).json(
+            this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuario!.id)
+        )
 
-        try {
-            await this.authService.iniciarSesion(usuarioDB, datos.contrasena);
-        } catch (e) {
-            if (e instanceof DatosIncorrectoException) {
-                res.status(401).json(this.enviarErrorGenerico("Email o contraseña incorrectos."));
-            } else {
-                res.status(401).json(this.enviarErrorGenerico())
-            }
-            return;
-        }
-
-        try {
-            await this.usuarioService.verificarCuentaValidada(usuarioDB?.id);
-        } catch (e) {
-            res.status(403).json(
-                this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuarioDB?.id)
-            )
-            return;
-        }
-
-        const token = generarToken({id: usuarioDB?.id})
+        const token = generarToken({id: usuario!.id})
         res.cookie("access-token", token, generateCookie());
         res.status(200).json("Iniciaste sesión correctamente. Redirigiendo...")
     }
 
     public recuperarContrasena = async (_req: Request, res: Response) => {
-        let datos: IRecover;
-        try {
-            datos = validate(recoverSchema, _req.body);
-        } catch (e) {
-            res.status(400).send(this.enviarErrorGenerico());
-            return;
+        const [usuarioRecoverDTO, errorUsuarioRecoverDTO] = safeSync<UsuarioRecoverDTO>(
+            () => validate(recoverSchema, _req.body)
+        );
+        if (errorUsuarioRecoverDTO) return res.status(400).send(this.enviarErrorGenerico());
+
+        const usuarioBuscado: UsuarioLogin | null =
+            await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioRecoverDTO!.email)
+
+        const [resultado, error] = await safe(
+            this.authService.recuperarContrasena(usuarioBuscado)
+        )
+        if (error) {
+            if (error instanceof CorreoExistenteException) return res.status(409).json({mensaje: error.message});
+            return res.status(400).send(this.enviarErrorGenerico())
         }
 
-        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
-
-        try {
-            await this.authService.recuperarContrasena(usuarioBuscado);
-            res.status(200).send("Correo de recuperación enviado correctamente.")
-        } catch (e) {
-            if (e instanceof CorreoExistenteException) {
-                res.status(409).json({mensaje: e.message});
-            } else {
-                res.status(400).send(this.enviarErrorGenerico())
-            }
-        }
+        res.status(200).send("Correo de recuperación enviado correctamente.")
     }
 
     public validar = async (_req: AuthenticatedRequest, res: Response) => {
@@ -109,110 +113,118 @@ class AuthController {
     }
 
     public cambiar = async (_req: Request, res: Response) => {
-        let datos: IChangePassword
-        try {
-            datos = validate(changePasswordSchema, _req.body);
-        } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
-            return;
-        }
+        // Validar body
+        const [usuarioCambiarDTO, errorUsuarioCambiarDTO] = safeSync<UsuarioCambiarDTO>(
+            () => validate(changePasswordSchema, _req.body)
+        );
+        if (errorUsuarioCambiarDTO) return res.status(400).send(this.enviarErrorGenerico());
 
-        let valorToken!: any;
-        try {
-            valorToken = verificarToken(datos.token);
-        } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
-            return;
-        }
+        // Verificar token que llega del body
+        const [tokenGenerado, errorTokenGenerado] = safeSync(
+            () => verificarToken<RecoverPasswordPayload>(usuarioCambiarDTO!.token)
+        );
+        if (errorTokenGenerado) return res.status(400).send(this.enviarErrorGenerico());
 
-        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(valorToken.id)
 
-        try {
-            let resultadoCambio = await this.authService.cambiarContrasena(usuarioBuscado, datos.contrasena);
-            resultadoCambio = await this.usuarioService.actualizarContrasena(valorToken.id, resultadoCambio.data)
-            res.status(200).json(this.enviarExito(resultadoCambio.mensaje))
-        } catch (e) {
-            res.status(500).json(this.enviarErrorGenerico());
-        }
+        // Buscar usuario por id del token
+        const usuarioBuscado: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(tokenGenerado!.email)
+
+        // Cambiar contraseña al usuario buscado
+        const [contrasenaNueva, errorContrasenaNueva] = await safe<string>(
+            this.authService.cambiarContrasena(usuarioBuscado, usuarioCambiarDTO!.contrasena)
+        );
+        if (errorContrasenaNueva) return res.status(500).send(this.enviarErrorGenerico());
+
+        // Persistir
+        const [resultado, error] = await safe(
+            this.usuarioService.actualizarContrasena(tokenGenerado!.id, contrasenaNueva!)
+        );
+        if (error) return res.status(500).send(this.enviarErrorGenerico());
+
+        res.status(201).json(this.enviarErrorGenerico(resultado?.mensaje))
     }
 
     public reenviarConfirmacion = async (_req: Request, res: Response) => {
         const {id} = _req.params
 
-        const usuarioBuscado = await this.usuarioService.obtenerUsuarioPorId(id)
+        // Obtener usuario
+        const usuarioBuscado: Usuario | null = await this.usuarioService.obtenerUsuarioPorId(id)
+        if (!usuarioBuscado) return res.status(404).json(this.enviarErrorGenerico());
 
-        if (!usuarioBuscado) {
-            res.status(404).json(this.enviarErrorGenerico());
-            return;
-        }
+        // Validar si esta validado
+        if (usuarioBuscado.validado) return res.status(409).json(this.enviarExito("El usuario ya tiene la cuenta verificada"));
 
-        if (usuarioBuscado.validado) {
-            res.status(409).json(this.enviarExito("El usuario ya tiene la cuenta verificada"));
-            return;
-        }
-
+        // Generación de token
         const token = generarToken({id: usuarioBuscado.id})
 
-        try {
-            const mensaje = await this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
-            res.status(200).json(this.enviarExito(mensaje));
-        } catch (e) {
-            res.status(500).json(this.enviarErrorGenerico(" Error al intentar reenviar el correo"));
-        }
+        // Respuesta
+        const [mensaje, errorMensaje] = await safe<string>(
+            this.authService.enviarCorreoConfirmacion(usuarioBuscado.email, token)
+        );
+        if (errorMensaje) return res.status(500).json(this.enviarErrorGenerico("Error al intentar reenviar el correo"));
+
+        res.status(200).json(this.enviarExito(mensaje));
     }
 
     public confirmarCuenta = async (_req: Request, res: Response) => {
         const {token} = _req.params
-        if (!token) {
-            res.status(400).send(this.enviarErrorGenerico());
-            return;
+        if (!token) return res.status(400).send(this.enviarErrorGenerico());
+
+        // Verificar token que llega de los params
+        const [tokenGenerado, errorTokenGenerado] = safeSync(
+            () => verificarToken<RecoverPasswordPayload>(token)
+        );
+        if (errorTokenGenerado) return res.status(401).json(this.enviarErrorGenerico());
+
+        // Mensaje de respuesta
+        const [mensaje, errorMensaje] = await safe<string>(
+            this.usuarioService.cambiarEstadoCuenta(tokenGenerado!.id)
+        );
+        if (errorMensaje) {
+            if (errorMensaje instanceof CuentaYaVerificadaException) return res.status(202).send();
+            return res.status(500).json(this.enviarErrorGenerico())
         }
 
-        let data: any;
-        try {
-            data = verificarToken(token);
-        } catch (e) {
-            res.status(401).json(this.enviarErrorGenerico());
-            return;
-        }
-
-        try {
-            const mensaje = await this.usuarioService.cambiarEstadoCuenta(data.id)
-            res.status(200).json(this.enviarExito(mensaje))
-        } catch (e) {
-            if (e instanceof CuentaYaVerificadaException) {
-                res.status(202).send();
-            } else {
-                res.status(500).json(this.enviarErrorGenerico())
-            }
-        }
+        res.status(200).json(this.enviarExito(mensaje))
     }
 
     public registrarse = async (_req: Request, res: Response) => {
-        let datos: IRegister;
-        try {
-            datos = validate(registerSchema, _req.body);
-        } catch (e) {
-            res.status(400).json(this.enviarErrorGenerico());
-            return;
+        // Validar body
+        const [usuarioRegisterDTO, errorUsuarioRegisterDTO] = safeSync<UsuarioRegisterDTO>(
+            () => validate(registerSchema, _req.body)
+        );
+        if (errorUsuarioRegisterDTO) return res.status(400).send(this.enviarErrorGenerico());
+
+        const usuarioExistente: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioRegisterDTO!.email)
+
+        const usuarioConPassHash: UsuarioRegisterDTO = await this.authService.registrarse(usuarioRegisterDTO!, usuarioExistente);
+
+        // Crear usuario y obtener id
+        const [idUsuarioCreado, errorIdUsuarioCreado] = await safe<number | null>(
+            this.usuarioService.guardar(usuarioConPassHash)
+        );
+        if (errorIdUsuarioCreado) return res.status(500).json(this.enviarErrorGenerico())
+
+        const token = generarToken({id: idUsuarioCreado});
+
+        // Enviar correo confirmación
+        const [resultado, error] = await safe(
+            this.authService.enviarCorreoConfirmacion(usuarioConPassHash.email, token)
+        );
+        if (error) {
+            if (error instanceof CorreoExistenteException) return res.status(409).json({mensaje: error.message})
+            return res.status(400).json(this.enviarErrorGenerico());
         }
 
-        const usuarioExistente = await this.usuarioService.obtenerUsuarioPorCorreo(datos.email)
+        res.status(200).json(this.enviarExito())
+    }
 
-        try {
-            const {data: usuarioValidado} = await this.authService.registrarse(datos, usuarioExistente);
-            const resultado = await this.usuarioService.guardar(usuarioValidado)
-            const token = generarToken({id: resultado.data})
-            await this.authService.enviarCorreoConfirmacion(datos.email, token)
-            res.status(200).json(resultado)
-        } catch (e) {
-            console.log(e)
-            if (e instanceof CorreoExistenteException) {
-                res.status(409).json({mensaje: e.message});
-            } else {
-                res.status(400).json(this.enviarErrorGenerico());
-            }
-        }
+    public cerrarSesion = async (_req: Request, res: Response) => {
+        console.log("CERRANDO SESIÓN PA")
+        res
+            .clearCookie('access-token')
+            .status(200).send();
+
     }
 
 }

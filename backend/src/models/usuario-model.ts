@@ -8,9 +8,15 @@ import {
     usuarioSchema
 } from '../schemas/app.schemas';
 
-export type ILogin = z.infer<typeof loginSchema>;
-export type IRegister = z.infer<typeof registerSchema>;
-export type IUsuario = z.infer<typeof usuarioSchema>;
+export type UsuarioLoginDTO = z.infer<typeof loginSchema>;
+export type UsuarioRegisterDTO = z.infer<typeof registerSchema>;
+export type Usuario = z.infer<typeof usuarioSchema>;
+export type UsuarioRecoverDTO = z.infer<typeof recoverSchema>;
+export type UsuarioCambiarDTO = z.infer<typeof changePasswordSchema>;
 export type ICarrito = z.infer<typeof carritoSchema>;
-export type IRecover = z.infer<typeof recoverSchema>;
-export type IChangePassword = z.infer<typeof changePasswordSchema>;
+
+export type UsuarioLogin = {
+    id: number;
+    email: string;
+    contrasena: string;
+}

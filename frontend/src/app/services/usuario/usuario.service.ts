@@ -1,6 +1,8 @@
 import {inject, Injectable, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
+import {UsuarioLoginRest, UsuarioRest} from './interfaces/usuario.interface.rest';
+import UsuarioMapper from './mapping/usuario.mapper';
 
 interface algo {
   exito?: boolean,
@@ -34,48 +36,56 @@ export class UsuarioService {
     return this.http.get<string>(`${this.apiUrl}`);
   }
 
-  public iniciarSesion(datos: any): Observable<boolean> {
+  public iniciarSesion(datos: UsuarioLoginRest): Observable<boolean> {
     const credenciales = {
       withCredentials: true
     }
     return this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos, credenciales);
   }
 
+  public cerrarSesion(): Observable<boolean> {
+    const credenciales = {
+      withCredentials: true
+    }
+    return this.http.get<boolean>(`${this.apiAuthUrl}/cerrar-sesion`, credenciales)
+  }
+
   public reenviarCorreo(id: number): Observable<algo> {
     return this.http.get(`${this.apiAuthUrl}/reenviar-confirmacion/${id}`)
   }
 
-  public confirmarCuenta (token: string): Observable<algo> {
+  public confirmarCuenta(token: string): Observable<algo> {
     return this.http.get(`${this.apiAuthUrl}/confirmar-cuenta/${token}`)
   }
 
-  public registrarse (datos: any): Observable<boolean> {
+  public registrarse(datos: any): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiAuthUrl}/register`, datos);
   }
 
-  public recuperar (email: string): Observable<algo> {
+  public recuperar(email: string): Observable<algo> {
     return this.http.post<algo>(`${this.apiAuthUrl}/recuperar`, {email});
   }
 
-  public cambiarContrasena (datos: any): Observable<algo> {
+  public cambiarContrasena(datos: any): Observable<algo> {
     return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
   }
 
-  public obtenerUsuarioActual (): Observable<Usuario> {
+  public obtenerUsuarioActual(): Observable<UsuarioRest> {
     const credenciales = {
       withCredentials: true
     }
-    return this.http.get<Usuario>(`${this.apiAuthUrl}/validar`, credenciales);
+    return this.http.get<UsuarioRest>(`${this.apiAuthUrl}/validar`, credenciales)
+      .pipe(
+        map((res: UsuarioRest) => UsuarioMapper.mapUsuarioRestToUsuario(res))
+      );
   }
 
-  public obtenerUsuarios (): Observable<algo> {
+  public obtenerUsuarios(): Observable<algo> {
     const credenciales = {
       withCredentials: true
     }
     return this.http.get<algo>(`${this.apiUrl}/usuarios`, credenciales);
   }
-
-
 
 
 }

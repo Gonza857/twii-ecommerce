@@ -1,15 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UsuarioService } from '../../../../../services/usuario.service';
 import { CarritoService } from '../../../../../services/carrito.service';
 import { CarritoItemComponent } from '../carrito-item/carrito-item.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import {UsuarioService} from '../../../../../services/usuario/usuario.service';
 
 @Component({
   selector: 'app-carrito-drawer',
   imports: [CommonModule, CarritoItemComponent, RouterModule, ButtonModule],
   templateUrl: './carrito-drawer.component.html',
+  standalone: true,
   styleUrl: './carrito-drawer.component.scss'
 })
 export class CarritoDrawerComponent implements OnInit {

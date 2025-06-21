@@ -1,11 +1,15 @@
-import {ILogin, IRegister, IUsuario} from "../models/usuario-model";
+import {
+    Usuario,
+    UsuarioLogin,
+    UsuarioRegisterDTO
+} from "../models/usuario-model";
 import {
     CuentaYaVerificadaException,
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
-import {IUsuarioRepository} from "../models/repositories-interfaces";
 import {IResultadoAccion} from "../models/main-models";
-import {IUsuarioService} from "../models/services-interfaces"
+import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
+import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
 
 class UsuarioService implements IUsuarioService {
 
@@ -16,29 +20,22 @@ class UsuarioService implements IUsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public async obtenerUsuarioPorId(id: string): Promise<IUsuario | null> {
+    public async obtenerUsuarioPorId(id: string): Promise<Usuario | null> {
         // Lógica para buscar usuario en la BD
         const idBuscado = Number(id);
         // if (typeof id === "NaN") throw new DatosIncorrectoException("El correo no existe.");
-        const usuario = await this.usuarioRepository.obtenerPorId(idBuscado);
-
-        if (!usuario) return null;
-
-        return usuario;
+        return await this.usuarioRepository.obtenerPorId(idBuscado);
     }
 
-    public async guardar(usuario: IRegister): Promise<IResultadoAccion> {
-        await this.usuarioRepository.crear(usuario);
-        return {
-            exito: true,
-            mensaje: "Te registraste correctamente.",
-        }
+    public async guardar(usuario: UsuarioRegisterDTO): Promise<number | null> {
+        return await this.usuarioRepository.crear(usuario);
     }
 
-    public async obtenerUsuarioPorCorreo (email: string): Promise<ILogin | null> {
+    public async obtenerUsuarioParaLoginPorCorreo(email: string): Promise<UsuarioLogin | null> {
         if (email.length < 1) throw new DatosIncorrectoException("E-mail incorrecto.");
-        return await this.usuarioRepository.obtenerPorEmail(email);
+        return await this.usuarioRepository.obtenerPorEmailParaLogin(email);
     }
+
 
     async actualizarContrasena(id: string, contrasena: string): Promise<IResultadoAccion> {
         await this.usuarioRepository.actualizarContrasena(Number(id), contrasena);
@@ -48,7 +45,7 @@ class UsuarioService implements IUsuarioService {
         }
     }
 
-    async cambiarEstadoCuenta (id: string) {
+    async cambiarEstadoCuenta(id: string) {
         const usuario = await this.usuarioRepository.obtenerPorId(Number(id));
         if (usuario?.validado) {
             throw new CuentaYaVerificadaException("El usuario ya está validado")
@@ -58,11 +55,11 @@ class UsuarioService implements IUsuarioService {
         return "Cuenta confirmada correctamente";
     }
 
-    async obtenerTodos(): Promise<IUsuario[]> {
+    async obtenerTodos(): Promise<Usuario[]> {
         return await this.usuarioRepository.obtenerTodos()
     }
 
-    async verificarCuentaValidada(id: number | undefined): Promise<void> {
+    async verificarCuentaValidada(id: number): Promise<void> {
         if (!id) throw new Error("error amigo")
         const usuario = await this.usuarioRepository.obtenerPorId(id)
         if (!usuario?.validado) throw new Error("error amigo: no validado")

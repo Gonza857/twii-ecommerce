@@ -1,141 +1,173 @@
 .layout-productos {
   display: flex;
-  gap: 2rem;
   align-items: flex-start;
-}
+  margin: 0 auto;
+  gap: 2rem;
 
-.sidebar-filtros {
-  flex: 0 0 250px;
-  position: sticky;
-  top: 1rem;
-  height: fit-content;
-}
+  .sidebar-filtros {
+    flex: 0 0 250px;
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+    background: #1e1e2f;
+    color: #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1.5rem;
 
-.productos-listado {
-  flex: 1;
-}
-
-.productos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.producto-card {
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 8px;
-  background-color: #fafafa;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
-  transition: box-shadow 0.2s;
-}
-
-.producto-card:hover {
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
-}
-
-.producto-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.2rem;
-}
-
-.producto-card .precio {
-  font-weight: bold;
-  color: #2ecc71;
-}
-
-.producto-card .clasificacion {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-h2{
-    margin: 20px;
-}
-
-.filtros-clasificacion,
-.filtros-precio {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 1.2rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-
-  h3 {
-    margin-bottom: 1rem;
-    color: #333;
-    font-size: 1.2rem;
-  }
-}
-
-.filtros-botones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-
-  button {
-    padding: 0.5rem 1rem;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 4px;
-    color: #333;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &.activo {
-      background-color: #007bff;
-      color: #fff;
-    }
-
-    &:hover {
-      background-color: #c0c0c0;
-    }
-  }
-}
-
-.filtros-precio {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-  .filtro {
-    display: flex;
-    flex-direction: column;
-
-    label {
+    h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      margin-bottom: 0.3rem;
+      color: #fff;
+      border-bottom: 2px solid #3a3a5a;
+      padding-bottom: 0.5rem;
     }
 
-    input {
-      padding: 0.4rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 150px;
+    .filtros-clasificacion,
+    .filtros-precio {
+      border: 1px solid #444466;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .filtros-botones {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      button {
+        background: #2a2a44;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        color: #cfd1f7;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-weight: 500;
+        flex: 1 1 auto;
+        min-width: 80px;
+        text-align: center;
+
+        &.activo,
+        &:hover {
+          background: #4f52ff;
+          color: white;
+        }
+      }
+    }
+
+    .filtros-precio {
+      .filtro {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+
+        label {
+          font-size: 0.9rem;
+          margin-bottom: 0.3rem;
+          color: #b0b0d6;
+          font-weight: 600;
+        }
+
+        input[type='number'] {
+          padding: 0.4rem 0.6rem;
+          border-radius: 4px;
+          border: 1px solid #444466;
+          background: #2a2a44;
+          color: #eee;
+          font-size: 1rem;
+          outline: none;
+          transition: border-color 0.3s ease;
+
+          &:focus {
+            border-color: #6b6fff;
+            background: #3b3b66;
+          }
+        }
+      }
+
+      button {
+        background: #4f52ff;
+        border: none;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background: #373acb;
+        }
+      }
+    }
+
+    /* Botón borrar filtros */
+    > .filtros-precio:last-child {
+      button {
+        background: #ff5c5c;
+        margin-top: 0.5rem;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background: #cc4848;
+        }
+      }
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
     }
   }
 
-  button {
-    align-self: flex-start;
-    padding: 0.45rem 1.2rem;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  .productos-listado {
+    flex: 1;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgb(0 0 0 / 0.4);
 
-    &:hover {
-      background-color: #218838;
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+
+      .producto-card {
+        border: 1px solid #444466;
+        padding: 16px;
+        border-radius: 8px;
+        background-color: #2a2a44;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        transition: box-shadow 0.2s;
+
+        &:hover {
+          box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        h3 {
+          margin: 0 0 10px;
+          font-size: 1.2rem;
+          color: #cfd1f7;
+        }
+
+        .precio {
+          font-weight: bold;
+          color: #2ecc71;
+        }
+
+        .clasificacion {
+          font-size: 0.85rem;
+          color: #888;
+        }
+      }
     }
-  }
-
-  .error {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 0.4rem;
   }
 }

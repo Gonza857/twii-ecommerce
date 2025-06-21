@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { Badge, BadgeModule } from 'primeng/badge';
-import { UsuarioService } from '../../../../services/usuario.service';
+import { BadgeModule } from 'primeng/badge';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
 @Component({
   selector: 'app-admin-home',

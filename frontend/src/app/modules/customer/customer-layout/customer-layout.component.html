@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-info" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">E-Commerce</a>
+<nav class="navbar navbar-expand-lg bg-primario" data-bs-theme="dark">
+  <div class="col-10 mx-auto d-flex">
+    <a class="navbar-brand" href="#">E-Commerce | Taller Web II</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -19,14 +19,11 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" [routerLink]="'/'"
-            >Home</a
+          >Home</a
           >
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/productos'">Productos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/cuenta/login'">Login</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
@@ -40,6 +37,16 @@
         <li class="nav-item">
           <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
+        @if (this.usuarioActual) {
+          <li class="nav-item">
+            <a (click)="cerrarSesion()" class="nav-link">Cerrar sesión</a>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/cuenta/login'">Iniciar sesión</a>
+          </li>
+        }
+
       </ul>
     </div>
   </div>
@@ -51,5 +58,44 @@
       </p-drawer>
   </div>
 
-<router-outlet> </router-outlet>
-<footer>Template footer</footer>
+<section class="bg-principal pb-5">
+  <router-outlet></router-outlet>
+</section>
+<footer class="footer-ecommerce">
+  <div class="footer-content col-10 mx-auto">
+    <!-- Proyecto -->
+    <div class="footer-info">
+      <h5 class="footer-title">E-Commerce | Taller Web II</h5>
+    </div>
+
+    <!-- Enlaces -->
+    <div class="footer-links">
+      <h6 class="footer-subtitle">Enlaces rápidos</h6>
+      <ul class="list-unstyled d-flex flex-column gap-2">
+        <li><a routerLink="/" class="footer-link">Inicio</a></li>
+        <li><a routerLink="/productos" class="footer-link">Productos</a></li>
+        <li><a routerLink="/cuenta/login" class="footer-link">Login</a></li>
+        <li><a routerLink="/cuenta/register" class="footer-link">Registro</a></li>
+        <li><a routerLink="/admin" class="footer-link">Admin</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-info">
+      <h6 class="footer-subtitle">Alumnos</h6>
+      <ul class="list-unstyled d-flex flex-column gap-2">
+        <p class="footer-line">Jimena Rocío Gomez Wusinowski</p>
+        <p class="footer-line">Federico Alvarez</p>
+        <p class="footer-line">Martin Zaccardo</p>
+        <p class="footer-line">Gonzalo Ramos</p>
+      </ul>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    &copy; 2025 UNLaM | Todos los derechos reservados.
+  </div>
+</footer>
+
+

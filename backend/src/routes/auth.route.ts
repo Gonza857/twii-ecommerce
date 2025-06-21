@@ -41,8 +41,9 @@ const authController = container.authController;
  *       403:
  *         description: "Cuenta no verificada. Revisa tu correo electrónico."
  */
+authRouter.post("/login", authController.iniciarSesion as RequestHandler)
 
-authRouter.post("/login", authController.iniciarSesion)
+authRouter.get("/cerrar-sesion", authController.cerrarSesion as RequestHandler)
 
 /**
  * @openapi
@@ -82,7 +83,7 @@ authRouter.post("/login", authController.iniciarSesion)
  *       409:
  *          description: Correo inexistente
  */
-authRouter.post("/register", authController.registrarse)
+authRouter.post("/register", authController.registrarse as RequestHandler)
 
 /**
  * @openapi
@@ -110,7 +111,7 @@ authRouter.post("/register", authController.registrarse)
  *       409:
  *          description: Correo inexistente
  */
-authRouter.post("/recuperar", authController.recuperarContrasena)
+authRouter.post("/recuperar", authController.recuperarContrasena as RequestHandler)
 
 /**
  * @openapi
@@ -129,7 +130,7 @@ authRouter.post("/recuperar", authController.recuperarContrasena)
  *               - contrasena
  *               - token
  *             properties:
- *               email:
+ *               contrasena:
  *                 type: string
  *               token:
  *                  type: string
@@ -143,13 +144,11 @@ authRouter.post("/recuperar", authController.recuperarContrasena)
  *       500:
  *          description: No se pudo actualizar la contraseña
  */
-authRouter.post("/cambiar", authController.cambiar);
-
-authRouter.post("/confirmar", authController.confirmarCuenta);
+authRouter.post("/cambiar", authController.cambiar as RequestHandler);
 
 /**
  * @openapi
- * /api/auth/confirmar/{token}:
+ * /api/auth/confirmar-cuenta/{token}:
  *   get:
  *     summary: Confirma la cuenta del usuario usando un token
  *     tags:
@@ -205,7 +204,7 @@ authRouter.post("/confirmar", authController.confirmarCuenta);
  *                   type: string
  *                   example: No se pudo confirmar la cuenta. Intente más tarde
  */
-authRouter.get("/confirmar-cuenta/:token", authController.confirmarCuenta);
+authRouter.get("/confirmar-cuenta/:token", authController.confirmarCuenta as RequestHandler);
 
 /**
  * @openapi
@@ -263,7 +262,7 @@ authRouter.get("/confirmar-cuenta/:token", authController.confirmarCuenta);
  *                   type: string
  *                   example: Error al intentar reenviar el correo
  */
-authRouter.get("/reenviar-confirmacion/:id", authController.reenviarConfirmacion);
+authRouter.get("/reenviar-confirmacion/:id", authController.reenviarConfirmacion as RequestHandler);
 
 /**
  * @openapi

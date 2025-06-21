@@ -11,8 +11,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { Router, RouterLink } from '@angular/router';
-import { Password, PasswordModule } from 'primeng/password';
-import { UsuarioService } from '../../../../services/usuario.service';
+import { PasswordModule } from 'primeng/password';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
+import UsuarioMapper from '../../../../services/usuario/mapping/usuario.mapper';
+import {UsuarioLoginRest} from '../../../../services/usuario/interfaces/usuario.interface.rest';
 
 @Component({
   selector: 'app-login',
@@ -69,15 +71,18 @@ export class LoginComponent implements OnInit {
   login() {
     this.enviando = true;
     this.mensajeError = '';
-    const email = this.form.get('email')?.value;
-    const contrasena = this.form.get('password')?.value;
+    const usuario = {
+      email: this.form.get('email')?.value,
+      contrasena: this.form.get('password')?.value
+    }
+    const usuarioRest = UsuarioMapper.mapLoginToLoginRest(usuario)
 
     if (this.form.valid) {
-      this.servicioUsuario.iniciarSesion({ email, contrasena }).subscribe({
+      this.servicioUsuario.iniciarSesion(usuarioRest).subscribe({
         next: () => {
           this.loginExitoso();
         },
-        error: (e) => {
+        error: (e: any) => {
           this.loginError(e);
         },
         complete: () => (this.enviando = false),
@@ -86,7 +91,5 @@ export class LoginComponent implements OnInit {
       this.form.markAllAsTouched();
     }
     this.enviando = false;
-
-    // Lógica de autenticación acá
   }
 }

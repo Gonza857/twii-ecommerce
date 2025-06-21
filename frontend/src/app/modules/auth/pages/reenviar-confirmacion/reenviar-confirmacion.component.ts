@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/message';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
-import { UsuarioService } from '../../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
 @Component({
   selector: 'app-confirmar-cuenta',
@@ -31,7 +31,7 @@ export class ReenviarConfirmacionComponent implements OnInit {
         this.mensaje = data.mensaje;
         this.exito = true;
       },
-      error: (e) => {
+      error: (e: any) => {
         if (e.status === 409) {
           this.router.navigate(['/cuenta/login']);
         }

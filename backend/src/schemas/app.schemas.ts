@@ -2,6 +2,7 @@ import { Decimal } from '@prisma/client/runtime/library';
 import { z } from 'zod';
 
 const registerSchema = z.object({
+    id: z.number().optional(),
     email: z.string().email(),
     contrasena: z.string().min(6),
     nombre: z.string(),

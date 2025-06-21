@@ -11,7 +11,7 @@ import { InputText } from 'primeng/inputtext';
 import { NgClass } from '@angular/common';
 import { Card } from 'primeng/card';
 import { Message } from 'primeng/message';
-import { UsuarioService } from '../../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
 @Component({
   selector: 'app-recuperar-contrasena',

@@ -1,9 +1,10 @@
-import {ILogin, IRegister, IUsuario} from "../models/usuario-model";
+import {UsuarioLogin, UsuarioRegisterDTO} from "../models/usuario-model";
 import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/UsuarioExceptions";
 import {IResultadoAccion} from "../models/main-models";
 import bcrypt from "bcrypt";
-import {IAuthService, IMailerService} from "../models/services-interfaces";
 import {generarToken} from "../utils/jwt";
+import {IAuthService} from "../models/interfaces/auth.service.interface";
+import {IMailerService} from "../models/services-interfaces";
 
 class AuthService implements IAuthService {
     private readonly mailerService!: IMailerService;
@@ -12,29 +13,18 @@ class AuthService implements IAuthService {
         this.mailerService = mailerService;
     }
 
-    public async iniciarSesion(usuario: ILogin, inputContrasena: string): Promise<IResultadoAccion> {
+    public async iniciarSesion(usuario: UsuarioLogin | null, inputContrasena: string): Promise<void> {
         if (!usuario)
             throw new DatosIncorrectoException("Datos incorrectos.")
 
         if (!await this.verificarContrasena(inputContrasena, usuario.contrasena))
             throw new DatosIncorrectoException("Datos incorrectos.");
-
-        return {
-            exito: true,
-            mensaje: "Se inició sesión correctamente.",
-            data: usuario.id
-        }
     }
 
-    public async registrarse(usuario: IRegister, encontrado: ILogin): Promise<IResultadoAccion> {
+    public async registrarse(usuario: UsuarioRegisterDTO, encontrado: UsuarioLogin): Promise<UsuarioRegisterDTO> {
         if (encontrado != null) throw new CorreoExistenteException("El correo ya existe.");
         usuario.contrasena = await this.cifrarContrasena(usuario.contrasena);
-
-        return {
-            exito: true,
-            mensaje: "",
-            data: usuario
-        }
+        return usuario
 
     }
 
@@ -45,10 +35,10 @@ class AuthService implements IAuthService {
     }
 
 
-    public async recuperarContrasena(usuario: ILogin | null): Promise<IResultadoAccion> {
+    public async recuperarContrasena(usuario: UsuarioLogin | null): Promise<IResultadoAccion> {
         if (!usuario) throw new DatosIncorrectoException("Datos incorrectos.")
 
-        const token = generarToken({id: usuario.id})
+        const token = generarToken({id: usuario.id, email: usuario.email})
 
         await this.mailerService.enviarCorreo(usuario.email, "Recuperación", getResetPasswordHTML(token))
 
@@ -71,15 +61,9 @@ class AuthService implements IAuthService {
         return await bcrypt.compare(plainPassword, hashedPassword);
     };
 
-    public async cambiarContrasena(usuario: IUsuario | null, contrasenaNueva: string): Promise<IResultadoAccion> {
+    public async cambiarContrasena(usuario: UsuarioLogin, contrasenaNueva: string): Promise<string> {
         if (!usuario) throw new DatosIncorrectoException("Datos incorrectos.")
-        contrasenaNueva = await this.cifrarContrasena(contrasenaNueva)
-        return {
-            exito: true,
-            mensaje: "Contraseña actualizada correctamente.",
-            data: contrasenaNueva,
-        }
-
+        return await this.cifrarContrasena(contrasenaNueva)
     }
 
 }

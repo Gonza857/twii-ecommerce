@@ -12,7 +12,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { Router, RouterLink } from '@angular/router';
 import { Message, MessageModule } from 'primeng/message';
-import { UsuarioService } from '../../../../services/usuario.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
+
 
 @Component({
   selector: 'app-register',
@@ -67,18 +68,14 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      console.log('Form valido');
       this.enviando = false;
       this.servicioUsuario.registrarse(usuario).subscribe({
         next: (data: any) => {
-          console.log('Exito pa');
-          console.log(data);
-          if (data.exito) {
-            this.exito = data.exito;
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 2500);
-          }
+          console.log("Server response", data)
+          this.exito = true
+          setTimeout(()=>{
+            this.router.navigate(['/cuenta/login']);
+          }, 2500)
         },
         error: (e) => {
           console.log(e);

@@ -1,16 +1,10 @@
-import { ICarrito, ILogin, IRegister, IUsuario } from '../models/usuario-model';
-import { DatosIncorrectoException } from '../exceptions/UsuarioExceptions';
+import { ICarrito } from '../models/usuario-model';
 import {
     ICarritoRepository,
-    IUsuarioRepository
 } from '../models/repositories-interfaces';
-import { IResultadoAccion } from '../models/main-models';
 import {
     ICarritoService,
-    IUsuarioService
 } from '../models/services-interfaces';
-import CarritoRepository from '../repositories/CarritoRepository';
-import { Carrito } from '../models/carrito-model';
 
 class CarritoService implements ICarritoService {
     private carritoRepository!: ICarritoRepository;

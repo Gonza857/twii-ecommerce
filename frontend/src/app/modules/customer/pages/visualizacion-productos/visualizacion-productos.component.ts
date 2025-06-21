@@ -1,20 +1,21 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Signal } from '@angular/core';
+import {Component, OnInit, Signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  Producto,
-  ProductoService,
-} from '../../../../services/producto.service';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { CarritoService, ItemCarrito } from '../../../../services/carrito.service';
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
+import {PrimeTemplate} from "primeng/api";
+import {CardModule} from "primeng/card";
+import {SkeletonModule} from "primeng/skeleton";
+import {ProductoService} from '../../../../services/producto/producto.service';
+import {Producto} from "../../../../services/producto/interfaces/producto.interface";
+import {RouterLink} from "@angular/router";
+import {CarritoService, ItemCarrito} from '../../../../services/carrito.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
+import {SelectModule} from 'primeng/select';
+import {ButtonDirective} from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule, ButtonModule, SelectModule],
+  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })
@@ -55,14 +56,18 @@ export class ListaProductosComponent implements OnInit {
       this.clasificacionSeleccionada = filtros.clasificacion || '';
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
+      setTimeout(()=>{
+        this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
+          this.productos = data;
+        });
+      }, 1000)
 
-      this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
-        this.productos = data;
-      });
     } else {
-      this.productoService.obtenerProductos().subscribe((data) => {
-        this.productos = data;
-      });
+      setTimeout(()=>{
+        this.productoService.obtenerProductos().subscribe((data:any) => {
+          this.productos = data;
+        });
+      }, 1000)
     }
 
     this.carrito = this.carritoService.carrito;
@@ -111,8 +116,7 @@ export class ListaProductosComponent implements OnInit {
     }
 
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
-
-    this.productoService.obtenerFiltrados(filtros).subscribe((data) => {
+    this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
       this.productos = data;
     });
   }
