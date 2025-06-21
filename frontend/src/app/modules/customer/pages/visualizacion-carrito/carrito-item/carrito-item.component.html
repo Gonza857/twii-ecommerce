@@ -1,0 +1,33 @@
+<div class="card bg-dark text-white mb-3 p-3 border border-secondary">
+  <h5 class="mb-2 fw-bold">{{ item.producto.nombre }}</h5>
+
+  <div class="d-flex justify-content-between small">
+    <span>Precio unitario:</span>
+    <span class="fw-medium">{{ item.producto.precio | currency:'USD':'symbol':'1.2-2' }}</span>
+  </div>
+
+  <div class="d-flex justify-content-between small mb-2">
+    <span>Subtotal:</span>
+    <span class="fw-bold">
+      {{ getSubtotal(item.producto.precio, item.cantidad) | currency:'USD':'symbol':'1.2-2' }}
+    </span>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center gap-2 mt-2">
+    <p-select
+      class="form-select form-select-sm flex-fill"
+      [options]="opcionesCantidad"
+      [(ngModel)]="item.cantidad"
+      (onChange)="cambiarCantidad()"
+      placeholder="Cantidad"
+    ></p-select>
+
+    <button
+      pButton
+      icon="pi pi-trash"
+      (click)="quitar()"
+      class="p-button-danger p-button-sm p-button-icon-only"
+      title="Eliminar del carrito"
+    ></button>
+  </div>
+</div>

@@ -8,6 +8,20 @@ interface algo {
   data?: any
 }
 
+export interface Usuario {
+  id: number;
+  nombre: string;
+  apellido: string;
+  email: string;
+  direccion: string;
+  validado: boolean;
+  rolid: number;
+  rol: {
+    id: number;
+    nombre: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -47,11 +61,11 @@ export class UsuarioService {
     return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
   }
 
-  public obtenerUsuarioActual (): Observable<algo> {
+  public obtenerUsuarioActual (): Observable<Usuario> {
     const credenciales = {
       withCredentials: true
     }
-    return this.http.get<algo>(`${this.apiAuthUrl}/validar`, credenciales);
+    return this.http.get<Usuario>(`${this.apiAuthUrl}/validar`, credenciales);
   }
 
   public obtenerUsuarios (): Observable<algo> {

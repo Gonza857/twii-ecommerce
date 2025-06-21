@@ -1,13 +1,26 @@
 <nav class="navbar navbar-expand-lg bg-info" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">E-Commerce</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+    <div
+      class="collapse navbar-collapse d-flex justify-content-end"
+      id="navbarNav"
+    >
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [routerLink]="'/'">Home</a>
+          <a class="nav-link active" aria-current="page" [routerLink]="'/'"
+            >Home</a
+          >
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/productos'">Productos</a>
@@ -24,12 +37,19 @@
         <li class="nav-item">
           <a class="nav-link disabled" aria-disabled="true">Perfil</a>
         </li>
+        <li class="nav-item">
+          <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
-<router-outlet>
 
-</router-outlet>
+  <div>
+    <p-drawer header="Carrito" [visible]="carritoService.drawerVisible()" (onHide)="carritoService.cerrarDrawer()" position="right" [style]="{ width: '25vw' }">
+        <app-carrito-drawer></app-carrito-drawer>
+      </p-drawer>
+  </div>
+
+<router-outlet> </router-outlet>
 <footer>Template footer</footer>
-
