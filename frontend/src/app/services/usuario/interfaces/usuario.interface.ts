@@ -21,7 +21,8 @@ export interface UsuarioRegister {
 }
 
 export interface UsuarioRecuperar {
-
+  contrasena: string,
+  token: string,
 }
 
 export interface UsuarioReenviarConfirmacion {

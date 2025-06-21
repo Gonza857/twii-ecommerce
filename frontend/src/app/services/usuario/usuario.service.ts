@@ -1,7 +1,7 @@
 import {inject, Injectable, OnInit, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Observable} from 'rxjs';
-import {UsuarioLoginRest, UsuarioRest} from './interfaces/usuario.interface.rest';
+import {Observable} from 'rxjs';
+import {UsuarioLoginRest, UsuarioRecuperarRest, UsuarioRest} from './interfaces/usuario.interface.rest';
 import UsuarioMapper from './mapping/usuario.mapper';
 import {Usuario} from './interfaces/usuario.interface';
 
@@ -30,26 +30,21 @@ export class UsuarioService {
   private usuarioSignal = signal<Usuario | null>(null);
   public readonly usuario = this.usuarioSignal.asReadonly();
 
-  private respuestaLoginSignal = signal<ResultadoRequest | null>(null);
-  public readonly resultadoLogin = this.respuestaLoginSignal.asReadonly();
-
-  public testearAPI(): Observable<string> {
-    return this.http.get<string>(`${this.apiUrl}`);
-  }
+  private respuestaServidorSignal = signal<ResultadoRequest | null>(null);
+  public readonly respuestaServidor = this.respuestaServidorSignal.asReadonly();
 
   public iniciarSesion(datos: UsuarioLoginRest): void {
-    console.log("LOGIN: iniciando", datos)
     const credenciales = {
       withCredentials: true
     }
     this.http.post<boolean>(`${this.apiAuthUrl}/login`, datos, credenciales)
       .subscribe({
         next: () => {
-          this.respuestaLoginSignal.set({exito: true})
+          this.respuestaServidorSignal.set({exito: true})
         },
         error: (e: any) => {
           if (e.status === 403) {
-            this.respuestaLoginSignal.set(
+            this.respuestaServidorSignal.set(
               {
                 exito: false,
                 mensaje: e.error.error,
@@ -58,7 +53,7 @@ export class UsuarioService {
               }
             )
           } else if (e.status === 400 || e.status === 401) {
-            this.respuestaLoginSignal.set(
+            this.respuestaServidorSignal.set(
               {
                 exito: false,
                 mensaje: e.error.error,
@@ -105,24 +100,83 @@ export class UsuarioService {
       })
   }
 
-  public reenviarCorreo(id: number): Observable<algo> {
-    return this.http.get(`${this.apiAuthUrl}/reenviar-confirmacion/${id}`)
+  public reenviarCorreo(id: number): void {
+    this.http.get<{mensaje: string}>(`${this.apiAuthUrl}/reenviar-confirmacion/${id}`).subscribe({
+      next: (res: {mensaje: string}) => {
+        this.respuestaServidorSignal.set({
+          exito: true,
+          mensaje: res.mensaje,
+        })
+      },
+      error: (e: any) => {
+        this.respuestaServidorSignal.set({
+          exito: false,
+          codigo: e.status,
+          mensaje: e.error.error
+        })
+      }
+    })
   }
 
-  public confirmarCuenta(token: string): Observable<algo> {
-    return this.http.get(`${this.apiAuthUrl}/confirmar-cuenta/${token}`)
+  public confirmarCuenta(token: string): void {
+    this.http.get(`${this.apiAuthUrl}/confirmar-cuenta/${token}`).subscribe({
+      next: () => {
+        this.respuestaServidorSignal.set({
+          exito: true
+        })
+      },
+      error: (e: any) => {
+        this.respuestaServidorSignal.set({
+          exito: false,
+          mensaje: e.error.error,
+          redireccion: false,
+          codigo: e.status,
+        })
+      },
+    })
   }
 
   public registrarse(datos: any): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiAuthUrl}/register`, datos);
   }
 
-  public recuperar(email: string): Observable<algo> {
-    return this.http.post<algo>(`${this.apiAuthUrl}/recuperar`, {email});
+  public recuperar(email: string): void {
+    this.http.post<{ mensaje: string }>(`${this.apiAuthUrl}/recuperar`, {email}).subscribe({
+      next: (res: { mensaje: string }) => {
+        this.respuestaServidorSignal.set({
+          exito: true,
+          mensaje: res.mensaje
+        })
+      },
+      error: (e: any) => {
+        this.respuestaServidorSignal.set({
+          exito: false,
+          mensaje: e.error.error
+        })
+      }
+    });
   }
 
-  public cambiarContrasena(datos: any): Observable<algo> {
-    return this.http.post<algo>(`${this.apiAuthUrl}/cambiar`, datos);
+  public cambiarContrasena(datos: UsuarioRecuperarRest): void {
+    this.http.post<{ mensaje: string }>(`${this.apiAuthUrl}/cambiar`, datos)
+      .subscribe({
+        next: (res: { mensaje: string }) => {
+          this.respuestaServidorSignal.set({
+            exito: true,
+            mensaje: res.mensaje,
+          })
+        },
+        error: (e: any) => {
+          this.respuestaServidorSignal.set(
+            {
+              exito: false,
+              mensaje: e.error.error,
+              codigo: e.status,
+              redireccion: false,
+            }
+          )
+        },
+      });
   }
 
 

@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      const resultado = this.servicioUsuario.resultadoLogin();
+      const resultado = this.servicioUsuario.respuestaServidor();
       if (!resultado) return;
 
       this.enviando = false;

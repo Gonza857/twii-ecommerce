@@ -16,3 +16,7 @@ export interface UsuarioRest {
   validado: boolean | null;
 }
 
+export interface UsuarioRecuperarRest {
+  contrasena: string;
+  token: string;
+}

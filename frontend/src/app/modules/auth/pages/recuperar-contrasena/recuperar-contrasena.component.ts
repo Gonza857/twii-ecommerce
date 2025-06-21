@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -31,33 +31,40 @@ export class RecuperarContrasenaComponent implements OnInit {
   protected form!: FormGroup;
   private readonly fb: FormBuilder = inject(FormBuilder);
   private readonly servicioUsuario: UsuarioService = inject(UsuarioService);
-  private readonly router: Router = inject(Router);
   protected enviando: boolean = false;
   protected exito: boolean = false;
   protected mensaje: string = '';
 
-  protected enviar = () => {
-    this.enviando = true;
-    const email: string = this.form.get('email')?.value;
-    if (this.form.valid) {
-      this.servicioUsuario.recuperar(email).subscribe({
-        next: (data: any) => {
-          this.exito = true;
-        },
-        error: (e) => {
-          this.exito = false;
-        },
-        complete: () => {},
-      });
-    }
-    this.enviando = false;
-    this.mensaje =
-      'Si tu cuenta existe, te hemos enviado un correo de confirmación.';
-  };
+  constructor() {
+    effect(() => {
+      const resultado = this.servicioUsuario.respuestaServidor();
+      if (!resultado) return;
+
+      if (resultado.exito) {
+        this.mensaje = resultado.mensaje ?? "Si tu cuenta existe, te hemos enviado un correo de confirmación."
+      }
+
+    });
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       email: ['test@test.com', [Validators.required, Validators.email]],
     });
   }
+
+  protected enviar = () => {
+    this.enviando = true;
+    const email: string = this.form.get('email')?.value;
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched()
+      this.enviando = false;
+      return;
+    }
+
+    this.servicioUsuario.recuperar(email);
+  };
+
+
 }

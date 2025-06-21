@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
@@ -15,18 +15,22 @@ export class RealizarConfirmacionComponent implements OnInit {
   private readonly router: Router = inject(Router);
   private token!: string | null;
 
+  constructor() {
+    effect(() => {
+      const resultado = this.usuarioService.respuestaServidor();
+      if (!resultado) return;
+
+      if (resultado.exito) {
+        this.router.navigate(["/cuenta/confirmada"])
+      }
+
+    });
+  }
+
+
   ngOnInit(): void {
     this.token = this.activatedRoute.snapshot.paramMap.get('token');
     if (this.token == null) return;
-    this.usuarioService.confirmarCuenta(this.token).subscribe({
-      next: () => {
-        this.router.navigate(["/cuenta/confirmada"])
-      },
-      error: (e) => {
-        if (e.status === 400 || e.status === 401) {
-        }
-      },
-      complete: () => {},
-    });
+    this.usuarioService.confirmarCuenta(this.token)
   }
 }
