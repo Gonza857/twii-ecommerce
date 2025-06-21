@@ -35,7 +35,7 @@
           <a class="nav-link disabled" aria-disabled="true">Perfil</a>
         </li>
         <li class="nav-item">
-          <a (click)="toggleCarrito()" class="nav-link">Carrito</a>
+          <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
         @if (this.usuarioActual) {
           <li class="nav-item">
@@ -52,16 +52,11 @@
   </div>
 </nav>
 
-<div>
-  <p-drawer header="Carrito" [(visible)]="carritoVisible" position="right">
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat.
-    </p>
-  </p-drawer>
-</div>
+  <div>
+    <p-drawer header="Carrito" [visible]="carritoService.drawerVisible()" (onHide)="carritoService.cerrarDrawer()" position="right" [style]="{ width: '25vw' }">
+        <app-carrito-drawer></app-carrito-drawer>
+      </p-drawer>
+  </div>
 
 <section class="bg-principal pb-5">
   <router-outlet></router-outlet>

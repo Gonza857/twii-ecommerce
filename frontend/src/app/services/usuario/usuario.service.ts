@@ -10,6 +10,20 @@ interface algo {
   data?: any
 }
 
+export interface Usuario {
+  id: number;
+  nombre: string;
+  apellido: string;
+  email: string;
+  direccion: string;
+  validado: boolean;
+  rolid: number;
+  rol: {
+    id: number;
+    nombre: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +47,7 @@ export class UsuarioService {
     const credenciales = {
       withCredentials: true
     }
-      return this.http.get<boolean>(`${this.apiAuthUrl}/cerrar-sesion`, credenciales)
+    return this.http.get<boolean>(`${this.apiAuthUrl}/cerrar-sesion`, credenciales)
   }
 
   public reenviarCorreo(id: number): Observable<algo> {
@@ -62,7 +76,7 @@ export class UsuarioService {
     }
     return this.http.get<UsuarioRest>(`${this.apiAuthUrl}/validar`, credenciales)
       .pipe(
-      map((res: UsuarioRest) => UsuarioMapper.mapUsuarioRestToUsuario(res))
+        map((res: UsuarioRest) => UsuarioMapper.mapUsuarioRestToUsuario(res))
       );
   }
 

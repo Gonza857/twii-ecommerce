@@ -43,8 +43,6 @@
   </aside>
 
   <main class="productos-listado">
-
-
     <div class="productos-grid">
 
       @defer (when productos.length > 0) {
@@ -88,12 +86,12 @@
 
                 <!-- Botón por fuera del link visualmente, pero posicionado adentro -->
                 <div class="pt-0 bg-transparent position-relative z-1">
-                  <button
-                    class="col-12 btn-primario"
-                    (click)="$event.stopPropagation(); $event.preventDefault();"
-                  >
-                    Agregar al carrito
-                  </button>
+<!--                  <button-->
+<!--                    class="col-12 btn-primario"-->
+<!--                    (click)="$event.stopPropagation(); $event.preventDefault();"-->
+<!--                  >-->
+<!--                    Agregar al carrito-->
+<!--                  </button>-->
                 </div>
               </p-card>
             </a>
@@ -111,6 +109,48 @@
           </p-card>
         }
       }
+<!--  <div class="productos-grid">-->
+<!--    <div *ngFor="let producto of productos" class="producto-card">-->
+<!--      <h3>{{ producto.nombre }}</h3>-->
+<!--      <p>{{ producto.descripcion }}</p>-->
+<!--      <span class="clasificacion">{{ producto.clasificacion }}</span>-->
+<!--      <p class="precio">{{ producto.precio | currency:'ARS' }}</p>-->
+<!--      <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">-->
+<!--        <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">-->
+<!--          <p-select-->
+<!--            class="flex-grow-1"-->
+<!--            [options]="opcionesCantidad"-->
+<!--            [(ngModel)]="item.cantidad"-->
+<!--            (onChange)="cambiarCantidad(item)"-->
+<!--            optionValue="value"-->
+<!--            optionLabel="label"-->
+<!--            [style]="{ height: '100%' }"-->
+<!--          ></p-select>-->
+
+<!--          <button-->
+<!--            pButton-->
+<!--            icon="pi pi-trash"-->
+<!--            class="p-button-sm p-button-danger"-->
+<!--            (click)="eliminarProducto(item)"-->
+<!--            title="Quitar del carrito"-->
+<!--            [style]="{ height: '100%' }"-->
+<!--          ></button>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+
+<!--      <ng-template #agregar>-->
+<!--        <div class="d-flex mt-2 align-items-stretch" style="height: 40px;">-->
+<!--          <button-->
+<!--            pButton-->
+<!--            icon="pi pi-shopping-cart"-->
+<!--            label="Agregar al carrito"-->
+<!--            class="p-button-sm p-button-success w-100"-->
+<!--            (click)="agregarAlCarrito(producto)"-->
+<!--            [disabled]="!usuarioLogueado"-->
+<!--            [style]="{ height: '100%' }"-->
+<!--          ></button>-->
+<!--        </div>-->
+<!--      </ng-template>-->
     </div>
   </main>
 </div>
