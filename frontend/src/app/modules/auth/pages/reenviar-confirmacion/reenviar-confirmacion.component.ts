@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/message';
 import { Card } from 'primeng/card';
@@ -20,25 +20,33 @@ export class ReenviarConfirmacionComponent implements OnInit {
   protected exito: boolean = false;
   protected mensaje!: string;
   protected mensajeError!: string;
+  protected enviando: boolean = false;
+
+  constructor() {
+    effect(() => {
+      const resultado = this.servicioUsuario.respuestaServidor();
+      if (!resultado) return;
+
+      this.enviando = false;
+      this.exito = resultado.exito ?? false;
+      if (resultado.exito) {
+        this.mensaje = resultado.mensaje ?? "";
+      } else {
+        if (resultado.redireccion) {
+          this.router.navigate(['/cuenta/login']);
+        } else {
+          this.mensajeError = resultado.mensaje ?? "";
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.userId = Number(this.activatedRoute.snapshot.paramMap.get('id'));
   }
 
   reenviarCorreo() {
-    this.servicioUsuario.reenviarCorreo(this.userId).subscribe({
-      next: (data: any) => {
-        this.mensaje = data.mensaje;
-        this.exito = true;
-      },
-      error: (e: any) => {
-        if (e.status === 409) {
-          this.router.navigate(['/cuenta/login']);
-        }
-        this.exito = false;
-        this.mensajeError = e.error.error;
-      },
-      complete: () => {},
-    });
+    this.enviando = true;
+    this.servicioUsuario.reenviarCorreo(this.userId)
   }
 }

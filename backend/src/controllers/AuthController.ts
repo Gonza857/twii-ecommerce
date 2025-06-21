@@ -102,7 +102,7 @@ class AuthController {
             return res.status(400).send(this.enviarErrorGenerico())
         }
 
-        res.status(200).send("Correo de recuperación enviado correctamente.")
+        res.status(200).send("Si tu cuenta existe, te hemos enviado un correo de confirmación.")
     }
 
     public validar = async (_req: AuthenticatedRequest, res: Response) => {
@@ -141,7 +141,7 @@ class AuthController {
         );
         if (error) return res.status(500).send(this.enviarErrorGenerico());
 
-        res.status(201).json(this.enviarErrorGenerico(resultado?.mensaje))
+        res.status(201).json(this.enviarExito(resultado?.mensaje))
     }
 
     public reenviarConfirmacion = async (_req: Request, res: Response) => {
@@ -220,7 +220,6 @@ class AuthController {
     }
 
     public cerrarSesion = async (_req: Request, res: Response) => {
-        console.log("CERRANDO SESIÓN PA")
         res
             .clearCookie('access-token')
             .status(200).send();

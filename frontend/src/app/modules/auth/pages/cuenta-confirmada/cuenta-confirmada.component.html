@@ -1,21 +1,21 @@
-<div class="container d-flex align-items-center justify-content-center vh-100">
-  <div class="card shadow p-4 text-center" style="max-width: 500px; width: 100%;">
+<main class="styledMain d-flex align-items-center justify-content-center bg-principal">
+  <div class="card shadow p-4 text-center bg-secundario" style="max-width: 500px; width: 100%;">
     <div class="card-body">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="64"
         height="64"
-        fill="green"
+        fill="#2ecc71"
         class="bi bi-check-circle mb-3"
         viewBox="0 0 16 16"
       >
         <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm3.354-8.354a.5.5 0 1 1 .707.707l-4 4a.5.5 0 0 1-.707 0l-2-2a.5.5 0 0 1 .707-.707L8 10.293l3.354-3.647z"/>
       </svg>
-      <h2 class="card-title text-success">¡Cuenta confirmada!</h2>
-      <p class="card-text mt-3">
+      <h2 class="card-title text-exito">¡Cuenta confirmada!</h2>
+      <p class="card-text pb-2 text-secundario">
         Tu cuenta fue activada correctamente. Ahora podés iniciar sesión.
       </p>
-      <a routerLink="/cuenta/login" class="btn btn-success mt-3">Ir al login</a>
+      <a routerLink="/cuenta/login" class="btn-primario">Ir al login</a>
     </div>
   </div>
-</div>
+</main>

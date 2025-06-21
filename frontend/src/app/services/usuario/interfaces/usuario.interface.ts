@@ -17,11 +17,17 @@ export interface UsuarioLogin {
 }
 
 export interface UsuarioRegister {
-
+  email: string;
+  nombre: string;
+  contrasena: string;
+  cContrasena: string;
+  apellido: string;
+  direccion: string | null;
 }
 
 export interface UsuarioRecuperar {
-
+  contrasena: string,
+  token: string,
 }
 
 export interface UsuarioReenviarConfirmacion {
