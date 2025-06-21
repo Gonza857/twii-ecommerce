@@ -24,21 +24,14 @@ export class CarritoDrawerComponent implements OnInit {
   public usuarioLogueado = false;
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual().subscribe({
-      next: (usuario) => {
-        console.log('[DEBUG] Usuario recibido:', usuario);
-        const usuarioId = usuario?.id;
-        if (usuarioId) {
-          this.usuarioId = usuarioId;
-          this.usuarioLogueado = true;
-          this.carritoService.obtenerCarrito(usuarioId);
-        }
-      },
-      error: (err) => {
-        console.error('[ERROR] al obtener usuario:', err);
-        this.usuarioLogueado = false;
-      }
-    });
+
+    this.usuarioService.obtenerUsuarioActual();
+    this.usuarioLogueado = this.usuarioService.usuario() != null;
+
+    if (this.usuarioLogueado) {
+      this.usuarioId = this.usuarioService.usuario()?.id;
+      this.carritoService.obtenerCarrito(this.usuarioId ?? 0);
+    }
   }
 
   vaciarCarrito(): void {

@@ -16,7 +16,6 @@ import {Usuario} from '../../../services/usuario/interfaces/usuario.interface';
 export class CustomerLayoutComponent implements OnInit{
   private readonly usuarioService: UsuarioService = inject(UsuarioService)
   protected usuarioActual: Usuario | null = null;
-  title = 'frontend';
   carritoVisible = false;
   public readonly carritoService = inject(CarritoService);
 
@@ -31,30 +30,11 @@ export class CustomerLayoutComponent implements OnInit{
   }
 
   cerrarSesion () {
-    this.usuarioService.cerrarSesion().subscribe({
-      next: (res: any) => {
-        this.usuarioActual = null;
-      },
-      error: (e: any) => {
-
-      },
-      complete: () => {}
-    })
+    this.usuarioService.cerrarSesion()
   }
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual().subscribe({
-      next: (usuario: Usuario) => {
-        console.log("FRONT: USUARIO DEL BACK:", usuario);
-        this.usuarioActual = usuario
-      },
-      error: (e: any) => {
-        console.log(e)
-        if (e.status === 404) {
-          this.usuarioActual = null;
-        }
-      },
-      complete: () => {}
-    })
+    this.usuarioActual = this.usuarioService.usuario();
+
   }
 }

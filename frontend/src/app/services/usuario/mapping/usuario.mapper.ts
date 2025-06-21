@@ -9,7 +9,7 @@ class UsuarioMapper {
     }
   }
 
-  static mapUsuarioRestToUsuario (usuario: Usuario): UsuarioRest {
+  static mapUsuarioRestToUsuario (usuario: UsuarioRest): Usuario {
       return {
         email: usuario.email,
         apellido: usuario.apellido,

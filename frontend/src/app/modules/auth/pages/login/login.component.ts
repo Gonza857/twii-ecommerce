@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -14,7 +14,6 @@ import { Router, RouterLink } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
 import UsuarioMapper from '../../../../services/usuario/mapping/usuario.mapper';
-import {UsuarioLoginRest} from '../../../../services/usuario/interfaces/usuario.interface.rest';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +38,30 @@ export class LoginComponent implements OnInit {
   protected form!: FormGroup;
   protected enviando: boolean = false;
   protected exito: boolean = false;
-  protected mensajeError!: string;
+  protected mensajeError!: string | undefined;
+
+  constructor() {
+    effect(() => {
+      const resultado = this.servicioUsuario.resultadoLogin();
+      if (!resultado) return;
+
+      this.enviando = false;
+
+      if (resultado.exito) {
+        this.exito = true;
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 2500);
+      } else {
+        this.exito = false;
+        if (resultado.redireccion) {
+          this.router.navigate(['/cuenta/confirmacion', resultado.data]);
+        } else {
+          this.mensajeError = resultado.mensaje ?? 'Error desconocido.';
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -51,45 +73,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private loginExitoso() {
-    this.exito = true;
-    setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 2500);
-  }
-
-  private loginError(e: any) {
-    if (e.status === 400 || e.status === 401) {
-      this.mensajeError = e.error.error;
-      this.exito = false;
-    } else if (e.status === 403) {
-      this.router.navigate(['/cuenta/confirmacion', e.error.data]);
-    }
-    this.enviando = false;
-  }
-
   login() {
     this.enviando = true;
     this.mensajeError = '';
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.enviando = false;
+      return;
+    }
+
     const usuario = {
       email: this.form.get('email')?.value,
       contrasena: this.form.get('password')?.value
-    }
-    const usuarioRest = UsuarioMapper.mapLoginToLoginRest(usuario)
+    };
+    const usuarioRest = UsuarioMapper.mapLoginToLoginRest(usuario);
 
-    if (this.form.valid) {
-      this.servicioUsuario.iniciarSesion(usuarioRest).subscribe({
-        next: () => {
-          this.loginExitoso();
-        },
-        error: (e: any) => {
-          this.loginError(e);
-        },
-        complete: () => (this.enviando = false),
-      });
-    } else {
-      this.form.markAllAsTouched();
-    }
-    this.enviando = false;
+    this.servicioUsuario.iniciarSesion(usuarioRest);
   }
 }

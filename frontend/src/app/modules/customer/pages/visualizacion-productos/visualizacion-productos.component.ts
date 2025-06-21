@@ -26,7 +26,7 @@ export class ListaProductosComponent implements OnInit {
   precioMax: number | null = null;
   errorPrecio: string = '';
   usuarioId?: number;
-  usuarioLogueado = false;
+  usuarioLogueado: boolean = false;
   carrito!: Signal<ItemCarrito[]>;
   opcionesCantidad = Array.from({ length: 10 }, (_, i) => ({
     label: `${i + 1}`,
@@ -38,15 +38,9 @@ export class ListaProductosComponent implements OnInit {
               private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual().subscribe({
-      next: (usuario) => {
-        this.usuarioId = usuario?.id;
-        this.usuarioLogueado = !!usuario?.id;
-      },
-      error: () => {
-        this.usuarioLogueado = false;
-      }
-    });
+    this.usuarioService.obtenerUsuarioActual();
+    this.usuarioLogueado = this.usuarioService.usuario() != null
+    this.usuarioId = this.usuarioService.usuario()?.id
 
     const filtrosGuardados = localStorage.getItem('filtrosProductos');
 
