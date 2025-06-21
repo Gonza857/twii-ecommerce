@@ -3,3 +3,16 @@ export interface UsuarioLoginRest {
   contrasena: string;
 }
 
+export interface UsuarioRest {
+  id: number;
+  email: string;
+  nombre: string;
+  apellido: string;
+  direccion: string | null;
+  rol: {
+    id: number;
+    nombre: string;
+  };
+  validado: boolean | null;
+}
+

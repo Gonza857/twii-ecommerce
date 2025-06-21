@@ -219,6 +219,14 @@ class AuthController {
         res.status(200).json(this.enviarExito())
     }
 
+    public cerrarSesion = async (_req: Request, res: Response) => {
+        console.log("CERRANDO SESIÓN PA")
+        res
+            .clearCookie('access-token')
+            .status(200).send();
+
+    }
+
 }
 
 export default AuthController;

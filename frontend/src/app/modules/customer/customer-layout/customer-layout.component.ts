@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
+import {UsuarioService} from '../../../services/usuario/usuario.service';
+import {Usuario} from '../../../services/usuario/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +11,41 @@ import { DrawerModule } from 'primeng/drawer';
   standalone: true,
   styleUrl: './customer-layout.component.scss',
 })
-export class CustomerLayoutComponent {
+export class CustomerLayoutComponent implements OnInit{
+  private readonly usuarioService: UsuarioService = inject(UsuarioService)
+  protected usuarioActual: Usuario | null = null;
   title = 'frontend';
   carritoVisible = false;
 
   toggleCarrito() {
     this.carritoVisible = !this.carritoVisible;
+  }
+
+  cerrarSesion () {
+    this.usuarioService.cerrarSesion().subscribe({
+      next: (res: any) => {
+        this.usuarioActual = null;
+      },
+      error: (e: any) => {
+
+      },
+      complete: () => {}
+    })
+  }
+
+  ngOnInit(): void {
+    this.usuarioService.obtenerUsuarioActual().subscribe({
+      next: (usuario: Usuario) => {
+        console.log("FRONT: USUARIO DEL BACK:", usuario);
+        this.usuarioActual = usuario
+      },
+      error: (e: any) => {
+        console.log(e)
+        if (e.status === 404) {
+          this.usuarioActual = null;
+        }
+      },
+      complete: () => {}
+    })
   }
 }

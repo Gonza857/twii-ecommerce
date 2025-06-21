@@ -26,9 +26,6 @@
           <a class="nav-link" [routerLink]="'/productos'">Productos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/cuenta/login'">Login</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
         </li>
         <li class="nav-item">
@@ -40,6 +37,16 @@
         <li class="nav-item">
           <a (click)="toggleCarrito()" class="nav-link">Carrito</a>
         </li>
+        @if (this.usuarioActual) {
+          <li class="nav-item">
+            <a (click)="cerrarSesion()" class="nav-link">Cerrar sesión</a>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/cuenta/login'">Iniciar sesión</a>
+          </li>
+        }
+
       </ul>
     </div>
   </div>

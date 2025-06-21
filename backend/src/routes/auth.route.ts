@@ -43,6 +43,8 @@ const authController = container.authController;
  */
 authRouter.post("/login", authController.iniciarSesion as RequestHandler)
 
+authRouter.get("/cerrar-sesion", authController.cerrarSesion as RequestHandler)
+
 /**
  * @openapi
  * /api/auth/register:
