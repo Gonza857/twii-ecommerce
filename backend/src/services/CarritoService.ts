@@ -34,6 +34,7 @@ class CarritoService implements ICarritoService {
             cantidad
         );
     }
+    
     public async eliminarProductoDelCarrito(
         id: number,
         productoId: number

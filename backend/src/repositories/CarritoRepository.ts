@@ -6,6 +6,7 @@ import {
 } from '../models/repositories-interfaces';
 import { ICarrito, IUsuario } from '../models/usuario-model';
 import { Carrito } from '../models/carrito-model';
+import { Decimal } from '@prisma/client/runtime/binary';
 
 class CarritoRepository implements ICarritoRepository {
     private readonly prisma!: PrismaClient;
@@ -50,7 +51,14 @@ class CarritoRepository implements ICarritoRepository {
             });
         }
 
-        return carrito;
+        const total = carrito.productos.reduce((acc, item) => {
+            return acc.plus(new Decimal(item.producto.precio).times(item.cantidad));
+        }, new Decimal(0)).toNumber();
+
+        return {
+            ...carrito,
+            total
+        };
     }
 
     /**
@@ -63,7 +71,7 @@ class CarritoRepository implements ICarritoRepository {
     async agregarProductoAlCarrito(
         id: number,
         productoId: number,
-        cantidad: number
+        cantidad: number = 1
     ): Promise<ICarrito> {
         const carrito = await this.obtenerCarritoPorUsuario(id);
 
@@ -112,23 +120,32 @@ class CarritoRepository implements ICarritoRepository {
         if (!productoEnCarrito)
             throw new Error('Producto no encontrado en el carrito');
 
-        return await this.prisma.carrito.update({
-            where: { id },
+        const carritoActualizado = await this.prisma.carrito.update({
+            where: { id: carrito.id },
             data: {
-                productos: {
-                    delete: {
-                        id: productoId
-                    }
-                }
-            },
-            include: {
-                productos: {
-                    include: {
-                        producto: true
-                    }
+            productos: {
+                delete: {
+                id: productoEnCarrito.id
                 }
             }
+            },
+            include: {
+            productos: {
+                include: {
+                producto: true
+                }
+            }
+            }
         });
+
+        const total = carritoActualizado.productos.reduce((acc, item) => {
+            return acc.plus(new Decimal(item.producto.precio).times(item.cantidad));
+        }, new Decimal(0)).toNumber();
+
+        return {
+            ...carritoActualizado,
+            total
+        };
     }
 
     /**
@@ -139,21 +156,26 @@ class CarritoRepository implements ICarritoRepository {
     async vaciarCarrito(id: number): Promise<ICarrito> {
         const carrito = await this.obtenerCarritoPorUsuario(id);
 
-        return await this.prisma.carrito.update({
+        const carritoVacio = await this.prisma.carrito.update({
             where: { id: carrito.id },
             data: {
-                productos: {
-                    deleteMany: {}
-                }
+            productos: {
+                deleteMany: {}
+            }
             },
             include: {
-                productos: {
-                    include: {
-                        producto: true
-                    }
+            productos: {
+                include: {
+                producto: true
                 }
             }
+            }
         });
+
+        return {
+            ...carritoVacio,
+            total: 0 
+        };
     }
 }
 
