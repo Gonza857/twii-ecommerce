@@ -38,18 +38,18 @@
           <a class="nav-link disabled" aria-disabled="true">Perfil</a>
         </li>
         <li class="nav-item">
-          <a (click)="toggleCarrito()" class="nav-link">Carrito</a>
+          <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<div>
-  <p-drawer header="Carrito" [(visible)]="carritoVisible" position="right">
-   <app-carrito-drawer></app-carrito-drawer>
-  </p-drawer>
-</div>
+  <div>
+    <p-drawer header="Carrito" [visible]="carritoService.drawerVisible()" (onHide)="carritoService.cerrarDrawer()" position="right" [style]="{ width: '25vw' }">
+        <app-carrito-drawer></app-carrito-drawer>
+      </p-drawer>
+  </div>
 
 <router-outlet> </router-outlet>
 <footer>Template footer</footer>

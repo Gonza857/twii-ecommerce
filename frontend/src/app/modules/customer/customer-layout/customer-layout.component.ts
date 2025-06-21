@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
 import { CarritoDrawerComponent } from '../pages/visualizacion-carrito/carrito-drawer/carrito-drawer.component';
+import { CarritoService } from '../../../services/carrito.service';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +14,15 @@ import { CarritoDrawerComponent } from '../pages/visualizacion-carrito/carrito-d
 export class CustomerLayoutComponent {
   title = 'frontend';
   carritoVisible = false;
+  public readonly carritoService = inject(CarritoService);
 
-  toggleCarrito() {
-    this.carritoVisible = !this.carritoVisible;
+  constructor() {
+    effect(() => {
+      this.carritoVisible = this.carritoService.drawerVisible();
+    });
+  }
+
+  toggleCarrito(): void {
+    this.carritoService.drawerVisible.set(!this.carritoVisible);
   }
 }

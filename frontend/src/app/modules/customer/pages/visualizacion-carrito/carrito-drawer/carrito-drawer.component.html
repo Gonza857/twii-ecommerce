@@ -1,15 +1,59 @@
-<div *ngIf="(carrito$() || []).length === 0" class="text-center mt-4">
-  <p>No hay productos en el carrito.</p>
-  <a pButton type="button" class="p-button" [routerLink]="['/productos']">Explorar productos</a>
-</div>
+<div class="p-4 text-white">
+  <!-- ⚠️ No logueado -->
+  <div *ngIf="!usuarioLogueado" class="text-center">
+    <p>Iniciá sesión para ver y agregar productos al carrito.</p>
+    <a pButton
+       type="button"
+       label="Iniciar sesión"
+       [routerLink]="['/cuenta/login']"
+       class="p-button w-100 mt-2"></a>
+  </div>
 
-<ng-container *ngFor="let item of carrito$()">
-  <app-carrito-item [item]="item" [usuarioId]="usuarioId"></app-carrito-item>
-</ng-container>
+  <!-- Logueado -->
+  <ng-container *ngIf="usuarioLogueado">
+    <!-- Carrito vacío -->
+    <div *ngIf="(carrito$() || []).length === 0" class="text-center mt-4">
+      <p>No hay productos en el carrito.</p>
+      <a pButton
+         type="button"
+         label="Explorar productos"
+         [routerLink]="['/productos']"
+         class="p-button w-100"
+        (click)="carritoService.cerrarDrawer()"></a>
+    </div>
 
-<div class="mt-4">
-  <h3>Total: ${{ total$() }}</h3>
-  <a pButton type="button" class="w-full mt-2 p-button" [routerLink]="['/carrito']">Ver Carrito</a>
-  <button pButton type="button" class="w-full mt-2 p-button-success">Finalizar compra</button>
+    <!-- 🧺 Carrito con items -->
+    <ng-container *ngFor="let item of carrito$()">
+      <app-carrito-item [item]="item" [usuarioId]="usuarioId!"></app-carrito-item>
+    </ng-container>
 
+    <!-- 🧾 Resumen y acciones -->
+    <div class="mt-4">
+      <!-- Total -->
+      <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-3">
+        <span class="fw-semibold fs-5">Total:</span>
+        <span class="fw-bold fs-5">{{ total$() | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <!-- Botón ver carrito -->
+      <!--<a pButton
+         label="Ver Carrito"
+         icon="pi pi-shopping-cart"
+         [routerLink]="['/carrito']"
+         class="p-button w-100 mt-3"></a>-->
+
+      <!-- Botón finalizar compra -->
+      <button pButton
+              label="Finalizar compra"
+              icon="pi pi-credit-card"
+              class="p-button-success p-button w-100 mt-2"></button>
+
+      <!-- Botón vaciar carrito -->
+      <button pButton
+              label="Vaciar carrito"
+              icon="pi pi-trash"
+              class="p-button-danger p-button w-100 mt-2"
+              (click)="vaciarCarrito()"></button>
+    </div>
+  </ng-container>
 </div>

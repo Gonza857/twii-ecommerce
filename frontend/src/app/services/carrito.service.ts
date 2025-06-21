@@ -1,11 +1,24 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+interface CarritoResponse {
+  productos: ItemCarrito[];
+  total: number;
+}
+
 export interface ItemCarrito {
-  productoId: number;
-  nombre: string;
-  precio: number;
+  id: number;
   cantidad: number;
+  carritoid: number;
+  productoid: number;
+  producto: {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    clasificacion: string;
+    precio: number | string;
+    imagen: string | null;
+  };
 }
 
 @Injectable({
@@ -17,31 +30,49 @@ export class CarritoService {
 
   private carritoSignal = signal<ItemCarrito[]>([]);
   public readonly carrito = this.carritoSignal.asReadonly();
+  private totalSignal = signal<number>(0);
+  public readonly total = this.totalSignal.asReadonly();
+  drawerVisible = signal(false);
 
-  public readonly total = computed(() =>
-    this.carrito().reduce((acc, item) => acc + item.precio * item.cantidad, 0)
-  );
-
-  obtenerCarrito(usuarioId: number): void {
-    this.http.get<ItemCarrito[]>(`${this.apiUrl}/${usuarioId}`).subscribe({
-      next: (data) => this.carritoSignal.set(data),
-      error: (err) => console.error('Error al cargar el carrito', err)
-    });
+  abrirDrawer(): void {
+    this.drawerVisible.set(true);
   }
 
-  agregarProducto(usuarioId: number, productoId: number, cantidad: number): void {
+  cerrarDrawer() {
+    this.drawerVisible.set(false);
+  }
+
+  obtenerCarrito(usuarioId: number): void {
+    this.http.get<CarritoResponse>(`${this.apiUrl}/${usuarioId}`)
+      .subscribe({
+        next: (data) => {
+          this.carritoSignal.set(data.productos);
+          this.totalSignal.set(data.total);
+        },
+        error: (err) => console.error('[Carrito] Error al obtener:', err)
+      });
+  }
+
+  agregarProducto(usuarioId: number, productoId: number, cantidad: number = 1): void {
     this.http.post(`${this.apiUrl}/${usuarioId}/agregar`, { productoId, cantidad })
       .subscribe(() => this.obtenerCarrito(usuarioId));
   }
 
   quitarProducto(usuarioId: number, productoId: number): void {
-    this.http.post(`${this.apiUrl}/${usuarioId}/eliminar`, { productoId })
-      .subscribe(() => this.obtenerCarrito(usuarioId));
+    this.http.delete(`${this.apiUrl}/${usuarioId}/eliminar`, {
+      body: { productoId }
+    }).subscribe({
+        next: () => this.obtenerCarrito(usuarioId),
+        error: (err) => console.error('[Carrito] Error al eliminar producto', err)
+      });
   }
 
   cambiarCantidad(usuarioId: number, productoId: number, cantidad: number): void {
-    this.http.put(`${this.apiUrl}/${usuarioId}/cantidad`, { productoId, cantidad })
-      .subscribe(() => this.obtenerCarrito(usuarioId));
+    this.http.post(`${this.apiUrl}/${usuarioId}/agregar`, { productoId, cantidad })
+      .subscribe(() => {
+        this.obtenerCarrito(usuarioId);
+        this.drawerVisible.set(true);
+      });
   }
 
   vaciar(usuarioId: number): void {
