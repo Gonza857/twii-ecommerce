@@ -11,10 +11,10 @@
           <a class="nav-link" [routerLink]="'/'">Cliente</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Usuarios</a>
+          <a class="nav-link" [routerLink]="'usuarios'">Usuarios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Productos</a>
+          <a class="nav-link" [routerLink]="'productos'">Productos</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" aria-disabled="true">Pedidos</a>
@@ -27,50 +27,6 @@
   </div>
 </nav>
 <router-outlet>
-  <main class="styledMain bg-dark">
-    <div class="col-8 mx-auto">
-      <h2 class="text-white py-2">Lista de Usuarios</h2>
-      <p-table
-        [value]="this.usuarios"
-        size="small"
-        stripedRows
-        showGridlines
-      >
-        <ng-template #caption>
-          <div class="flex items-center justify-between">
-            <span class="text-xl font-bold">Usuarios</span>
-          </div>
-        </ng-template>
-        <ng-template #header let-columns>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Email</th>
-            <th>Direccion</th>
-            <th>Validado</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-usuario>
-          <tr>
-            <td>{{ usuario.nombre }}</td>
-            <td>{{ usuario.apellido }}</td>
-            <td>{{ usuario.email }}</td>
-            <td>{{ usuario.direccion }}</td>
-            <td>
-              <p-badge
-                [value]="usuario.validado ? 'Verificado' : 'No verificado'"
-                [severity]="usuario.validado ? 'success' : 'danger'"
-              />
-            </td>
-            <!--        <td>-->
-            <!--          <button class="btn btn-sm btn-info me-2">Ver</button>-->
-            <!--          <button class="btn btn-sm btn-warning me-2">Editar</button>-->
-            <!--          <button class="btn btn-sm btn-danger">Eliminar</button>-->
-            <!--        </td>-->
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </main>
+ 
 </router-outlet>
 <footer>Template admin footer</footer>

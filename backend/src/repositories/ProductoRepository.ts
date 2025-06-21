@@ -3,6 +3,7 @@ import { IProductoService } from '../models/services-interfaces';
 import { Producto } from '../models/producto-model';
 import { IProductoRepository } from '../models/repositories-interfaces';
 import {undefined} from "zod";
+import { ProductoDTO } from '../models/interfaces/producto-dto';
 
 export class ProductoRepository implements IProductoRepository {
     private readonly prisma!: PrismaClient;
@@ -46,4 +47,21 @@ export class ProductoRepository implements IProductoRepository {
 
         return this.prisma.producto.findMany({where});
     }
+
+    async getById(id: number) {
+    return this.prisma.producto.findUnique({ where: { id } });
+  }
+
+  async create(data: ProductoDTO) {
+    return this.prisma.producto.create({ data });
+  }
+
+  async update(id: number, data: ProductoDTO) {
+    console.log("modificando prisma, id: " + id + data)
+    return this.prisma.producto.update({ where: { id }, data,});
+  }
+
+  async delete(id: number) {
+    await this.prisma.producto.delete({ where: { id } });
+  }
 }

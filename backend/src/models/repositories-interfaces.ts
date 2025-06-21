@@ -1,3 +1,4 @@
+import { ProductoDTO } from './interfaces/producto-dto';
 import { Producto } from './producto-model';
 import {ICarrito} from "./usuario-model";
 
@@ -22,4 +23,8 @@ export interface IProductoRepository {
         precioMin?: number;
         precioMax?: number;
     }): Promise<Producto[]>;
+    getById(id: number): Promise<Producto | null>;
+    create(data: ProductoDTO): Promise<Producto>;
+    update(id: number, data: ProductoDTO): Promise<Producto>;
+    delete(id: number): Promise<void>;
 }

@@ -2,6 +2,8 @@ import express, {Router} from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import {setupSwagger} from "../config/swagger";
+import path from 'path';
+
 
 interface Options {
     puerto: number,
@@ -27,6 +29,9 @@ export class Server {
             origin: 'http://localhost:4200',
             credentials: true
         }))
+
+        this.app.use('/images', express.static(path.resolve(__dirname, '../public/images')));
+
         setupSwagger(this.app)
         this.app.use(this.routes)
 

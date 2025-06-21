@@ -8,6 +8,15 @@ export interface Producto {
   descripcion: string;
   clasificacion: string;
   precio: number;
+  imagen?: string;
+}
+
+export interface ProductoDTO {
+  nombre: string;
+  descripcion: string;
+  clasificacion: string;
+  precio: number;
+  imagen?: string;
 }
 
 @Injectable({
@@ -52,5 +61,25 @@ export class ProductoService {
 
     const query = params.length ? `?${params.join('&')}` : '';
     return this.http.get<Producto[]>(`${this.apiUrl}${query}`);
+  }
+
+  crearProducto(producto: ProductoDTO): Observable<ProductoDTO> {
+    return this.http.post<ProductoDTO>(this.apiUrl, producto);
+  }
+
+  actualizarProducto(producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${producto.id}`, producto);
+  }
+
+  /*crearProductoConImagen(data: FormData): Observable<Producto> {
+  return this.http.post<Producto>(this.apiUrl, data);
+  }
+
+  actualizarProductoConImagen(id: number, data: FormData): Observable<Producto> {
+  return this.http.put<Producto>(`${this.apiUrl}/${id}`, data);
+  }*/
+
+  eliminarProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

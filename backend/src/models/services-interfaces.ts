@@ -1,3 +1,4 @@
+import { ProductoDTO } from './interfaces/producto-dto';
 import { Producto } from './producto-model';
 
 
@@ -23,4 +24,8 @@ export interface IProductoService {
         precioMin?: number;
         precioMax?: number;
     }): Promise<Producto[]>;
+    obtenerProductoPorId(id: number): Promise<Producto | null>;
+    crearProducto(data: ProductoDTO): Promise<Producto>;
+    actualizarProducto(id: number, data: ProductoDTO): Promise<Producto>;
+    eliminarProducto(id: number): Promise<void>;
 }

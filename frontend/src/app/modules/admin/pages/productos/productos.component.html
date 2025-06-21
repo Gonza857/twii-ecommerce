@@ -1,0 +1,93 @@
+<div class="styledMain bg-dark">
+  <h2 class="text-white">Gestión de Productos</h2>
+
+  <button class="btn btn-success mb-3" (click)="abrirAgregar()">
+    Agregar producto
+  </button>
+
+  <p-table
+    [value]="productos"
+    size="small"
+    stripedRows
+    showGridlines
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Clasificación</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-producto>
+      <tr>
+        <td>
+          <img
+              [src]="'http://localhost:3000' + producto.imagen"
+            [alt]="producto.nombre"
+            width="60"
+            height="60"
+            class="rounded"
+            style="object-fit: cover;"
+          />
+        </td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.descripcion }}</td>
+        <td>{{ producto.clasificacion }}</td>
+        <td>{{ producto.precio | currency:'ARS' }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="abrirEditar(producto)">
+            Editar
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarProducto(producto.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    header="{{ esModoEdicion ? 'Editar producto' : 'Agregar producto' }}"
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+  >
+    <form (ngSubmit)="guardarProducto()">
+      <div class="form-group mb-2">
+        <label>Nombre</label>
+        <input type="text" class="form-control" [(ngModel)]="productoActual.nombre" name="nombre" required />
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Descripción</label>
+        <textarea class="form-control" [(ngModel)]="productoActual.descripcion" name="descripcion" required></textarea>
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Clasificación</label>
+        <input type="text" class="form-control" [(ngModel)]="productoActual.clasificacion" name="clasificacion" required />
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Precio</label>
+        <input type="number" class="form-control" [(ngModel)]="productoActual.precio" name="precio" required />
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Imagen (URL)</label>
+        <input type="text" class="form-control" [(ngModel)]="productoActual.imagen" name="imagen" />
+      </div>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-secondary me-2" type="button" (click)="displayDialog = false">Cancelar</button>
+        <button class="btn btn-primary" type="submit">{{ esModoEdicion ? 'Guardar cambios' : 'Agregar' }}</button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+

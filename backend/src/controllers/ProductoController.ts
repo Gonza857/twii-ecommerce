@@ -4,6 +4,7 @@ import { IProductoService } from '../models/services-interfaces';
 
 class ProductoController {
     private productoService!: IProductoService;
+    
 
     constructor(productoService: IProductoService) {
         this.productoService = productoService;
@@ -29,6 +30,41 @@ class ProductoController {
             res.status(500).json({ message: 'Error al obtener productos', error });
         }
     }
+
+    async crearProducto(req: Request, res: Response) {
+      try {
+      const nuevo = await this.productoService.crearProducto(req.body);
+      res.status(201).json(nuevo);
+    } catch (e) {
+      res.status(500).json({ mensaje: 'Error al crear producto' });
+    }
+  }
+
+  async modificarProducto(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+    console.log('ID:', id);
+    console.log('BODY:', JSON.stringify(req.body, null, 2));
+
+    const { id: _id, ...dataWithoutId } = req.body;
+
+    const actualizado = await this.productoService.actualizarProducto(id, dataWithoutId);
+    res.json(actualizado);
+  } catch (e) {
+    console.error('Error al actualizar producto:', e);
+    res.status(500).json({ mensaje: 'Error al actualizar producto' });
+  }
+}
+
+  async eliminarProducto(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await this.productoService.eliminarProducto(Number(id));
+      res.sendStatus(204);
+    } catch (e) {
+      res.status(500).json({ mensaje: 'Error al eliminar producto' });
+    }
+  }
 }
 
 export default ProductoController;
