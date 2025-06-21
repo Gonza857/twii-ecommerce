@@ -9,11 +9,13 @@ import {Producto} from "../../../../services/producto/interfaces/producto.interf
 import {RouterLink} from "@angular/router";
 import {CarritoService, ItemCarrito} from '../../../../services/carrito.service';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
+import {SelectModule} from 'primeng/select';
+import {ButtonDirective} from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule, RouterLink],
+  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })
