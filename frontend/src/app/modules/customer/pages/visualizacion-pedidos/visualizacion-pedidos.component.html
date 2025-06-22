@@ -1,0 +1,79 @@
+<div class="styledMain pt-4">
+  <div class="col-10 mx-auto">
+    <h2 class="text-white mb-4">Mis Pedidos</h2>
+    
+    @if (!usuarioLogueado) {
+      <div class="text-center text-white">
+        <p>Debes iniciar sesión para ver tus pedidos.</p>
+        <a pButton 
+           type="button" 
+           label="Iniciar sesión" 
+           [routerLink]="['/cuenta/login']" 
+           class="p-button mt-2"></a>
+      </div>
+    } @else {
+      @if (cargando) {
+        <div class="d-flex justify-content-center">
+          <p-progressSpinner></p-progressSpinner>
+        </div>
+      } @else if (pedidos.length === 0) {
+        <div class="text-center text-white">
+          <p>No tienes pedidos realizados.</p>
+          <a pButton 
+             type="button" 
+             label="Explorar productos" 
+             [routerLink]="['/productos']" 
+             class="p-button mt-2"></a>
+        </div>
+      } @else {
+        <div class="row">
+          @for (pedido of pedidos; track pedido.id) {
+            <div class="col-md-6 col-lg-4 mb-4">
+              <p-card class="h-100 pedido-card">
+                <ng-template pTemplate="header">
+                  <div class="d-flex justify-content-between align-items-center p-3">
+                    <h5 class="mb-0">Pedido #{{ pedido.id }}</h5>
+                    <p-badge 
+                      [value]="getEstadoLabel(pedido.estado)" 
+                      [severity]="getEstadoSeverity(pedido.estado) || 'info'">
+                    </p-badge>
+                  </div>
+                </ng-template>
+                
+                <div class="pedido-info">
+                  <p><strong>Fecha:</strong> {{ pedido.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+                  <p><strong>Total:</strong> {{ pedido.total.toString() | currency:'ARS':'symbol':'1.2-2' }}</p>
+                  <p><strong>Productos:</strong> {{ pedido.productos.length }} item(s)</p>
+                  
+                  <div class="productos-preview">
+                    @for (producto of pedido.productos.slice(0, 2); track producto.id) {
+                      <small class="d-block text-muted">
+                        {{ producto.cantidad }}x {{ producto.producto.nombre }}
+                      </small>
+                    }
+                    @if (pedido.productos.length > 2) {
+                      <small class="text-muted">
+                        y {{ pedido.productos.length - 2 }} más...
+                      </small>
+                    }
+                  </div>
+                </div>
+                
+                <ng-template pTemplate="footer">
+                  <div class="d-flex gap-2">
+                    <button pButton 
+                            type="button" 
+                            label="Ver detalle" 
+                            icon="pi pi-eye"
+                            class="p-button-sm flex-fill"
+                            [routerLink]="['/pedido', pedido.id]"></button>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

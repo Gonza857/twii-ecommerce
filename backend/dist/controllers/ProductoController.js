@@ -9,21 +9,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = require("../prisma");
+const safe_1 = require("../utils/safe");
 class ProductoController {
-    constructor() {
-        console.log("Producto Controller");
-    }
-    getProductos(_req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(productoService) {
+        this.getProductos = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const productos = yield prisma_1.prisma.producto.findMany();
+                const filtros = {
+                    clasificacion: req.query.clasificacion,
+                    precioMin: req.query.precioMin ? parseFloat(req.query.precioMin) : undefined,
+                    precioMax: req.query.precioMax ? parseFloat(req.query.precioMax) : undefined
+                };
+                let productos;
+                if (filtros) {
+                    productos = yield this.productoService.obtenerProductosFiltrados(filtros);
+                }
+                else {
+                    productos = yield this.productoService.obtenerTodos();
+                }
                 res.status(200).json(productos);
             }
-            catch (e) {
-                res.status(500).json({ message: "Error", error: e });
+            catch (error) {
+                res.status(500).json({ message: 'Error al obtener productos', error });
             }
         });
+        this.obtenerPorId = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id } = _req.params;
+            if (isNaN(Number(id)))
+                return res.status(500).json({ mensaje: "NaN" });
+            const [producto, errorProducto] = yield (0, safe_1.safe)(this.productoService.obtenerPorId(Number(id)));
+            if (errorProducto)
+                return res.status(500).json({ mensaje: "errorProducto" });
+            if (!producto)
+                return res.status(404).json(producto);
+            res.status(200).json(producto);
+        });
+        this.productoService = productoService;
     }
 }
 exports.default = ProductoController;

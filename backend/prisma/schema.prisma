@@ -15,6 +15,7 @@ model producto {
   precio            Decimal            @db.Decimal(10, 2)
   imagen            String?            @db.VarChar(255)
   carrito_productos carrito_producto[]
+  pedido_productos  pedido_producto[]
 }
 
 model rol {
@@ -24,15 +25,16 @@ model rol {
 }
 
 model usuario {
-  id         Int     @id @default(autoincrement())
-  direccion  String? @db.VarChar(255)
-  apellido   String  @db.VarChar(100)
-  nombre     String  @db.VarChar(100)
-  email      String  @unique @db.VarChar(100)
-  contrasena String  @db.VarChar(255)
+  id         Int      @id @default(autoincrement())
+  direccion  String?  @db.VarChar(255)
+  apellido   String   @db.VarChar(100)
+  nombre     String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(100)
+  contrasena String   @db.VarChar(255)
   rolid      Int
-  validado   Boolean @default(false)
-  rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
+  validado   Boolean  @default(false)
+  rol        rol      @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
+  pedidos    pedido[]
 }
 
 model carrito {
@@ -48,4 +50,24 @@ model carrito_producto {
   productoid Int
   carrito    carrito  @relation(fields: [carritoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_carrito_producto")
   producto   producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_carrito_producto")
+}
+
+model pedido {
+  id        Int               @id @default(autoincrement())
+  usuarioid Int
+  fecha     DateTime          @default(now())
+  estado    String            @default("pendiente") @db.VarChar(50)
+  total     Decimal           @db.Decimal(10, 2)
+  usuario   usuario           @relation(fields: [usuarioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_pedido")
+  productos pedido_producto[]
+}
+
+model pedido_producto {
+  id             Int      @id @default(autoincrement())
+  cantidad       Int
+  precio_unitario Decimal @db.Decimal(10, 2)
+  pedidoid       Int
+  productoid     Int
+  pedido         pedido   @relation(fields: [pedidoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_pedido_producto")
+  producto       producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_pedido_producto")
 }

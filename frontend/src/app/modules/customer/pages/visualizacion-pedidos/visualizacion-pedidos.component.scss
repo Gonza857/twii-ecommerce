@@ -1,0 +1,35 @@
+.pedido-card {
+  transition: transform 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.pedido-info {
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.productos-preview {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+:host ::ng-deep .p-card {
+  background: #2a2a44;
+  border: 1px solid #444466;
+  color: #e0e0e0;
+}
+
+:host ::ng-deep .p-card .p-card-header {
+  background: #1e1e2f;
+  border-bottom: 1px solid #444466;
+}
+
+:host ::ng-deep .p-card .p-card-footer {
+  background: #1e1e2f;
+  border-top: 1px solid #444466;
+}

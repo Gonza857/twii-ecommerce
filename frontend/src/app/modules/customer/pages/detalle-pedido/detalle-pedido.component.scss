@@ -1,0 +1,72 @@
+.info-card, .productos-card {
+  :host ::ng-deep .p-card {
+    background: #2a2a44;
+    border: 1px solid #444466;
+    color: #e0e0e0;
+  }
+
+  :host ::ng-deep .p-card .p-card-header {
+    background: #1e1e2f;
+    border-bottom: 1px solid #444466;
+    color: #cfd1f7;
+  }
+}
+
+.info-item {
+  margin-bottom: 1rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.productos-list {
+  .producto-item {
+    padding: 1rem;
+    border-bottom: 1px solid #444466;
+    margin-bottom: 1rem;
+    
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.producto-imagen {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.cantidad-badge {
+  background: #4f52ff;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.precio-info {
+  text-align: right;
+}
+
+.total-final {
+  border-top: 2px solid #444466;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+:host ::ng-deep .p-card {
+  background: #2a2a44;
+  border: 1px solid #444466;
+  color: #e0e0e0;
+}
+
+:host ::ng-deep .p-card .p-card-header {
+  background: #1e1e2f;
+  border-bottom: 1px solid #444466;
+  color: #cfd1f7;
+}

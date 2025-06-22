@@ -7,8 +7,8 @@ class MailerService {
         this.transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "gonzaloalexramos@gmail.com", // TODO: send it to .env
-                pass: "lzur yusi atsp mkdx", // TODO: send it to .env
+                user: "alvarezfede159@gmail.com", // TODO: send it to .env
+                pass: "pnsh wbfn kmrz kuhk", // TODO: send it to .env
             }
         });
     }

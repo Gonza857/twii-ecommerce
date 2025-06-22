@@ -1,0 +1,117 @@
+<div class="styledMain pt-4">
+  <div class="col-10 mx-auto">
+    @if (cargando) {
+      <div class="d-flex justify-content-center">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+    } @else if (pedido) {
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white mb-0">Pedido #{{ pedido.id }}</h2>
+        <button pButton 
+                type="button" 
+                label="Volver a mis pedidos" 
+                icon="pi pi-arrow-left"
+                class="p-button-secondary"
+                [routerLink]="['/pedidos']"></button>
+      </div>
+
+      <div class="row">
+        <!-- Información del pedido -->
+        <div class="col-md-4 mb-4">
+          <p-card header="Información del Pedido" class="info-card">
+            <div class="info-item">
+              <strong>Estado:</strong>
+              <p-badge 
+                [value]="getEstadoLabel(pedido.estado)" 
+                [severity]="getEstadoSeverity(pedido.estado) || 'info'"
+                class="ms-2">
+              </p-badge>
+            </div>
+            
+            <div class="info-item">
+              <strong>Fecha:</strong>
+              <span class="ms-2">{{ pedido.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            
+            <div class="info-item">
+              <strong>Total:</strong>
+              <span class="ms-2 text-success fw-bold">
+                {{ pedido.total.toString() | currency:'ARS':'symbol':'1.2-2' }}
+              </span>
+            </div>
+            
+            <div class="info-item">
+              <strong>Cantidad de productos:</strong>
+              <span class="ms-2">{{ pedido.productos.length }} item(s)</span>
+            </div>
+          </p-card>
+        </div>
+
+        <!-- Productos del pedido -->
+        <div class="col-md-8">
+          <p-card header="Productos del Pedido" class="productos-card">
+            <div class="productos-list">
+              @for (item of pedido.productos; track item.id) {
+                <div class="producto-item">
+                  <div class="row align-items-center">
+                    <div class="col-md-2">
+                      <img 
+                        [src]="item.producto.imagen || 'https://via.placeholder.com/80x80?text=Sin+imagen'"
+                        [alt]="item.producto.nombre"
+                        class="img-fluid rounded producto-imagen"
+                      />
+                    </div>
+                    
+                    <div class="col-md-6">
+                      <h6 class="mb-1">{{ item.producto.nombre }}</h6>
+                      <small class="text-muted">{{ item.producto.clasificacion }}</small>
+                      <p class="mb-0 mt-1 small">{{ item.producto.descripcion }}</p>
+                    </div>
+                    
+                    <div class="col-md-2 text-center">
+                      <strong>Cantidad:</strong>
+                      <div class="cantidad-badge">{{ item.cantidad }}</div>
+                    </div>
+                    
+                    <div class="col-md-2 text-end">
+                      <div class="precio-info">
+                        <small class="text-muted d-block">
+                          Precio unitario: {{ item.precio_unitario.toString() | currency:'ARS':'symbol':'1.2-2' }}
+                        </small>
+                        <strong class="text-success">
+                          Subtotal: {{ getSubtotal(item.precio_unitario, item.cantidad) | currency:'ARS':'symbol':'1.2-2' }}
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            
+            <!-- Total final -->
+            <div class="total-final">
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4 text-end">
+                  <h4 class="text-success mb-0">
+                    <strong>Total: {{ pedido.total.toString() | currency:'ARS':'symbol':'1.2-2' }}</strong>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+    } @else {
+      <div class="text-center text-white">
+        <h3>Pedido no encontrado</h3>
+        <p>El pedido que buscas no existe o no tienes permisos para verlo.</p>
+        <button pButton 
+                type="button" 
+                label="Volver a mis pedidos" 
+                [routerLink]="['/pedidos']"
+                class="p-button mt-3"></button>
+      </div>
+    }
+  </div>
+</div>
