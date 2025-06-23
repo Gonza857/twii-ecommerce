@@ -13,7 +13,13 @@ const routes: Routes = [
             './pages/visualizacion-productos/visualizacion-productos.component'
           ).then((c) => c.ListaProductosComponent),
       },
-      // { path: 'usuarios', component: UsuariosComponent },
+      {
+        path: 'producto/:id',
+        loadComponent: () =>
+          import(
+            './pages/detalle-producto/detalle-producto.component'
+            ).then((c) => c.DetalleProductoComponent),
+      },
       // { path: '', redirectTo: 'productos', pathMatch: 'full' }
     ],
   },

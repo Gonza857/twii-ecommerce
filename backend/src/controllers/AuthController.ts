@@ -76,7 +76,7 @@ class AuthController {
         const [resultado, error] = await safe(
             this.usuarioService.verificarCuentaValidada(usuario!.id)
         );
-        if (errorIniciarSesion) return res.status(403).json(
+        if (error) return res.status(403).json(
             this.enviarErrorConDatos("Cuenta no verificada. Revisa tu correo electrónico.", usuario!.id)
         )
 
@@ -102,7 +102,7 @@ class AuthController {
             return res.status(400).send(this.enviarErrorGenerico())
         }
 
-        res.status(200).send("Correo de recuperación enviado correctamente.")
+        res.status(200).send("Si tu cuenta existe, te hemos enviado un correo de confirmación.")
     }
 
     public validar = async (_req: AuthenticatedRequest, res: Response) => {
@@ -141,7 +141,7 @@ class AuthController {
         );
         if (error) return res.status(500).send(this.enviarErrorGenerico());
 
-        res.status(201).json(this.enviarErrorGenerico(resultado?.mensaje))
+        res.status(201).json(this.enviarExito(resultado?.mensaje))
     }
 
     public reenviarConfirmacion = async (_req: Request, res: Response) => {
@@ -217,6 +217,13 @@ class AuthController {
         }
 
         res.status(200).json(this.enviarExito())
+    }
+
+    public cerrarSesion = async (_req: Request, res: Response) => {
+        res
+            .clearCookie('access-token')
+            .status(200).send();
+
     }
 
 }

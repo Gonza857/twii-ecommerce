@@ -39,7 +39,7 @@ export class CarritoController {
                 await this.carritoService.agregarProductoAlCarrito(
                     Number(id),
                     productoId,
-                    cantidad
+                    cantidad ?? 1
                 );
 
             res.status(200).json(carritoActualizado);

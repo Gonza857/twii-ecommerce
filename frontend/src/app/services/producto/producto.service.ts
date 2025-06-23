@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+<<<<<<< HEAD
 import { Observable } from 'rxjs';
 
 export interface Producto {
@@ -18,6 +19,12 @@ export interface ProductoDTO {
   precio: number;
   imagen?: string;
 }
+=======
+import {map, Observable} from 'rxjs';
+import {Producto} from './interfaces/producto.interface';
+import {ProductoRest} from './interfaces/producto.interface.rest';
+import ProductoMapper from './mapping/producto.mapper';
+>>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +36,13 @@ export class ProductoService {
 
   public obtenerProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.apiUrl}`);
+  }
+
+  public obtenerPorId (id: string): Observable<Producto> {
+    return this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
+      .pipe(
+        map((res) => ProductoMapper.mapToProducto(res))
+      );
   }
 
   public obtenerPorClasificacion(clasificacion: string): Observable<Producto[]> {

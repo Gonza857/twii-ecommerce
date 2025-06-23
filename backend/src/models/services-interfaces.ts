@@ -18,6 +18,7 @@ export interface ICarritoService {
 }
 
 export interface IProductoService {
+    obtenerPorId(id: number): Promise<Producto | null>;
     obtenerTodos(): Promise<Producto[]>;
     obtenerProductosFiltrados(filtros: {
         clasificacion?: string;

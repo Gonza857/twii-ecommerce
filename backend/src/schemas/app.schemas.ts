@@ -43,6 +43,7 @@ const usuarioSchema = z.object({
 const carritoSchema = z.object({
     id: z.number(),
     usuarioid: z.number(),
+    total: z.number(),
     productos: z.array(
         z.object({
             id: z.number(),

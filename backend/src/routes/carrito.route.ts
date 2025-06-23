@@ -26,7 +26,7 @@ carritoRouter.delete(
     carritoController.eliminarProductoDelCarrito
 );
 
-carritoRouter.patch(
+carritoRouter.delete(
     '/:id/vaciar',
     authMiddleware,
     carritoController.vaciarCarrito

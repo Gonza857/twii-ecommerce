@@ -22,15 +22,14 @@
                 }
             }
 
-            <p-button
+            <button
                     type="submit"
-                    label="Reenviar correo de confirmación"
-                    fluid
-                    [raised]="true"
-                    severity="info"
-                    loadingIcon="pi pi-spinner pi-spin"
-                    (onClick)="reenviarCorreo()"
-            />
+                    [disabled]="this.exito"
+                    class="btn-primario"
+                    (click)="reenviarCorreo()"
+            >
+              {{ this.enviando ? "Enviando..." : "Reenviar correo de confirmación" }}
+            </button>
         </div>
 
 

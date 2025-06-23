@@ -1,31 +1,24 @@
-import { inject, Injectable } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
 import {UsuarioService} from '../../../services/usuario/usuario.service';
+import {Usuario} from '../../../services/usuario/interfaces/usuario.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminGuardService implements CanActivate {
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+  constructor(private usuarioService: UsuarioService, private router: Router) {
+    this.usuarioService.obtenerUsuarioActual()
+  }
 
-  canActivate(): Observable<boolean> {
-    return this.usuarioService.obtenerUsuarioActual().pipe(
-      map((data: any) => {
-        if (data?.rol?.id === 1) {
-          return true;
-        } else {
-          this.router.navigate(['/']);
-          return false;
-        }
-      }),
-      catchError((error) => {
-        if (error.status == 403) {
-          this.router.navigate(['/cuenta/login']);
-        }
+  canActivate(): boolean {
+    const usuario: Usuario | null = this.usuarioService.usuario();
+    if (usuario) {
+      if (usuario?.rol?.id !== 1) {
         this.router.navigate(['/']);
-        return of(false);
-      })
-    );
+        return false;
+      } else return true;
+    }
+    return false;
   }
 }
