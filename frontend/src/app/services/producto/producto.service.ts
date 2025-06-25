@@ -1,16 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-<<<<<<< HEAD
-import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {inject, Injectable, signal} from '@angular/core';
+import {map, Observable} from 'rxjs';
+import {Producto, ProductoFormulario} from './interfaces/producto.interface';
+import {ProductoRest} from './interfaces/producto.interface.rest';
+import ProductoMapper from './mapping/producto.mapper';
 
-export interface Producto {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  clasificacion: string;
-  precio: number;
-  imagen?: string;
-}
 
 export interface ProductoDTO {
   nombre: string;
@@ -19,12 +13,14 @@ export interface ProductoDTO {
   precio: number;
   imagen?: string;
 }
-=======
-import {map, Observable} from 'rxjs';
-import {Producto} from './interfaces/producto.interface';
-import {ProductoRest} from './interfaces/producto.interface.rest';
-import ProductoMapper from './mapping/producto.mapper';
->>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d
+
+type ResultadoRequest = {
+  mensaje?: string,
+  codigo?: number,
+  exito?: boolean,
+  redireccion?: boolean,
+  data?: any,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +29,29 @@ import ProductoMapper from './mapping/producto.mapper';
 export class ProductoService {
   private apiUrl: string = "http://localhost:3000/api/producto";
   private readonly http: HttpClient = inject(HttpClient);
+  private productos = signal<Producto[]>([]);
+  public readonly signalProductos = this.productos.asReadonly()
 
-  public obtenerProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${this.apiUrl}`);
+  constructor() {
+    this.obtenerProductos()
   }
 
-  public obtenerPorId (id: string): Observable<Producto> {
+  public obtenerProductos(): void {
+    this.http.get<ProductoRest[]>(`${this.apiUrl}`)
+      .pipe(
+        map((res: ProductoRest[]) => ProductoMapper.mapProductoArrayRestToProductoArray(res))
+      )
+      .subscribe({
+        next: (productos: Producto[]) => {
+          this.productos.set(productos);
+        },
+        error: (e: any) => {
+          console.log("ERROR OBTENER PRODUCTOS", e)
+        }
+      });
+  }
+
+  public obtenerPorId(id: string): Observable<Producto> {
     return this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
       .pipe(
         map((res) => ProductoMapper.mapToProducto(res))
@@ -77,23 +90,34 @@ export class ProductoService {
     return this.http.get<Producto[]>(`${this.apiUrl}${query}`);
   }
 
-  crearProducto(producto: ProductoDTO): Observable<ProductoDTO> {
-    return this.http.post<ProductoDTO>(this.apiUrl, producto);
+  public crearProducto(producto: ProductoFormulario): Observable<ProductoDTO> {
+    const productoFormData = this.crearFormDataProducto(producto);
+    return this.http.post<ProductoDTO>(this.apiUrl, productoFormData)
   }
 
-  actualizarProducto(producto: Producto): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}/${producto.id}`, producto);
+  private crearFormDataProducto = (producto: ProductoFormulario): FormData => {
+    const formData = new FormData();
+
+    Object.entries(producto).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    return formData;
   }
 
-  /*crearProductoConImagen(data: FormData): Observable<Producto> {
-  return this.http.post<Producto>(this.apiUrl, data);
+  public actualizarProducto(producto: ProductoFormulario, id: number): Observable<{ mensaje: string }> {
+    const productoFormData = this.crearFormDataProducto(producto);
+    return this.http.put<{ mensaje: string }>(`${this.apiUrl}/${id}`, productoFormData)
   }
 
-  actualizarProductoConImagen(id: number, data: FormData): Observable<Producto> {
-  return this.http.put<Producto>(`${this.apiUrl}/${id}`, data);
-  }*/
+  eliminarProducto(id: number): void {
+    this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe({
+      next: () => {
+        this.obtenerProductos();
+      },
+      error: (e: any) => {
 
-  eliminarProducto(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+      }
+    });
   }
 }

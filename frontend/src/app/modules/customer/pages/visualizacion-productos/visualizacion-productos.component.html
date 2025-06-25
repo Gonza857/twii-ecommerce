@@ -54,33 +54,33 @@
 
               <!-- Envolvemos todo con un enlace -->
 
-              <ng-template pTemplate="header">
-<<<<<<< HEAD
-            <div class="d-flex align-items-center justify-content-center bg-white rounded" style="height: 200px; overflow: hidden;">
-            <img
-              [src]="'http://localhost:3000' + producto.imagen"
-              alt="{{ producto.nombre }}"
-              style="max-height: 100%; max-width: 100%; object-fit: contain;"
-              />
-            </div>
-</ng-template>
-=======
-                <div
-                  class="bg-secondary d-flex align-items-center justify-content-center"
-                  style="height: 200px;"
-                >
-                  <img
-                    *ngIf="producto.imagen; else sinImagen"
-                    [src]="producto.imagen ?? 'https://www.mediacenterone.mx/wp-content/uploads/2021/01/4ps1-780x405-1.png'"
-                    alt="{{ producto.nombre }}"
-                    class="img-fluid w-100 h-100 object-fit-contain"
-                  />
-                  <ng-template #sinImagen>
-                    <span class="text-white">Imagen del producto</span>
-                  </ng-template>
-                </div>
-              </ng-template>
->>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d
+<!--              <ng-template pTemplate="header">-->
+<!--<<<<<<< HEAD-->
+<!--            <div class="d-flex align-items-center justify-content-center bg-white rounded" style="height: 200px; overflow: hidden;">-->
+<!--            <img-->
+<!--              [src]="'http://localhost:3000' + producto.imagen"-->
+<!--              alt="{{ producto.nombre }}"-->
+<!--              style="max-height: 100%; max-width: 100%; object-fit: contain;"-->
+<!--              />-->
+<!--            </div>-->
+<!--</ng-template>-->
+<!--=======-->
+<!--                <div-->
+<!--                  class="bg-secondary d-flex align-items-center justify-content-center"-->
+<!--                  style="height: 200px;"-->
+<!--                >-->
+<!--                  <img-->
+<!--                    *ngIf="producto.imagen; else sinImagen"-->
+<!--                    [src]="producto.imagen ?? 'https://www.mediacenterone.mx/wp-content/uploads/2021/01/4ps1-780x405-1.png'"-->
+<!--                    alt="{{ producto.nombre }}"-->
+<!--                    class="img-fluid w-100 h-100 object-fit-contain"-->
+<!--                  />-->
+<!--                  <ng-template #sinImagen>-->
+<!--                    <span class="text-white">Imagen del producto</span>-->
+<!--                  </ng-template>-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--&gt;>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d-->
 
               <a
                 [routerLink]="['/producto', producto.id]"

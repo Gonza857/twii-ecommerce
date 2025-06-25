@@ -8,8 +8,8 @@ import {
     DatosIncorrectoException,
 } from "../exceptions/UsuarioExceptions";
 import {IResultadoAccion} from "../models/main-models";
-import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
-import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
+import {IUsuarioService} from "../models/interfaces/services/usuario.service.interface";
+import {IUsuarioRepository} from "../models/interfaces/repositories/usuario.repository.interface";
 
 class UsuarioService implements IUsuarioService {
 

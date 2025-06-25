@@ -6,7 +6,7 @@
   </button>
 
   <p-table
-    [value]="productos"
+    [value]="this.productoService.signalProductos()"
     size="small"
     stripedRows
     showGridlines
@@ -27,7 +27,7 @@
       <tr>
         <td>
           <img
-              [src]="'http://localhost:3000' + producto.imagen"
+            [src]="producto.imagen"
             [alt]="producto.nombre"
             width="60"
             height="60"
@@ -38,7 +38,7 @@
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.descripcion }}</td>
         <td>{{ producto.clasificacion }}</td>
-        <td>{{ producto.precio | currency:'ARS' }}</td>
+        <td>{{ producto.precio.toString() | currency:'ARS' }}</td>
         <td>
           <button class="btn btn-sm btn-warning me-2" (click)="abrirEditar(producto)">
             Editar
@@ -57,35 +57,79 @@
     [modal]="true"
     [style]="{ width: '500px' }"
   >
-    <form (ngSubmit)="guardarProducto()">
+    <form [formGroup]="form">
       <div class="form-group mb-2">
         <label>Nombre</label>
-        <input type="text" class="form-control" [(ngModel)]="productoActual.nombre" name="nombre" required />
+        <input type="text"
+               class="form-control"
+               formControlName="nombre"
+               name="nombre"
+               required/>
       </div>
 
       <div class="form-group mb-2">
         <label>Descripción</label>
-        <textarea class="form-control" [(ngModel)]="productoActual.descripcion" name="descripcion" required></textarea>
+        <textarea class="form-control"
+                  formControlName="descripcion"
+                  name="descripcion"
+                  required></textarea>
       </div>
 
       <div class="form-group mb-2">
         <label>Clasificación</label>
-        <input type="text" class="form-control" [(ngModel)]="productoActual.clasificacion" name="clasificacion" required />
+        <input type="text"
+               class="form-control"
+               formControlName="clasificacion"
+               name="clasificacion"
+               required/>
       </div>
 
       <div class="form-group mb-2">
         <label>Precio</label>
-        <input type="number" class="form-control" [(ngModel)]="productoActual.precio" name="precio" required />
+        <input type="number"
+               class="form-control"
+               formControlName="precio"
+               name="precio"
+               required/>
       </div>
 
-      <div class="form-group mb-2">
-        <label>Imagen (URL)</label>
-        <input type="text" class="form-control" [(ngModel)]="productoActual.imagen" name="imagen" />
-      </div>
+<!--      <div class="form-group mb-2">-->
+<!--        <label>Imagen (URL)</label>-->
+<!--        <input type="text" class="form-control" [(ngModel)]="productoActual.imagen" name="imagen"/>-->
+<!--      </div>-->
+
+      @if (this.productoActual) {
+        @if (this.productoActual.imagen) {
+          <div class="form-group mb-2">
+            <div class="col-12 d-flex justify-content-between">
+              <label>Imagen</label>
+              <button class="btn btn-danger" (click)="quitarImagen()">Quitar</button>
+            </div>
+
+            <img
+              class="col-12 pt-2"
+              [src]="this.productoActual.imagen"
+              [alt]="this.productoActual.nombre"
+            />
+          </div>
+        } @else {
+          <div class="form-group mb-2">
+            <label>Imagen</label>
+            <input type="file" (change)="onFileChange($event)"/>
+          </div>
+        }
+      } @else {
+        <div class="form-group mb-2">
+          <label>Imagen</label>
+          <input type="file" (change)="onFileChange($event)"/>
+        </div>
+      }
+
+
 
       <div class="text-end mt-3">
         <button class="btn btn-secondary me-2" type="button" (click)="displayDialog = false">Cancelar</button>
-        <button class="btn btn-primary" type="submit">{{ esModoEdicion ? 'Guardar cambios' : 'Agregar' }}</button>
+        <button class="btn btn-primary" type="submit" (click)="enviarProducto()">{{ esModoEdicion ? 'Guardar cambios' : 'Agregar' }}</button>
       </div>
     </form>
   </p-dialog>

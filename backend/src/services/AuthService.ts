@@ -3,8 +3,8 @@ import {CorreoExistenteException, DatosIncorrectoException} from "../exceptions/
 import {IResultadoAccion} from "../models/main-models";
 import bcrypt from "bcrypt";
 import {generarToken} from "../utils/jwt";
-import {IAuthService} from "../models/interfaces/auth.service.interface";
 import {IMailerService} from "../models/services-interfaces";
+import {IAuthService} from "../models/interfaces/services/auth.service.interface";
 
 class AuthService implements IAuthService {
     private readonly mailerService!: IMailerService;

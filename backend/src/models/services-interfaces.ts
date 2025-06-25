@@ -1,6 +1,5 @@
 import { ProductoDTO } from './interfaces/producto-dto';
-import { Producto } from './producto-model';
-
+import {Producto} from "./entities/producto";
 
 export interface IMailerService {
     enviarCorreo(to: string, subject: string, html: string): any;
@@ -17,16 +16,4 @@ export interface ICarritoService {
     vaciarCarrito(id: number): Promise<any>;
 }
 
-export interface IProductoService {
-    obtenerPorId(id: number): Promise<Producto | null>;
-    obtenerTodos(): Promise<Producto[]>;
-    obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
-        precioMin?: number;
-        precioMax?: number;
-    }): Promise<Producto[]>;
-    obtenerProductoPorId(id: number): Promise<Producto | null>;
-    crearProducto(data: ProductoDTO): Promise<Producto>;
-    actualizarProducto(id: number, data: ProductoDTO): Promise<Producto>;
-    eliminarProducto(id: number): Promise<void>;
-}
+

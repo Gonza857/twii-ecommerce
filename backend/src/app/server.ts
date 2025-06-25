@@ -3,12 +3,15 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import {setupSwagger} from "../config/swagger";
 import path from 'path';
-
+import multer from 'multer';
 
 interface Options {
     puerto: number,
     routes: Router,
 }
+
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
 
 export class Server {
     private app = express()
@@ -30,7 +33,7 @@ export class Server {
             credentials: true
         }))
 
-        this.app.use('/images', express.static(path.resolve(__dirname, '../public/images')));
+        this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
         setupSwagger(this.app)
         this.app.use(this.routes)

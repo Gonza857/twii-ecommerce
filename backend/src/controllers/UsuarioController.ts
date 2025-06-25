@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {AuthenticatedRequest} from "../models/main-models";
-import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
 import {Usuario} from "../models/usuario-model";
+import {IUsuarioService} from "../models/interfaces/services/usuario.service.interface";
 
 class UsuarioController {
     private usuarioService!: IUsuarioService;

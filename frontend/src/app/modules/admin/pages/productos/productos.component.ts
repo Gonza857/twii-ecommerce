@@ -1,45 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { Producto, ProductoDTO, ProductoService } from '../../../../services/producto/producto.service';
-import { TableModule } from 'primeng/table';
-import { CurrencyPipe} from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
+import {Component, effect, inject, OnInit} from '@angular/core';
+import {ProductoDTO, ProductoService} from '../../../../services/producto/producto.service';
+import {TableModule} from 'primeng/table';
+import {CurrencyPipe} from '@angular/common';
+import {DialogModule} from 'primeng/dialog';
+import {ButtonModule} from 'primeng/button';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  Producto,
+  ProductoFormulario
+} from '../../../../services/producto/interfaces/producto.interface';
+import ProductoMapper from '../../../../services/producto/mapping/producto.mapper';
 
 @Component({
   selector: 'app-productos',
-  imports: [TableModule, CurrencyPipe, DialogModule, ButtonModule, FormsModule],
+  imports: [TableModule, CurrencyPipe, DialogModule, ButtonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './productos.component.html',
+  standalone: true,
   styleUrl: './productos.component.scss'
 })
-export class ProductosComponent {
-    productos: Producto[] = [];
+export class ProductosComponent implements OnInit {
+  protected readonly productoService: ProductoService = inject(ProductoService);
+  productos: Producto[] = []
 
-    displayDialog = false;
-    esModoEdicion = false;
+  displayDialog = false;
+  esModoEdicion = false;
 
-    productoActual: Producto | ProductoDTO = this.crearProductoVacio();
+  protected productoActual!: Producto;
 
-    //imagenSeleccionada: File | null = null;
+  private readonly fb: FormBuilder = inject(FormBuilder)
+  protected form!: FormGroup;
+  modo: 'crear' | 'editar' = 'crear';
+
+  //imagenSeleccionada: File | null = null;
 
 
-    constructor(private productoService: ProductoService){}
-
-    ngOnInit(): void {
-    this.productoService.obtenerProductos().subscribe({
-      next: (data: Producto[]) => {
-        this.productos = data;
-      },
-      error: (err) => {},
-      complete: () => {},
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      nombre: ["", Validators.required],
+      clasificacion: ["", Validators.required],
+      precio: [0, Validators.required],
+      descripcion: ["", Validators.required],
+      imagen: [null, Validators.required],
+      cambioImagen: [false]
     });
-  }
 
-    obtenerProductos(): void {
-    this.productoService.obtenerProductos().subscribe({
-      next: (data) => this.productos = data,
-      error: (err) => console.error('Error al cargar productos:', err)
-    });
+    this.productoService.obtenerProductos()
   }
 
   /*onImagenSeleccionada(event: Event): void {
@@ -47,49 +52,95 @@ export class ProductosComponent {
   if (fileInput.files && fileInput.files.length > 0) {
     this.imagenSeleccionada = fileInput.files[0];
   }
-}*/
-
-  crearProductoVacio(): ProductoDTO {
-    return {
-      nombre: '',
-      descripcion: '',
-      clasificacion: '',
-      precio: 0,
-      imagen: '',
-    };
-  }
+  }*/
 
   abrirAgregar(): void {
     this.esModoEdicion = false;
-    this.productoActual = this.crearProductoVacio();
     this.displayDialog = true;
   }
 
   abrirEditar(producto: Producto): void {
     this.esModoEdicion = true;
-    this.productoActual = { ...producto }; // copia segura
+    this.productoActual = {...producto}; // copia segura
+
+    this.form.patchValue({
+      nombre: producto.nombre,
+      clasificacion: producto.clasificacion,
+      descripcion: producto.descripcion,
+      precio: producto.precio,
+      imagen: producto.imagen, // No cargás archivo anterior
+      cambioImagen: false
+    });
+
     this.displayDialog = true;
+
   }
 
-  guardarProducto(): void {
+  // guardarProducto(): void {
+  //   if (this.esModoEdicion
+  //   ) {
+  //     const productoEditado = this.productoActual as Producto;
+  //     this.productoService.actualizarProducto(productoEditado).subscribe(() => {
+  //       // this.obtenerProductos();
+  //       this.displayDialog = false;
+  //     });
+  //   } else {
+  //
+  //     const {id, ...productoParaCrear} = this.productoActual as Producto;
+  //     productoParaCrear.precio = new Decimal(productoParaCrear.precio)
+  //     this.productoService.crearProducto(productoParaCrear).subscribe(() => {
+  //       // this.obtenerProductos();
+  //       this.displayDialog = false;
+  //     });
+  //   }
+  // }
+
+// Capturamos el archivo y lo ponemos en el form control 'imagen'
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    this.form.patchValue({imagen: file});
+    // Opcional: para que Angular reconozca el cambio
+    this.form.get('imagen')?.updateValueAndValidity();
+  }
+
+  quitarImagen() {
+    this.form.get('imagen')?.setValue(null);
+    this.form.get('cambioImagen')?.setValue(true);
+    this.productoActual.imagen = null;
+  }
+
+  enviarProducto() {
+    const producto: ProductoFormulario = ProductoMapper.mapProductoFormularioToRest(this.form)
     if (this.esModoEdicion) {
-      const productoEditado = this.productoActual as Producto;
-      this.productoService.actualizarProducto(productoEditado).subscribe(() => {
-        this.obtenerProductos();
-        this.displayDialog = false;
+      this.productoService.actualizarProducto(producto, this.productoActual.id).subscribe({
+        next: (res: {mensaje: string}) => {
+            this.productoService.obtenerProductos()
+        },
+        error: (e: any) => {
+
+        }
       });
     } else {
-      const { id, ...productoParaCrear } = this.productoActual as Producto;
-      this.productoService.crearProducto(productoParaCrear).subscribe(() => {
-        this.obtenerProductos();
-        this.displayDialog = false;
+      this.productoService.crearProducto(producto).subscribe({
+        next: () => {
+          this.productoService.obtenerProductos()
+        },
+        error: (e: any) => {
+          console.log("[SUBIR PRODUCTO] error", e)
+        }
       });
     }
+
+    this.displayDialog = false;
   }
 
   eliminarProducto(id: number): void {
-    if (confirm('¿Eliminar este producto?')) {
-      this.productoService.eliminarProducto(id).subscribe(() => this.obtenerProductos());
+    if (confirm('¿Eliminar este producto?')
+    ) {
+      this.productoService.eliminarProducto(id);
     }
   }
 }
