@@ -1,3 +1,4 @@
+import { ProductoDTO } from './interfaces/producto-dto';
 import {Producto} from "./entities/producto";
 
 export interface IMailerService {
@@ -15,12 +16,4 @@ export interface ICarritoService {
     vaciarCarrito(id: number): Promise<any>;
 }
 
-export interface IProductoService {
-    obtenerPorId(id: number): Promise<Producto | null>;
-    obtenerTodos(): Promise<Producto[]>;
-    obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
-        precioMin?: number;
-        precioMax?: number;
-    }): Promise<Producto[]>;
-}
+

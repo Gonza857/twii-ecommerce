@@ -1,9 +1,26 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {inject, Injectable, signal} from '@angular/core';
 import {map, Observable} from 'rxjs';
-import {Producto} from './interfaces/producto.interface';
+import {Producto, ProductoFormulario} from './interfaces/producto.interface';
 import {ProductoRest} from './interfaces/producto.interface.rest';
 import ProductoMapper from './mapping/producto.mapper';
+
+
+export interface ProductoDTO {
+  nombre: string;
+  descripcion: string;
+  clasificacion: string;
+  precio: number;
+  imagen?: string;
+}
+
+type ResultadoRequest = {
+  mensaje?: string,
+  codigo?: number,
+  exito?: boolean,
+  redireccion?: boolean,
+  data?: any,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +29,29 @@ import ProductoMapper from './mapping/producto.mapper';
 export class ProductoService {
   private apiUrl: string = "http://localhost:3000/api/producto";
   private readonly http: HttpClient = inject(HttpClient);
+  private productos = signal<Producto[]>([]);
+  public readonly signalProductos = this.productos.asReadonly()
 
-  public obtenerProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${this.apiUrl}`);
+  constructor() {
+    this.obtenerProductos()
   }
 
-  public obtenerPorId (id: string): Observable<Producto> {
+  public obtenerProductos(): void {
+    this.http.get<ProductoRest[]>(`${this.apiUrl}`)
+      .pipe(
+        map((res: ProductoRest[]) => ProductoMapper.mapProductoArrayRestToProductoArray(res))
+      )
+      .subscribe({
+        next: (productos: Producto[]) => {
+          this.productos.set(productos);
+        },
+        error: (e: any) => {
+          console.log("ERROR OBTENER PRODUCTOS", e)
+        }
+      });
+  }
+
+  public obtenerPorId(id: string): Observable<Producto> {
     return this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
       .pipe(
         map((res) => ProductoMapper.mapToProducto(res))
@@ -54,5 +88,36 @@ export class ProductoService {
 
     const query = params.length ? `?${params.join('&')}` : '';
     return this.http.get<Producto[]>(`${this.apiUrl}${query}`);
+  }
+
+  public crearProducto(producto: ProductoFormulario): Observable<ProductoDTO> {
+    const productoFormData = this.crearFormDataProducto(producto);
+    return this.http.post<ProductoDTO>(this.apiUrl, productoFormData)
+  }
+
+  private crearFormDataProducto = (producto: ProductoFormulario): FormData => {
+    const formData = new FormData();
+
+    Object.entries(producto).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    return formData;
+  }
+
+  public actualizarProducto(producto: ProductoFormulario, id: number): Observable<{ mensaje: string }> {
+    const productoFormData = this.crearFormDataProducto(producto);
+    return this.http.put<{ mensaje: string }>(`${this.apiUrl}/${id}`, productoFormData)
+  }
+
+  eliminarProducto(id: number): void {
+    this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe({
+      next: () => {
+        this.obtenerProductos();
+      },
+      error: (e: any) => {
+
+      }
+    });
   }
 }

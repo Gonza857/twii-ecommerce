@@ -24,20 +24,22 @@ model rol {
 }
 
 model usuario {
-  id         Int     @id @default(autoincrement())
-  direccion  String? @db.VarChar(255)
-  apellido   String  @db.VarChar(100)
-  nombre     String  @db.VarChar(100)
-  email      String  @unique @db.VarChar(100)
-  contrasena String  @db.VarChar(255)
+  id         Int       @id @default(autoincrement())
+  direccion  String?   @db.VarChar(255)
+  apellido   String    @db.VarChar(100)
+  nombre     String    @db.VarChar(100)
+  email      String    @unique @db.VarChar(100)
+  contrasena String    @db.VarChar(255)
   rolid      Int
-  validado   Boolean @default(false)
-  rol        rol     @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
+  validado   Boolean?  @default(false)
+  carrito    carrito[]
+  rol        rol       @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }
 
 model carrito {
   id        Int                @id @default(autoincrement())
   usuarioid Int
+  usuario   usuario            @relation(fields: [usuarioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_usuario")
   productos carrito_producto[]
 }
 

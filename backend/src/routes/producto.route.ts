@@ -1,6 +1,7 @@
 import {RequestHandler, Router} from 'express';
 import container from "../app/container";
 import ProductoController from '../controllers/ProductoController';
+import {upload} from "../app/server";
 
 export const productosRouter = Router();
 
@@ -53,3 +54,6 @@ productosRouter.get('/', (req, res) => productoController.getProductos(req, res)
  */
 productosRouter.get("/:id", productoController.obtenerPorId as RequestHandler)
 
+productosRouter.post('/', upload.single("imagen"), productoController.crearProducto as RequestHandler);
+productosRouter.put('/:id', upload.single("imagen"), productoController.modificarProducto as RequestHandler);
+productosRouter.delete('/:id', (req, res) => productoController.eliminarProducto(req, res));

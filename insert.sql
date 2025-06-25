@@ -29,3 +29,14 @@ INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, rolId) VALU
 INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, rolId) VALUES
 ('Testing 456', 'Test', 'Usuario', 'test@test.com', 'test', 2);
 
+-- Actualizar los primeros 10 productos con rutas para las imagenes
+UPDATE "producto" SET "imagen" = '/images/cocaCola.jpg' WHERE id = 1;
+UPDATE "producto" SET "imagen" = '/images/aguaMineral.jpg' WHERE id = 2;
+UPDATE "producto" SET "imagen" = '/images/jugo.jpg' WHERE id = 3;
+UPDATE "producto" SET "imagen" = '/images/lavandina.jpg' WHERE id = 4;
+UPDATE "producto" SET "imagen" = '/images/detergente.jpg' WHERE id = 5;
+UPDATE "producto" SET "imagen" = '/images/jabon.jpg' WHERE id = 6;
+UPDATE "producto" SET "imagen" = '/images/harina.jpg' WHERE id = 7;
+UPDATE "producto" SET "imagen" = '/images/yerba.jpg' WHERE id = 8;
+UPDATE "producto" SET "imagen" = '/images/arroz.jpg' WHERE id = 9;
+UPDATE "producto" SET "imagen" = '/images/fideos.jpg' WHERE id = 10;

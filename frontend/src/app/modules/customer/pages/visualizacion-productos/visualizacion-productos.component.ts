@@ -58,9 +58,7 @@ export class ListaProductosComponent implements OnInit {
 
     } else {
       setTimeout(()=>{
-        this.productoService.obtenerProductos().subscribe((data:any) => {
-          this.productos = data;
-        });
+        this.productoService.obtenerProductos()
       }, 1000)
     }
 

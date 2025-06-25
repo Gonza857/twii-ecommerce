@@ -1,0 +1,11 @@
+.enlace-hover {
+  cursor: pointer;
+  color: #fff; /* Azul como un link */
+  text-decoration: none;
+  transition: color 0.2s, text-decoration 0.2s;
+}
+
+.enlace-hover:hover {
+  text-decoration: underline;
+  color: #cfd1f7; /* Un azul más oscuro al pasar el mouse */
+}

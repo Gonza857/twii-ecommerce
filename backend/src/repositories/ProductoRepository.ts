@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import {IProductoRepository} from "../models/interfaces/producto.repository.interface";
-import {Producto} from "../models/entities/producto";
+import {PrismaClient} from '@prisma/client';
+import {undefined} from "zod";
+import {Producto, ProductoDTO} from "../models/entities/producto";
+import {IProductoRepository} from "../models/interfaces/repositories/producto.repository.interface";
 
 export class ProductoRepository implements IProductoRepository {
     private readonly prisma!: PrismaClient;
@@ -47,6 +48,29 @@ export class ProductoRepository implements IProductoRepository {
 
     public async obtenerPorId(id: number): Promise<Producto | null> {
         return this.prisma.producto.findUnique({where: {id}});
+
+    }
+
+    async create(data: ProductoDTO): Promise<number>{
+        const productoCreado = await this.prisma.producto.create({data});
+        return productoCreado.id;
+    }
+
+    async update(id: number, data: ProductoDTO) {
+        console.log("modificando prisma, id: " + id + data)
+        return this.prisma.producto.update({where: {id}, data,});
+    }
+
+    async update2(id: number, data: ProductoDTO) {
+        console.log(`modificando prisma, id ${id}: `, data)
+        await this.prisma.producto.update({where: {id}, data,});
+    }
+
+    async delete(id: number) {
+        await this.prisma.producto.delete({where: {id}});
+    }
+
+    async save (data: Producto) {
 
     }
 }

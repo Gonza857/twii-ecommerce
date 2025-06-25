@@ -1,4 +1,6 @@
+import { ProductoDTO } from './interfaces/producto-dto';
 import {ICarrito} from "./usuario-model";
+import {Producto} from "./entities/producto";
 
 export interface ICarritoRepository {
     obtenerCarritoPorUsuario(id: number): Promise<ICarrito>;
@@ -13,4 +15,5 @@ export interface ICarritoRepository {
     ): Promise<ICarrito>;
     vaciarCarrito(id: number): Promise<ICarrito>;
 }
+
 

@@ -15,8 +15,8 @@ import {generarToken, verificarToken} from "../utils/jwt";
 import {generateCookie} from "../utils/cookies";
 import {AuthenticatedRequest} from "../models/main-models";
 import {safe, safeSync} from "../utils/safe";
-import {IUsuarioService} from "../models/interfaces/usuario.service.interface";
-import {IAuthService} from "../models/interfaces/auth.service.interface";
+import {IUsuarioService} from "../models/interfaces/services/usuario.service.interface";
+import {IAuthService} from "../models/interfaces/services/auth.service.interface";
 
 type BaseJwtPayload = {
     iat?: number;

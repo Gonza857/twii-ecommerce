@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {Usuario, UsuarioRegisterDTO} from "../models/usuario-model";
-import {IUsuarioRepository} from "../models/interfaces/usuario.repository.interface";
+import {IUsuarioRepository} from "../models/interfaces/repositories/usuario.repository.interface";
 
 class UsuarioRepository implements IUsuarioRepository {
     private readonly prisma!: PrismaClient;

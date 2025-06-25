@@ -1,0 +1,84 @@
+<main class="styledMain bg-principal">
+  <section class="col-xl-8 mx-auto py-2">
+    <div class="d-flex justify-content-between">
+      <h2 class="text-white">
+        Gestión de Productos
+      </h2>
+
+      <button class="btn-primario mb-3 d-flex justify-content-center align-items-center gap-2" (click)="abrirAgregar()">
+        Agregar producto
+        <i class="pi pi-plus"></i>
+      </button>
+    </div>
+
+
+    <div class="col-12">
+      <p-table
+        [value]="this.productoService.signalProductos()"
+        size="small"
+        stripedRows
+        showGridlines
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Clasificación</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-producto>
+          <tr>
+            <td>
+              <img
+                [src]="producto.imagen"
+                [alt]="producto.nombre"
+                width="60"
+                height="60"
+                class="rounded"
+                style="object-fit: cover;"
+              />
+            </td>
+            <td>
+              <p (click)="abrirVer(producto)" class="enlace-hover">
+                {{ producto.nombre }}
+              </p>
+            </td>
+            <td>{{ producto.descripcion.length > 30 ? (producto.nombre | slice:0:30) + '...' : producto.descripcion }}</td>
+            <td>{{ producto.clasificacion }}</td>
+            <td>{{ producto.precio.toString() | currency:'ARS' }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-warning me-2" (click)="abrirEditar(producto)">
+                  <i class="pi pi-pencil" style="color: black"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="eliminarProducto(producto.id)">
+                  <i class="pi pi-trash" style="color: black"></i>
+                </button>
+              </div>
+
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <app-modal-formulario
+      [esModoEdicion]="esModoEdicion"
+      [productoActual]="this.productoActual"
+      [displayDialog]="displayDialog"
+      (manejarModalFormulario)="manejarFormulario($event)"
+    />
+
+    <app-modal-ver
+      (manejarModalFormulario)="manejarVer($event)"
+      [displayDialog]="verModalDetalle"
+      [productoActual]="this.productoActual"
+    />
+  </section>
+</main>
+

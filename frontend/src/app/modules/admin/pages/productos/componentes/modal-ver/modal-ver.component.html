@@ -1,0 +1,38 @@
+<p-dialog
+  header="Detalle producto: {{productoActual()?.nombre}}"
+  [visible]="displayDialog()"
+  (visibleChange)="manejarModal($event)"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+>
+  <div>
+
+    <div class="form-group mb-2">
+      <p><span class="fw-bold">Nombre: </span>{{ productoActual()?.nombre }}</p>
+      <p><span class="fw-bold">Descripcion: </span>{{ productoActual()?.descripcion }}</p>
+      <p><span class="fw-bold">Clasificacion: </span>{{ productoActual()?.clasificacion }}</p>
+      <p><span class="fw-bold">Precio: </span>{{ productoActual()?.precio }}</p>
+    </div>
+
+    <p><span class="fw-bold">Imagen: </span></p>
+    <div class="d-flex justify-content-center">
+      @if (this.productoActual()?.imagen) {
+        <img
+          class="pt-2"
+          [src]="this.productoActual()?.imagen"
+          [alt]="this.productoActual()?.nombre"
+          width="250"
+        />
+      } @else {
+        <p>Sin imagen</p>
+      }
+    </div>
+
+
+    <div class="text-end mt-3">
+      <button class="btn btn-secondary me-2" type="button" (click)="manejarModal(false)">Cerrar</button>
+    </div>
+  </div>
+</p-dialog>
