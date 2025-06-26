@@ -8,7 +8,7 @@ class ProductoMapper {
     return {
       clasificacion: producto.clasificacion,
       descripcion: producto.descripcion,
-      imagen: producto.descripcion,
+      imagen: producto.imagen,
       precio: producto.precio.toString(),
       nombre: producto.nombre,
       id: producto.id
