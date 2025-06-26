@@ -24,6 +24,7 @@ export class ListaProductosComponent implements OnInit {
   clasificacionSeleccionada: string = '';
   precioMin: number | null = null;
   precioMax: number | null = null;
+  busquedaNombre: string = '';
   errorPrecio: string = '';
   usuarioId?: number;
   usuarioLogueado: boolean = false;
@@ -50,6 +51,7 @@ export class ListaProductosComponent implements OnInit {
       this.clasificacionSeleccionada = filtros.clasificacion || '';
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
+      this.busquedaNombre = filtros.nombre ?? '';
       setTimeout(()=>{
         this.productoService.obtenerFiltrados(filtros).subscribe((data:Producto[]) => {
           this.productos = data;
@@ -65,6 +67,11 @@ export class ListaProductosComponent implements OnInit {
     this.carrito = this.carritoService.carrito;
 
   }
+
+  buscarPorNombre(){
+  
+    this.actualizarProductos();  // actualizar con nuevos filtros
+    }
 
   filtrarPorClasificacion(clasificacion: string): void {
     this.clasificacionSeleccionada = clasificacion;
@@ -107,6 +114,10 @@ export class ListaProductosComponent implements OnInit {
       filtros.precioMax = this.precioMax;
     }
 
+    if(this.busquedaNombre && this.busquedaNombre.trim() !== ''){
+      filtros.nombre = this.busquedaNombre.trim();
+    }
+
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
     this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
       this.productos = data;
@@ -117,6 +128,7 @@ export class ListaProductosComponent implements OnInit {
     this.clasificacionSeleccionada = '';
     this.precioMin = null;
     this.precioMax = null;
+    this.busquedaNombre = '';
 
     localStorage.removeItem('filtrosProductos');
 

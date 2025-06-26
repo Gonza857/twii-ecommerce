@@ -7,6 +7,7 @@ export interface IProductoService {
         clasificacion?: string;
         precioMin?: number;
         precioMax?: number;
+        nombre?: string;
     }): Promise<Producto[]>;
     obtenerProductoPorId(id: number): Promise<Producto | null>;
     crearProducto(data: ProductoCrearDTO): Promise<number>;

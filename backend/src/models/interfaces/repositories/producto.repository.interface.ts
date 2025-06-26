@@ -1,5 +1,5 @@
 import {Producto} from "../../entities/producto";
-import {ProductoDTO} from "../producto-dto";
+import {ProductoDTO} from "../../entities/producto";
 
 export interface IProductoRepository {
     obtenerPorId(id: number): Promise<Producto | null>;
@@ -8,6 +8,7 @@ export interface IProductoRepository {
         clasificacion?: string;
         precioMin?: number;
         precioMax?: number;
+        nombre?: string;
     }): Promise<Producto[]>;
     create(data: ProductoDTO): Promise<number>;
     update(id: number, data: ProductoDTO): Promise<Producto>;
