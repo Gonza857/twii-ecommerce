@@ -87,6 +87,16 @@
                 class="text-decoration-none text-white"
               >
                 <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
+                  <div class="mb-3 d-flex align-items-center justify-content-center">
+                    <img
+                [src]="producto.imagen"
+                [alt]="producto.nombre"
+                height="200"
+                class="rounded"
+                style="object-fit: cover;"
+              />
+                  </div>
+
                   <div>
                     <h5 class="card-title text-white">{{ producto.nombre }}</h5>
                     <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>

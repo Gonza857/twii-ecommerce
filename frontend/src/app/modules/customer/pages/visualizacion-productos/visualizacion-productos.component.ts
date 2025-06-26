@@ -51,7 +51,7 @@ export class ListaProductosComponent implements OnInit {
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
       setTimeout(()=>{
-        this.productoService.obtenerFiltrados(filtros).subscribe((data:any) => {
+        this.productoService.obtenerFiltrados(filtros).subscribe((data:Producto[]) => {
           this.productos = data;
         });
       }, 1000)
