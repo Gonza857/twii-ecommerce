@@ -15,14 +15,14 @@ import {Usuario} from '../../../services/usuario/interfaces/usuario.interface';
 })
 export class CustomerLayoutComponent implements OnInit{
   private readonly usuarioService: UsuarioService = inject(UsuarioService)
-  protected usuarioActual: Usuario | null = null;
+  protected usuarioActual: Usuario | null = this.usuarioService.usuario();
   carritoVisible = false;
   public readonly carritoService = inject(CarritoService);
 
   constructor() {
+    console.log("CONSTRUCTOR EJECTUADO")
     effect(() => {
       this.carritoVisible = this.carritoService.drawerVisible();
-      this.usuarioActual = this.usuarioService.usuario();
     });
   }
 
@@ -35,6 +35,7 @@ export class CustomerLayoutComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    console.log("NG ON INIT EJECUTADO")
     this.usuarioService.obtenerUsuarioActual();
   }
 }
