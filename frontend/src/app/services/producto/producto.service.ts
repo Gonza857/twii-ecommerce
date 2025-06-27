@@ -1,6 +1,6 @@
-import {HttpClient} from '@angular/common/http';
-import {inject, Injectable, signal} from '@angular/core';
-import {map, Observable} from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {computed, inject, Injectable, signal} from '@angular/core';
+import {catchError, delay, map, Observable, throwError} from 'rxjs';
 import {Producto, ProductoFormulario} from './interfaces/producto.interface';
 import {ProductoRest} from './interfaces/producto.interface.rest';
 import ProductoMapper from './mapping/producto.mapper';
@@ -22,6 +22,13 @@ type ResultadoRequest = {
   data?: any,
 }
 
+// --- NUEVO: Interfaz para el estado completo del producto ---
+export interface ProductoDetailState {
+  producto: Producto | null;
+  loading: boolean;
+  error: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,12 +36,39 @@ type ResultadoRequest = {
 export class ProductoService {
   private apiUrl: string = "http://localhost:3000/api/producto";
   private readonly http: HttpClient = inject(HttpClient);
+
   private productos = signal<Producto[]>([]);
   public readonly signalProductos = this.productos.asReadonly()
+
+  private productoDetalle = signal<Producto | null>(null);
+  public readonly signalProductoDetalle = this.productoDetalle.asReadonly()
+
+  // --- NUEVO: Signal principal que contiene el estado completo ---
+  private _productoDetalle = signal<ProductoDetailState>({
+    producto: null,
+    loading: false,
+    error: null
+  });
+
+  // --- Signals públicos y de solo lectura (computed para conveniencia) ---
+  public readonly productoDetalleState = this._productoDetalle.asReadonly();
+  public readonly producto = computed(() => this.productoDetalleState().producto);
+  public readonly isLoading = computed(() => this.productoDetalleState().loading);
+  public readonly error = computed(() => this.productoDetalleState().error);
+
 
   constructor() {
     this.obtenerProductos()
   }
+
+  public limpiarProducto () {
+    this._productoDetalle.set({
+      producto: null,
+      loading: false,
+      error: null
+    })
+  }
+
 
   public obtenerProductos(): void {
     this.http.get<ProductoRest[]>(`${this.apiUrl}`)
@@ -51,11 +85,39 @@ export class ProductoService {
       });
   }
 
-  public obtenerPorId(id: string): Observable<Producto> {
-    return this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
+  public obtenerPorId(id: string): void{
+    this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
       .pipe(
-        map((res) => ProductoMapper.mapToProducto(res))
-      );
+        map((res) => ProductoMapper.mapToProducto(res)),
+        catchError((e: HttpErrorResponse) => {
+          let errorMessage = 'Ocurrió un error desconocido al cargar el producto.';
+          if (e.status === 404) {
+            errorMessage = `Producto no encontrado.`;
+          } else if (e.error && e.error.message) {
+            errorMessage = e.error.message;
+          } else if (e.message) {
+            errorMessage = e.message;
+          }
+          this._productoDetalle.set({
+            producto: null,
+            loading: false,
+            error: errorMessage
+          });
+          return throwError(() => new Error(errorMessage));
+        })
+      )
+      .subscribe({
+        next: (producto: Producto) => {
+          this._productoDetalle.set({
+            producto: producto,
+            loading: false,
+            error: null
+          });
+        },
+        error: (e: any) => {
+          console.log("error", e)
+        }
+      });
   }
 
   public obtenerPorClasificacion(clasificacion: string): Observable<Producto[]> {

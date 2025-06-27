@@ -1,31 +1,79 @@
 <div class="styledMain pt-4">
-    <div class="card shadow-lg p-4 rounded-4 col-8 mx-auto">
+  <div class="shadow-lg p-4 rounded-4 col-8 mx-auto bg-secundario text-secundario">
+
+    @if (error()) {
+      <div class="error-message text-error">
+        <p>¡Ocurrió un error al cargar el producto!</p>
+        <p>{{ error() }}</p>
+        <button pButton type="button" label="Volver" icon="pi pi-arrow-left"
+                class="p-button-lg p-button-secondary mt-3" [routerLink]="'/productos'"></button>
+      </div>
+    }
+    @else if (isLoading()) {
+      <div class="loader bor1">
+        <p>Cargando producto...</p>
+        <p-progress-spinner ariaLabel="loading"/>
+      </div>
+    }
+    @else {
+      @defer (when this.producto()) {
         <div class="row">
-            <div class="col-md-5 text-center mb-3 mb-md-0">
-                <img
-                        src="{{producto?.imagen ?? 'https://via.placeholder.com/300x300?text=Sin+imagen'}}"
-                        alt="{{producto?.nombre}}"
-                        class="img-fluid rounded-3"
-                        style="max-height: 300px; object-fit: contain"
-                />
+          <div class="col-md-5 text-center mb-3 mb-md-0">
+            <img
+              src="{{producto()!.imagen ?? 'https://via.placeholder.com/300x300?text=Sin+imagen'}}"
+              alt="{{producto()!.nombre}}"
+              class="img-fluid rounded-3"
+              style="max-height: 300px; object-fit: contain"
+            />
+          </div>
+
+          <div class="col-md-7">
+            <h2 class="mb-3">{{ producto()!.nombre }}</h2>
+            <hr class="separator"/>
+            <span class="badge bg-primario mb-2">{{ producto()!.clasificacion }}</span>
+            <h4 class="text-success fw-bold mb-3 text-secundario">
+              {{ producto()!.precio.toString() | currency:'ARS':'symbol':'1.2-2' }}
+            </h4>
+
+            <p class="text-muted text-secundario" style="font-size: 1.1rem">
+              {{ producto()!.descripcion }}
+            </p>
+
+            <div class="mt-4 d-flex gap-2">
+              <button
+                (click)="agregarAlCarrito()"
+                type="button"
+                class="btn-primario">
+                <i class="pi pi-shopping-cart"></i>
+                Agregar al carrito
+              </button>
+              <button
+                pButton
+                type="button"
+                label="Volver"
+                icon="pi pi-arrow-left"
+                class="p-button-lg p-button-secondary"
+                [routerLink]="'/productos'">
+              </button>
             </div>
-
-            <div class="col-md-7">
-                <h2 class="mb-3">{{ producto?.nombre }}</h2>
-                <span class="badge bg-primary mb-2">{{ producto?.clasificacion }}</span>
-                <h4 class="text-success fw-bold mb-3">{{ producto.precio.toString() | currency:'ARS':'symbol':'1.2-2' }}</h4>
-
-                <p class="text-muted" style="font-size: 1.1rem">
-                    {{ producto?.descripcion }}
-                </p>
-
-                <div class="mt-4">
-                    <button pButton type="button" label="Agregar al carrito" icon="pi pi-shopping-cart"
-                            class="p-button-lg p-button-success me-2"></button>
-                    <button pButton type="button" label="Volver" icon="pi pi-arrow-left"
-                            class="p-button-lg p-button-secondary"   [routerLink]="'/productos'"></button>
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
+      } @placeholder {
+        <div class="placeholder-content text d-flex flex-column justify-content-center align-items-center">
+          <p>Preparando los detalles del producto...</p>
+          <p-progress-spinner ariaLabel="loading"/>
+        </div>
+      } @loading (after 100ms) {
+        <div class="loader bor1">
+          <p>Cargando vista...</p>
+          <div class="spinner"></div>
+        </div>
+      } @error {
+        <div class="error-message text-exito">
+          <p>Error inesperado al cargar la vista del producto.</p>
+          <p>Intenta recargar la página.</p>
+        </div>
+      }
+    }
+  </div>
 </div>

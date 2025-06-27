@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import Decimal from "decimal.js";
 
 export interface ImagenProductoFormulario {
   imagen: File | null;
@@ -16,6 +16,7 @@ export interface ProductoBase {
   nombre: string;
   descripcion: string;
   clasificacion: string;
+  // @ts-ignore
   precio: Decimal;
 }
 

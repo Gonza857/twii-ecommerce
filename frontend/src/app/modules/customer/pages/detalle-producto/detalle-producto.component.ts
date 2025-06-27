@@ -1,10 +1,12 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 import {ProductoService} from '../../../../services/producto/producto.service';
-import {Producto} from '../../../../services/producto/interfaces/producto.interface';
 import {CurrencyPipe, ViewportScroller} from '@angular/common';
 import {ButtonDirective} from 'primeng/button';
-import { RouterModule } from '@angular/router';
+import { ProgressSpinnerModule} from 'primeng/progressspinner';
+import {StyleClass} from 'primeng/styleclass';
+import {CarritoService} from '../../../../services/carrito.service';
+import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
 
 @Component({
@@ -12,31 +14,42 @@ import { RouterModule } from '@angular/router';
   imports: [
     CurrencyPipe,
     ButtonDirective,
-    RouterModule
+    RouterModule,
+    ProgressSpinnerModule,
+    StyleClass
   ],
   templateUrl: './detalle-producto.component.html',
   standalone: true,
   styleUrl: './detalle-producto.component.scss'
 })
-export class DetalleProductoComponent implements OnInit{
+export class DetalleProductoComponent implements OnInit, OnDestroy{
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private readonly productoService: ProductoService = inject(ProductoService);
+  protected readonly productoService: ProductoService = inject(ProductoService);
+  protected readonly carritoService: CarritoService = inject(CarritoService);
+  protected readonly usuarioService: UsuarioService = inject(UsuarioService);
   private readonly viewportScroller: ViewportScroller = inject(ViewportScroller)
   protected idProducto!: string | null ;
-  protected producto!: Producto;
+
+  protected producto = this.productoService.producto; // Signal del producto
+  protected isLoading = this.productoService.isLoading; // Signal del estado de carga
+  protected error = this.productoService.error; // Signal del mensaje de error
 
   ngOnInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
     this.idProducto = this.activatedRoute.snapshot.paramMap.get('id');
-    this.productoService.obtenerPorId(this.idProducto ?? "0").subscribe({
-      next: (data: Producto) => {
-        this.producto = data
-      },
-      error: (err: any) => {
-        console.log(err)
-      },
-      complete: () => {}
-    })
+    if (this.idProducto) {
+      this.productoService.obtenerPorId(this.idProducto ?? "0")
+    }
   }
 
+  ngOnDestroy(): void {
+    this.productoService.limpiarProducto();
+  }
+
+  agregarAlCarrito() {
+    const idUsuario = this.usuarioService.usuario()?.id
+    if (this.usuarioService.usuario() == null && !idUsuario) return;
+    this.carritoService.agregarProducto(idUsuario!, this.producto()!.id, 1);
+    this.carritoService.abrirDrawer();
+  }
 }
