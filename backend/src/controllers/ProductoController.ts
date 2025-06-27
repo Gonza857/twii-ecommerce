@@ -18,7 +18,8 @@ class ProductoController {
             const filtros = {
                 clasificacion: req.query.clasificacion as string,
                 precioMin: req.query.precioMin ? parseFloat(req.query.precioMin as string) : undefined,
-                precioMax: req.query.precioMax ? parseFloat(req.query.precioMax as string) : undefined
+                precioMax: req.query.precioMax ? parseFloat(req.query.precioMax as string) : undefined,
+                nombre: req.query.nombre as string
             };
 
             let productos;

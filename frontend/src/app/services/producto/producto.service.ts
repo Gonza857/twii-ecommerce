@@ -73,6 +73,7 @@ export class ProductoService {
     clasificacion?: string;
     precioMin?: number;
     precioMax?: number;
+    nombre?: string;
   }): Observable<Producto[]> {
     const params: string[] = [];
 
@@ -84,6 +85,9 @@ export class ProductoService {
     }
     if (filtros.precioMax !== undefined) {
       params.push(`precioMax=${filtros.precioMax}`);
+    }
+    if(filtros.nombre){
+      params.push(`nombre=${encodeURIComponent(filtros.nombre)}`);
     }
 
     const query = params.length ? `?${params.join('&')}` : '';

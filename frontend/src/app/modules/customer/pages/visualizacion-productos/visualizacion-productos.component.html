@@ -3,19 +3,25 @@
 <div class="layout-productos col-10 mx-auto">
 
   <aside class="sidebar-filtros">
+    <section class="filtro-busqueda">
+      <h3>Buscar por nombre</h3>
+      <input type="text" [(ngModel)]="busquedaNombre" placeholder="Nombre del producto" />
+      <button (click)="buscarPorNombre()">Buscar</button>
+    </section>
+
     <section class="filtros-clasificacion">
       <h3>Filtrar por clasificación</h3>
 
       <div class="filtros-botones">
         <button (click)="filtrarPorClasificacion('')" [class.activo]="!clasificacionSeleccionada">Todos</button>
         <button (click)="filtrarPorClasificacion('bebidas')"
-                [class.activo]="clasificacionSeleccionada === 'bebidas'">Bebidas
+          [class.activo]="clasificacionSeleccionada === 'bebidas'">Bebidas
         </button>
         <button (click)="filtrarPorClasificacion('limpieza')"
-                [class.activo]="clasificacionSeleccionada === 'limpieza'">Limpieza
+          [class.activo]="clasificacionSeleccionada === 'limpieza'">Limpieza
         </button>
         <button (click)="filtrarPorClasificacion('almacén')"
-                [class.activo]="clasificacionSeleccionada === 'almacén'">Almacén
+          [class.activo]="clasificacionSeleccionada === 'almacén'">Almacén
         </button>
       </div>
     </section>
@@ -25,12 +31,12 @@
 
       <div class="filtro">
         <label>Precio mínimo</label>
-        <input type="number" [(ngModel)]="precioMin"/>
+        <input type="number" [(ngModel)]="precioMin" />
       </div>
 
       <div class="filtro">
         <label>Precio máximo</label>
-        <input type="number" [(ngModel)]="precioMax"/>
+        <input type="number" [(ngModel)]="precioMax" />
       </div>
 
       <button (click)="aplicarFiltroPrecio()">Aplicar precio</button>
@@ -46,116 +52,90 @@
     <div class="productos-grid">
 
       @defer (when productos.length > 0) {
-        @for (producto of productos; track producto.id) {
-          <div class="col">
-            <p-card
-              class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden position-relative"
-            >
+      @for (producto of productos; track producto.id) {
+      <div class="col">
+        <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden position-relative">
 
-              <!-- Envolvemos todo con un enlace -->
+          <!-- Envolvemos todo con un enlace -->
 
-<!--              <ng-template pTemplate="header">-->
-<!--<<<<<<< HEAD-->
-<!--            <div class="d-flex align-items-center justify-content-center bg-white rounded" style="height: 200px; overflow: hidden;">-->
-<!--            <img-->
-<!--              [src]="'http://localhost:3000' + producto.imagen"-->
-<!--              alt="{{ producto.nombre }}"-->
-<!--              style="max-height: 100%; max-width: 100%; object-fit: contain;"-->
-<!--              />-->
-<!--            </div>-->
-<!--</ng-template>-->
-<!--=======-->
-<!--                <div-->
-<!--                  class="bg-secondary d-flex align-items-center justify-content-center"-->
-<!--                  style="height: 200px;"-->
-<!--                >-->
-<!--                  <img-->
-<!--                    *ngIf="producto.imagen; else sinImagen"-->
-<!--                    [src]="producto.imagen ?? 'https://www.mediacenterone.mx/wp-content/uploads/2021/01/4ps1-780x405-1.png'"-->
-<!--                    alt="{{ producto.nombre }}"-->
-<!--                    class="img-fluid w-100 h-100 object-fit-contain"-->
-<!--                  />-->
-<!--                  <ng-template #sinImagen>-->
-<!--                    <span class="text-white">Imagen del producto</span>-->
-<!--                  </ng-template>-->
-<!--                </div>-->
-<!--              </ng-template>-->
-<!--&gt;>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d-->
+          <!--              <ng-template pTemplate="header">-->
+          <!--<<<<<<< HEAD-->
+          <!--            <div class="d-flex align-items-center justify-content-center bg-white rounded" style="height: 200px; overflow: hidden;">-->
+          <!--            <img-->
+          <!--              [src]="'http://localhost:3000' + producto.imagen"-->
+          <!--              alt="{{ producto.nombre }}"-->
+          <!--              style="max-height: 100%; max-width: 100%; object-fit: contain;"-->
+          <!--              />-->
+          <!--            </div>-->
+          <!--</ng-template>-->
+          <!--=======-->
+          <!--                <div-->
+          <!--                  class="bg-secondary d-flex align-items-center justify-content-center"-->
+          <!--                  style="height: 200px;"-->
+          <!--                >-->
+          <!--                  <img-->
+          <!--                    *ngIf="producto.imagen; else sinImagen"-->
+          <!--                    [src]="producto.imagen ?? 'https://www.mediacenterone.mx/wp-content/uploads/2021/01/4ps1-780x405-1.png'"-->
+          <!--                    alt="{{ producto.nombre }}"-->
+          <!--                    class="img-fluid w-100 h-100 object-fit-contain"-->
+          <!--                  />-->
+          <!--                  <ng-template #sinImagen>-->
+          <!--                    <span class="text-white">Imagen del producto</span>-->
+          <!--                  </ng-template>-->
+          <!--                </div>-->
+          <!--              </ng-template>-->
+          <!--&gt;>>>>>> 7ada492a63010938b7e7ce56ceb027e13781b20d-->
 
-              <a
-                [routerLink]="['/producto', producto.id]"
-                class="text-decoration-none text-white"
-              >
-                <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
-                  <div class="mb-3 d-flex align-items-center justify-content-center">
-                    <img
-                [src]="producto.imagen"
-                [alt]="producto.nombre"
-                height="200"
-                class="rounded"
-                style="object-fit: cover;"
-              />
-                  </div>
+          <a [routerLink]="['/producto', producto.id]" class="text-decoration-none text-white">
+            <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
+              <div class="mb-3 d-flex align-items-center justify-content-center">
+                <img [src]="producto.imagen" [alt]="producto.nombre" height="200" class="rounded"
+                  style="object-fit: cover;" />
+              </div>
 
-                  <div>
-                    <h5 class="card-title text-white">{{ producto.nombre }}</h5>
-                    <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
-                  </div>
+              <div>
+                <h5 class="card-title text-white">{{ producto.nombre }}</h5>
+                <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
+              </div>
 
-                  <p class="h5 text-success mt-auto text-secundario">
-                    {{ producto.precio.toString() | currency: 'ARS' }}
-                  </p>
-                </div>
-              </a>
-              <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">
-                <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">
-                  <p-select
-                    class="flex-grow-1"
-                    [options]="opcionesCantidad"
-                    [(ngModel)]="item.cantidad"
-                    (onChange)="cambiarCantidad(item)"
-                    optionValue="value"
-                    optionLabel="label"
-                    [style]="{ height: '100%' }"
-                  ></p-select>
+              <p class="h5 text-success mt-auto text-secundario">
+                {{ producto.precio.toString() | currency: 'ARS' }}
+              </p>
+            </div>
+          </a>
+          <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">
+            <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">
+              <p-select class="flex-grow-1" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
+                (onChange)="cambiarCantidad(item)" optionValue="value" optionLabel="label"
+                [style]="{ height: '100%' }"></p-select>
 
-                  <button
-                    pButton
-                    icon="pi pi-trash"
-                    (click)="eliminarProducto(item)"
-                    title="Quitar del carrito"
-                    [style]="{ height: '100%' }"
+              <button pButton icon="pi pi-trash" (click)="eliminarProducto(item)" title="Quitar del carrito"
+                [style]="{ height: '100%' }"></button>
+            </div>
+          </ng-container>
 
-                  ></button>
-                </div>
-              </ng-container>
-
-              <ng-template #agregar>
-                <div class="d-flex mt-2 align-items-stretch" style="height: 40px;">
-                  <button
-                    class="btn-primario col-12"
-                    (click)="agregarAlCarrito(producto)"
-                    [disabled]="!usuarioLogueado"
-                    [style]="{ height: '100%' }"
-                  >
-                    Agregar al carrito
-                  </button>
-                </div>
-              </ng-template>
-            </p-card>
-          </div>
-        }
+          <ng-template #agregar>
+            <div class="d-flex mt-2 align-items-stretch" style="height: 40px;">
+              <button class="btn-primario col-12" (click)="agregarAlCarrito(producto)" [disabled]="!usuarioLogueado"
+                [style]="{ height: '100%' }">
+                Agregar al carrito
+              </button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+      }
 
       } @placeholder {
-        @for (n of [1, 2, 3, 4, 5, 6, 7]; track n) {
-          <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden">
-            <p-skeleton width="100%" height="11rem" styleClass="mb-2"/>
-            <p-skeleton width="100%" height="1.5rem" styleClass="mb-2 mt-4"/>
-            <p-skeleton width="5rem" styleClass="mb-2 mt-1"/>
-            <p-skeleton width="10rem" height="1.5rem" styleClass="mb-2 mt-3"/>
-            <p-skeleton width="100%" height="2.5rem"/>
-          </p-card>
-        }
+      @for (n of [1, 2, 3, 4, 5, 6, 7]; track n) {
+      <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden">
+        <p-skeleton width="100%" height="11rem" styleClass="mb-2" />
+        <p-skeleton width="100%" height="1.5rem" styleClass="mb-2 mt-4" />
+        <p-skeleton width="5rem" styleClass="mb-2 mt-1" />
+        <p-skeleton width="10rem" height="1.5rem" styleClass="mb-2 mt-3" />
+        <p-skeleton width="100%" height="2.5rem" />
+      </p-card>
+      }
       }
       <!--  <div class="productos-grid">-->
       <!--    <div *ngFor="let producto of productos" class="producto-card">-->

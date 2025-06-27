@@ -28,6 +28,7 @@ class ProductoService implements IProductoService {
         clasificacion?: string;
         precioMin?: number;
         precioMax?: number;
+        nombre?: string;
     }): Promise<Producto[]> {
         return await this.productoRepository.obtenerProductosFiltrados(filtros);
     }

@@ -4,12 +4,15 @@ import {ProductoService} from '../../../../services/producto/producto.service';
 import {Producto} from '../../../../services/producto/interfaces/producto.interface';
 import {CurrencyPipe, ViewportScroller} from '@angular/common';
 import {ButtonDirective} from 'primeng/button';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-detalle-producto',
   imports: [
     CurrencyPipe,
-    ButtonDirective
+    ButtonDirective,
+    RouterModule
   ],
   templateUrl: './detalle-producto.component.html',
   standalone: true,

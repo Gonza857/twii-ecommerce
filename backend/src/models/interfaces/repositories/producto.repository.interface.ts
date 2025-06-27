@@ -7,6 +7,7 @@ export interface IProductoRepository {
         clasificacion?: string;
         precioMin?: number;
         precioMax?: number;
+        nombre?: string;
     }): Promise<Producto[]>;
     create(data: ProductoDTO): Promise<number>;
     update(id: number, data: ProductoDTO): Promise<Producto>;

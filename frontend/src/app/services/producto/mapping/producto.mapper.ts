@@ -8,7 +8,7 @@ class ProductoMapper {
     return {
       clasificacion: producto.clasificacion,
       descripcion: producto.descripcion,
-      imagen: producto.descripcion,
+      imagen: producto.imagen,
       precio: producto.precio.toString(),
       nombre: producto.nombre,
       id: producto.id
@@ -42,7 +42,7 @@ class ProductoMapper {
     return {
       clasificacion: productoRest.clasificacion,
       descripcion: productoRest.descripcion,
-      imagen: productoRest.descripcion,
+      imagen: productoRest.imagen,
       precio: new Decimal(productoRest.precio),
       nombre: productoRest.nombre,
       id: productoRest.id

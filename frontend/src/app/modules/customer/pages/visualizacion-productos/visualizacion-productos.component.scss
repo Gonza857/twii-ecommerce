@@ -106,6 +106,54 @@
         }
       }
     }
+    .filtro-busqueda {
+  border: 1px solid #444466;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  label {
+    font-size: 0.9rem;
+    color: #b0b0d6;
+    font-weight: 600;
+  }
+
+  input[type='text'] {
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid #444466;
+    background: #2a2a44;
+    color: #eee;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: #6b6fff;
+      background: #3b3b66;
+    }
+  }
+
+  button {
+    background: #4f52ff;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: #373acb;
+    }
+  }
+}
 
     /* Botón borrar filtros */
     > .filtros-precio:last-child {
