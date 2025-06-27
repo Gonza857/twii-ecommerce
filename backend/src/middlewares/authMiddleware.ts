@@ -1,5 +1,5 @@
 import {verificarToken} from "../utils/jwt";
-import {NextFunction, Request, Response} from "express";
+import {NextFunction, Response} from "express";
 import {AuthenticatedRequest} from "../models/main-models";
 
 export const authMiddleware = async (
@@ -13,7 +13,6 @@ export const authMiddleware = async (
             req.user = null;
             return next();
         }
-
         const payload: any = verificarToken(token);
         req.user = payload.id ?? null;
     } catch (e) {

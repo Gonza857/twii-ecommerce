@@ -1,5 +1,4 @@
-import {Producto} from "../../entities/producto";
-import {ProductoDTO} from "../producto-dto";
+import {Producto, ProductoDTO} from "../../entities/producto";
 
 export interface IProductoRepository {
     obtenerPorId(id: number): Promise<Producto | null>;

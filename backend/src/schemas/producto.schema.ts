@@ -18,6 +18,7 @@ export const productoEditarSchema = z.object({
 });
 
 export const imagenProductoSchema = z.object({
+    originalname: z.string(),
     mimetype: z
         .string()
         .refine((val) => val.startsWith('image/'), {
