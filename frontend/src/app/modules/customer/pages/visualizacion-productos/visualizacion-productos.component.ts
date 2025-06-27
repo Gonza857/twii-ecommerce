@@ -1,16 +1,16 @@
-import {Component, OnInit, Signal} from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {PrimeTemplate} from "primeng/api";
-import {CardModule} from "primeng/card";
-import {SkeletonModule} from "primeng/skeleton";
-import {ProductoService} from '../../../../services/producto/producto.service';
-import {Producto} from "../../../../services/producto/interfaces/producto.interface";
-import {RouterLink} from "@angular/router";
-import {CarritoService, ItemCarrito} from '../../../../services/carrito.service';
-import {UsuarioService} from '../../../../services/usuario/usuario.service';
-import {SelectModule} from 'primeng/select';
-import {ButtonDirective} from 'primeng/button';
+import { PrimeTemplate } from "primeng/api";
+import { CardModule } from "primeng/card";
+import { SkeletonModule } from "primeng/skeleton";
+import { ProductoService } from '../../../../services/producto/producto.service';
+import { Producto } from "../../../../services/producto/interfaces/producto.interface";
+import { RouterLink } from "@angular/router";
+import { CarritoService, ItemCarrito } from '../../../../services/carrito.service';
+import { UsuarioService } from '../../../../services/usuario/usuario.service';
+import { SelectModule } from 'primeng/select';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   standalone: true,
@@ -24,6 +24,7 @@ export class ListaProductosComponent implements OnInit {
   clasificacionSeleccionada: string = '';
   precioMin: number | null = null;
   precioMax: number | null = null;
+  busquedaNombre: string = '';
   errorPrecio: string = '';
   usuarioId?: number;
   usuarioLogueado: boolean = false;
@@ -34,8 +35,8 @@ export class ListaProductosComponent implements OnInit {
   }));
 
   constructor(private productoService: ProductoService,
-              private carritoService: CarritoService,
-              private usuarioService: UsuarioService) {}
+    private carritoService: CarritoService,
+    private usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
     this.usuarioService.obtenerUsuarioActual();
@@ -50,20 +51,26 @@ export class ListaProductosComponent implements OnInit {
       this.clasificacionSeleccionada = filtros.clasificacion || '';
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
-      setTimeout(()=>{
-        this.productoService.obtenerFiltrados(filtros).subscribe((data:Producto[]) => {
+      this.busquedaNombre = filtros.nombre ?? '';
+      setTimeout(() => {
+        this.productoService.obtenerFiltrados(filtros).subscribe((data: Producto[]) => {
           this.productos = data;
         });
       }, 1000)
 
     } else {
-      setTimeout(()=>{
+      setTimeout(() => {
         this.productoService.obtenerProductos()
       }, 1000)
     }
 
     this.carrito = this.carritoService.carrito;
 
+  }
+
+  buscarPorNombre() {
+
+    this.actualizarProductos();  // actualizar con nuevos filtros
   }
 
   filtrarPorClasificacion(clasificacion: string): void {
@@ -74,18 +81,24 @@ export class ListaProductosComponent implements OnInit {
   aplicarFiltroPrecio(): void {
     this.errorPrecio = '';
 
-    if (this.precioMin == null || this.precioMax == null) {
-      this.errorPrecio = 'Debes ingresar ambos precios.';
+    const min = this.precioMin;
+    const max = this.precioMax;
+
+    // Al menos uno debe estar definido
+    if (min == null && max == null) {
+      this.errorPrecio = 'Debes ingresar al menos un precio.';
       return;
     }
 
-    if (this.precioMin > this.precioMax) {
-      this.errorPrecio = 'El precio mínimo no puede ser mayor que el máximo.';
-      return;
-    }
-
-    if (this.precioMin < 0 || this.precioMax < 0) {
+    // Validaciones individuales
+    if ((min != null && min < 0) || (max != null && max < 0)) {
       this.errorPrecio = 'Los precios no pueden ser negativos.';
+      return;
+    }
+
+    // Validar rango solo si ambos están definidos
+    if (min != null && max != null && min > max) {
+      this.errorPrecio = 'El precio mínimo no puede ser mayor que el máximo.';
       return;
     }
 
@@ -107,6 +120,10 @@ export class ListaProductosComponent implements OnInit {
       filtros.precioMax = this.precioMax;
     }
 
+    if (this.busquedaNombre && this.busquedaNombre.trim() !== '') {
+      filtros.nombre = this.busquedaNombre.trim();
+    }
+
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
     this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
       this.productos = data;
@@ -117,6 +134,7 @@ export class ListaProductosComponent implements OnInit {
     this.clasificacionSeleccionada = '';
     this.precioMin = null;
     this.precioMax = null;
+    this.busquedaNombre = '';
 
     localStorage.removeItem('filtrosProductos');
 
