@@ -1,5 +1,5 @@
-import {Usuario, UsuarioLogin, UsuarioLoginDTO, UsuarioRecoverDTO, UsuarioRegisterDTO} from "../usuario-model";
-import {IResultadoAccion} from "../main-models";
+import {Usuario, UsuarioLogin, UsuarioLoginDTO, UsuarioRecoverDTO, UsuarioRegisterDTO} from "../../usuario-model";
+import {IResultadoAccion} from "../../main-models";
 
 export interface IUsuarioService {
     obtenerUsuarioParaLoginPorCorreo (email: string): Promise<UsuarioLogin | null>

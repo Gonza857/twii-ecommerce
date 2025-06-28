@@ -1,4 +1,4 @@
-import {Usuario, UsuarioLogin, UsuarioRegisterDTO} from "../usuario-model";
+import {Usuario, UsuarioLogin, UsuarioRegisterDTO} from "../../usuario-model";
 
 export interface IUsuarioRepository {
     obtenerPorEmailParaLogin(email: string): Promise<UsuarioLogin | null>;

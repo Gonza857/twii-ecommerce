@@ -1,0 +1,52 @@
+<main class="styledMain pt-4">
+<div class="col-10 mx-auto">
+  <h2 class="page-title mb-4">Mis Pedidos</h2>
+
+  @if (isLoading()) {
+    <div class="text-center text-dark-text">
+      <p>Cargando tus pedidos...</p>
+      <p-progress-spinner ariaLabel="loading"/>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-danger text-center" role="alert">
+      {{ error() }}
+    </div>
+  } @else if (pedidos().length === 0) {
+    <div class="alert alert-info text-center" role="alert">
+      No tienes pedidos realizados aún.
+    </div>
+  } @else {
+    <div class="pedidos-grid">
+      @for (pedido of pedidos(); track pedido.id) {
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-title">
+              <h4>Pedido #{{ pedido.id }}</h4>
+              <span class="order-date">{{ pedido.fecha | date:'medium' }}</span>
+            </div>
+            <p-tag [value]="pedido.estado" [severity]="getSeverity(pedido.estado)"></p-tag>
+          </div>
+
+          <div class="order-body">
+            <p class="products-heading">Productos:</p>
+            <div class="product-list">
+              @for (item of pedido.pedido_productos ?? []; track item.id) {
+                <div class="product-item">
+                  <span class="product-name">{{ item.producto?.nombre }}</span>
+                  <span class="product-details">{{ item.cantidad }}x ${{ item.precioUnitario | number:'1.2-2' }}</span>
+                  <span class="product-subtotal">{{ (item.cantidad * item.precioUnitario) | currency:'ARS':'symbol':'1.2-2' }}</span>
+                </div>
+              }
+            </div>
+            <div class="order-total">
+              <span>Total:</span>
+              <span class="total-amount">{{ pedido.total | currency:'ARS':'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+</main>
+

@@ -9,19 +9,93 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = require("../prisma");
+const safe_1 = require("../utils/safe");
+const producto_schema_1 = require("../schemas/producto.schema");
+const zod_validator_1 = require("../utils/zod-validator");
 class ProductoController {
-    constructor() {
-        console.log("Producto Controller");
-    }
-    getProductos(_req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(productoService) {
+        this.getProductos = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const productos = yield prisma_1.prisma.producto.findMany();
+                const filtros = {
+                    clasificacion: req.query.clasificacion,
+                    precioMin: req.query.precioMin ? parseFloat(req.query.precioMin) : undefined,
+                    precioMax: req.query.precioMax ? parseFloat(req.query.precioMax) : undefined,
+                    nombre: req.query.nombre
+                };
+                let productos;
+                if (filtros) {
+                    productos = yield this.productoService.obtenerProductosFiltrados(filtros);
+                }
+                else {
+                    productos = yield this.productoService.obtenerTodos();
+                }
                 res.status(200).json(productos);
             }
+            catch (error) {
+                res.status(500).json({ message: 'Error al obtener productos', error });
+            }
+        });
+        this.obtenerPorId = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id } = _req.params;
+            if (isNaN(Number(id)))
+                return res.status(500).json({ mensaje: "NaN" });
+            const [producto, errorProducto] = yield (0, safe_1.safe)(this.productoService.obtenerPorId(Number(id)));
+            if (errorProducto)
+                return res.status(500).json({ mensaje: "errorProducto" });
+            if (!producto)
+                return res.status(404).json(producto);
+            res.status(200).json(producto);
+        });
+        this.crearProducto = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            // Validar archivo de imagen
+            let imagenProductoDTO = null, errorImagenProductoDTO;
+            if (_req.file) {
+                [imagenProductoDTO, errorImagenProductoDTO] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.imagenProductoSchema, _req.file));
+                if (errorImagenProductoDTO)
+                    return res.status(400).send();
+            }
+            // Validar cuerpo de petición
+            const [productoCrearDTO, errorProductoCrearDTO] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.productoSchema, _req.body));
+            if (errorProductoCrearDTO)
+                return res.status(400).send();
+            // Crear producto y obtener su id para asiginar a imagen
+            const [resultadoCrear, errorCrearProducto] = yield (0, safe_1.safe)(this.productoService.crearProducto(productoCrearDTO, imagenProductoDTO));
+            if (errorCrearProducto)
+                return res.status(500).json({ mensaje: "error al guardar producto" });
+            res.status(201).send();
+        });
+        this.modificarProducto = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            // Validar cuerpo de petición
+            const [productoValidado, errorValidacionProducto] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.productoEditarSchema, _req.body));
+            if (errorValidacionProducto)
+                return res.status(400).send();
+            // Validar ID de req.params
+            const { id } = _req.params;
+            if (isNaN(Number(id)))
+                return res.status(400).json({ mensaje: "ID incorrecto" });
+            let imagenProducto = null, errorValidarImagenNueva;
+            if (_req.file) {
+                // Validar archivo de imagen
+                [imagenProducto, errorValidarImagenNueva] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.imagenProductoSchema, _req.file));
+                if (errorValidarImagenNueva)
+                    return res.status(400).send();
+            }
+            const [resultadoActualizarProducto, errorActualizarProducto] = yield (0, safe_1.safe)(this.productoService.actualizarProducto(Number(id), productoValidado, imagenProducto));
+            if (errorActualizarProducto)
+                return res.status(500).json({ mensaje: "error al guardar producto" });
+            res.status(200).send();
+        });
+        this.productoService = productoService;
+    }
+    eliminarProducto(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                yield this.productoService.eliminarProducto(Number(id));
+                res.sendStatus(204);
+            }
             catch (e) {
-                res.status(500).json({ message: "Error", error: e });
+                res.status(500).json({ mensaje: 'Error al eliminar producto' });
             }
         });
     }

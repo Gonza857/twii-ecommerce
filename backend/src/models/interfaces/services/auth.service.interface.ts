@@ -1,5 +1,5 @@
-import {IResultadoAccion} from "../main-models";
-import {Usuario, UsuarioLogin, UsuarioLoginDTO, UsuarioRegisterDTO} from "../usuario-model";
+import {IResultadoAccion} from "../../main-models";
+import {Usuario, UsuarioLogin, UsuarioLoginDTO, UsuarioRegisterDTO} from "../../usuario-model";
 
 export interface IAuthService {
     iniciarSesion(usuario: UsuarioLogin | null, inputContrasena: string): Promise<void>

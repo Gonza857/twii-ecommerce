@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const server_1 = require("./server/server");
+const server_1 = require("./app/server");
 const envConfig_1 = require("./config/envConfig");
-const app_routes_1 = require("./routes/app.routes");
+const app_routes_1 = require("./app/app.routes");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     main();
 }))();

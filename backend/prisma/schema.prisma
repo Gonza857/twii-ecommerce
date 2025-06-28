@@ -15,6 +15,7 @@ model producto {
   precio            Decimal            @db.Decimal(10, 2)
   imagen            String?            @db.VarChar(255)
   carrito_productos carrito_producto[]
+  pedido_productos  pedido_producto[]
 }
 
 model rol {
@@ -33,6 +34,7 @@ model usuario {
   rolid      Int
   validado   Boolean?  @default(false)
   carrito    carrito[]
+  pedidos    pedido[]
   rol        rol       @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }
 
@@ -50,4 +52,24 @@ model carrito_producto {
   productoid Int
   carrito    carrito  @relation(fields: [carritoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_carrito_producto")
   producto   producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_carrito_producto")
+}
+
+model pedido {
+  id               Int               @id @default(autoincrement())
+  usuarioid        Int
+  fecha            DateTime          @default(now())
+  estado           String            @db.VarChar(50)
+  total            Decimal           @db.Decimal(10, 2)
+  usuario          usuario           @relation(fields: [usuarioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_usuario")
+  pedido_productos pedido_producto[]
+}
+
+model pedido_producto {
+  id             Int      @id @default(autoincrement())
+  cantidad       Int
+  precioUnitario Decimal  @db.Decimal(10, 2)
+  pedidoid       Int
+  productoid     Int
+  pedido         pedido   @relation(fields: [pedidoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_pedido_producto")
+  producto       producto @relation(fields: [productoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_pedido_producto")
 }
