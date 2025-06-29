@@ -1,0 +1,227 @@
+.styledMain {
+  background-color: #1e1e2f; // Dark background for the admin page
+  color: #e0e0e0; // Light text for the page
+  padding: 2rem 0;
+}
+
+.page-title {
+  color: #e0e0e0; // Light text for the main title
+}
+
+.pedidos-list {
+  margin-top: 2rem; // Espacio superior para separar del título
+
+  // Estilos para los paneles de PrimeNG
+  :host ::ng-deep .p-panel {
+    .p-panel-header {
+      background-color: var(--bg-secundario); // Fondo del encabezado del panel
+      color: var(--text-white); // Color del texto del encabezado
+      border-color: var(--border-suave); // Borde del encabezado
+      padding: 1rem 1.25rem; // Ajustar padding
+
+      .p-panel-title {
+        font-weight: 600;
+      }
+
+      .p-panel-icons {
+        .p-panel-toggler {
+          color: var(--text-white); // Color del icono de toggle
+          &:hover {
+            background-color: var(--bg-primario-hover); // Hover para el icono
+          }
+        }
+      }
+    }
+
+    .p-panel-content {
+      background-color: var(--bg-secundario); // Fondo del contenido del panel
+      color: var(--text-secundario); // Color del texto del contenido
+      border-color: var(--border-suave); // Borde del contenido
+      border-top: none; // Eliminar doble borde
+      padding: 1.25rem; // Ajustar padding
+    }
+
+    .p-tag {
+      font-size: 0.85rem; // Tamaño de fuente para las etiquetas de estado
+      padding: 0.3rem 0.6rem; // Padding para las etiquetas
+    }
+  }
+
+  // Estilos para las tablas de PrimeNG dentro de los paneles
+  :host ::ng-deep .p-table {
+    .p-datatable-wrapper {
+      border: 1px solid var(--border-suave); // Borde para la tabla
+      border-radius: 6px; // Bordes redondeados
+      overflow: hidden; // Asegura que los bordes redondeados se apliquen correctamente
+
+      .p-datatable-thead > tr > th {
+        background-color: var(--bg-primario); // Fondo del encabezado de la tabla
+        color: var(--text-white); // Color del texto del encabezado
+        border-color: var(--border-suave); // Borde de las celdas del encabezado
+        padding: 0.75rem 1rem; // Ajustar padding
+      }
+
+      .p-datatable-tbody > tr > td {
+        background-color: var(--bg-secundario); // Fondo de las celdas del cuerpo
+        color: var(--text-secundario); // Color del texto del cuerpo
+        border-color: var(--border-suave); // Borde de las celdas del cuerpo
+        padding: 0.75rem 1rem; // Ajustar padding
+      }
+
+      .p-datatable-tbody > tr:nth-child(even) > td {
+        background-color: #25253a; // Un tono ligeramente diferente para filas pares
+      }
+    }
+  }
+
+  // Estilos para el Dropdown de PrimeNG
+  :host ::ng-deep .p-dropdown {
+    background-color: #f0f0f0; // Light background for dropdown
+    border-color: #ccc; // Light border for dropdown
+    color: #333; // Dark text for dropdown
+
+    .p-dropdown-label {
+      color: #333; // Dark text for selected value
+    }
+
+    .p-dropdown-trigger {
+      color: #666; // Darker icon color
+    }
+
+    &:not(.p-disabled):hover {
+      border-color: #007bff; // Blue border on hover
+    }
+
+    &.p-focus {
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); // Blue shadow on focus
+      border-color: #007bff; // Blue border on focus
+    }
+  }
+
+  :host ::ng-deep .p-dropdown-panel {
+    background-color: #ffffff; // White background for dropdown options panel
+    border-color: #ccc; // Light border for options panel
+
+    .p-dropdown-items {
+      .p-dropdown-item {
+        color: #333; // Dark text for options
+        &:hover {
+          background-color: #e9ecef; // Light gray on hover
+          color: #333;
+        }
+        &.p-highlight {
+          background-color: #007bff; // Blue background for selected option
+          color: #ffffff; // White text for selected option
+        }
+      }
+    }
+  }
+}
+
+.pedidos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background-color: #ffffff; // White background for the cards
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  color: #333; // Default text color for card content
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px; // Ensure cards have a minimum height
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+
+  h4 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .order-date {
+    font-size: 0.85rem;
+  }
+
+  p-tag {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    &.p-tag-success {
+      background-color: #e6ffe6; // Light green
+      color: #28a745; // Dark green
+    }
+    &.p-tag-warning {
+      background-color: #fff3e0; // Light orange
+      color: #ffc107; // Dark orange
+    }
+    &.p-tag-danger {
+      background-color: #ffe6e6; // Light red
+      color: #dc3545; // Dark red
+    }
+    &.p-tag-info {
+      background-color: #e0f2f7; // Light blue
+      color: #17a2b8; // Dark blue
+    }
+  }
+}
+
+.order-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .products-heading {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .product-list {
+    flex-grow: 1;
+    margin-bottom: 15px;
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+      color: #555;
+
+      .product-name {
+        flex: 2;
+        font-weight: 500;
+      }
+      .product-details {
+        flex: 1;
+        text-align: right;
+        margin-left: 10px;
+        color: #777;
+      }
+      .product-subtotal {
+        flex: 1;
+        text-align: right;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+}

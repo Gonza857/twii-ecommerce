@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {AuthenticatedRequest} from "../models/main-models";
 import {Usuario} from "../models/usuario-model";
 import {IUsuarioService} from "../models/interfaces/services/usuario.service.interface";
+import {safe} from "../utils/safe";
 
 class UsuarioController {
     private usuarioService!: IUsuarioService;
@@ -24,6 +25,17 @@ class UsuarioController {
         if (!usuario) return res.status(401).send();
         const usuarios: Usuario[] = await this.usuarioService.obtenerTodos();
         res.status(200).json(usuarios);
+    }
+
+    public obtenerEstadisticas = async (_req: Request, res: Response) => {
+        console.log("obteniendo estadisticas")
+        const [estadisticas, errorEstadisticas] = await safe(
+            this.usuarioService.obtenerEstadisticas()
+        )
+        if (errorEstadisticas) return res.status(401).send();
+
+        console.log("Estadisticas obtenidas", estadisticas)
+        res.status(200).json(estadisticas);
     }
 
 

@@ -7,10 +7,10 @@ import { SkeletonModule } from "primeng/skeleton";
 import { ProductoService } from '../../../../services/producto/producto.service';
 import { Producto } from "../../../../services/producto/interfaces/producto.interface";
 import { RouterLink } from "@angular/router";
-import { CarritoService, ItemCarrito } from '../../../../services/carrito.service';
 import { UsuarioService } from '../../../../services/usuario/usuario.service';
 import { SelectModule } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
+import {CarritoService, ItemCarrito} from '../../../../services/carrito/carrito.service';
 
 @Component({
   standalone: true,
@@ -70,7 +70,7 @@ export class ListaProductosComponent implements OnInit {
 
   buscarPorNombre() {
 
-    this.actualizarProductos();  // actualizar con nuevos filtros
+    this.actualizarProductos();
   }
 
   filtrarPorClasificacion(clasificacion: string): void {
@@ -84,19 +84,19 @@ export class ListaProductosComponent implements OnInit {
     const min = this.precioMin;
     const max = this.precioMax;
 
-    // Al menos uno debe estar definido
+
     if (min == null && max == null) {
       this.errorPrecio = 'Debes ingresar al menos un precio.';
       return;
     }
 
-    // Validaciones individuales
+
     if ((min != null && min < 0) || (max != null && max < 0)) {
       this.errorPrecio = 'Los precios no pueden ser negativos.';
       return;
     }
 
-    // Validar rango solo si ambos están definidos
+
     if (min != null && max != null && min > max) {
       this.errorPrecio = 'El precio mínimo no puede ser mayor que el máximo.';
       return;

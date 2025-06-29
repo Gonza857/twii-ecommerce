@@ -74,6 +74,10 @@ export class ProductoRepository implements IProductoRepository {
         await this.prisma.producto.update({ where: { id }, data, });
     }
 
+    public async obtenerTotalProductos(): Promise<number> {
+        return this.prisma.producto.count()
+    }
+
     async delete(id: number) {
         await this.prisma.producto.delete({ where: { id } });
     }

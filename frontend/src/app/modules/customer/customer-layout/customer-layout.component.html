@@ -26,24 +26,24 @@
           <a class="nav-link" [routerLink]="'/productos'">Productos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
+          <a class="nav-link" [routerLink]="'/mis-pedidos'">Mis Pedidos</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/admin'">Admin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Perfil</a>
-        </li>
-        <li class="nav-item">
           <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
-        @if (this.usuarioActual) {
+        @if (this.usuarioService.usuario()) {
           <li class="nav-item">
             <a (click)="cerrarSesion()" class="nav-link">Cerrar sesión</a>
           </li>
         } @else {
           <li class="nav-item">
             <a class="nav-link" style="cursor: pointer;" routerLink="/cuenta/login">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
           </li>
         }
 
@@ -53,7 +53,12 @@
 </nav>
 
   <div>
-    <p-drawer header="Carrito" [visible]="carritoService.drawerVisible()" (onHide)="carritoService.cerrarDrawer()" position="right" [style]="{ width: '25vw' }">
+    <p-drawer
+      header="Carrito"
+      [visible]="carritoService.drawerVisible()"
+      (onHide)="carritoService.cerrarDrawer()"
+      position="right"
+      [style]="{ width: '25vw' }">
         <app-carrito-drawer></app-carrito-drawer>
       </p-drawer>
   </div>
@@ -74,6 +79,7 @@
       <ul class="list-unstyled d-flex flex-column gap-2">
         <li><a routerLink="/" class="footer-link">Inicio</a></li>
         <li><a routerLink="/productos" class="footer-link">Productos</a></li>
+        <li><a routerLink="/mis-pedidos" class="footer-link">Mis Pedidos</a></li>
         <li><a routerLink="/cuenta/login" class="footer-link">Login</a></li>
         <li><a routerLink="/cuenta/register" class="footer-link">Registro</a></li>
         <li><a routerLink="/admin" class="footer-link">Admin</a></li>
@@ -97,5 +103,3 @@
     &copy; 2025 UNLaM | Todos los derechos reservados.
   </div>
 </footer>
-
-

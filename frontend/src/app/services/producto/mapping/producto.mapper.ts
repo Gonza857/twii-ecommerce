@@ -1,17 +1,12 @@
-import { ProductoRest} from '../interfaces/producto.interface.rest';
-import {Producto, ProductoFormulario} from '../interfaces/producto.interface';
+import {EstadisticasProductosRest, ProductoRest} from '../interfaces/producto.interface.rest';
+import {EstadisticasProductos, Producto, ProductoFormulario} from '../interfaces/producto.interface';
 import Decimal from 'decimal.js';
 import {FormGroup} from '@angular/forms';
 
 class ProductoMapper {
-  static mapToProductoRest(producto: Producto): ProductoRest {
+  static mapToEstadisticasProducto (epr: EstadisticasProductosRest): EstadisticasProductos {
     return {
-      clasificacion: producto.clasificacion,
-      descripcion: producto.descripcion,
-      imagen: producto.imagen,
-      precio: producto.precio.toString(),
-      nombre: producto.nombre,
-      id: producto.id
+      productosTotales: epr.productosTotales
     }
   }
 

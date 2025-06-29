@@ -1,5 +1,6 @@
 import {ImagenProductoDTO, Producto, ProductoCrearDTO, ProductoDTO, ProductoEditarDTO} from "../../entities/producto";
 import {ArchivoDTO} from "../../DTO/archivo.dto";
+import {EstadisticasProductoDTO} from "../../DTO/estadisticas.producto.dto";
 
 export interface IProductoService {
     obtenerPorId(id: number): Promise<Producto | null>;
@@ -16,4 +17,5 @@ export interface IProductoService {
     eliminarProducto(id: number): Promise<void>;
     guardarImagenProducto(url: string, idProducto: number): Promise<void>;
     saberSiProductoTieneImagen(id: number): Promise<boolean>;
+    obtenerEstadisticas(): Promise<EstadisticasProductoDTO>
 }

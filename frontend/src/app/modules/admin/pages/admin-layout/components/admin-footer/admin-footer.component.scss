@@ -1,0 +1,72 @@
+.footer-ecommerce {
+  background-color: #1e1e2f;
+  color: #e0e0e0;
+  padding: 3rem 1rem;
+  border-top: 1px solid #444466;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: space-between;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+
+  .footer-title {
+    color: #4f52ff;
+    margin-bottom: 1rem;
+  }
+
+  .footer-subtitle {
+    color: #cfd1f7;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .footer-line {
+    margin: 0;
+  }
+
+  .footer-links ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-link {
+    color: #e0e0e0;
+    text-decoration: none;
+    display: inline-block;
+    &:hover {
+      color: #4f52ff;
+    }
+  }
+
+  .footer-social {
+    .footer-icons {
+      display: flex;
+      gap: 1rem;
+
+      i {
+        font-size: 1.2rem;
+        color: #4f52ff;
+        cursor: pointer;
+
+        &:hover {
+          color: #373acb;
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: #cfd1f7;
+  }
+}

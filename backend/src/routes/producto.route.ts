@@ -3,12 +3,20 @@ import container from "../app/container";
 import {upload} from "../app/server";
 import {authMiddleware} from "../middlewares/authMiddleware";
 import {roleMiddleware} from "../middlewares/roleMiddleware";
+import ProductoController from "../controllers/ProductoController";
 
 export const productosRouter = Router();
 
-const productoController = container.productoController;
+const productoController: ProductoController = container.productoController;
 
 productosRouter.get('/', (req, res) => productoController.getProductos(req, res));
+
+productosRouter.get(
+    "/estadisticas",
+    authMiddleware,
+    roleMiddleware,
+    productoController.obtenerEstadisticas as RequestHandler
+)
 
 /**
  * @openapi
@@ -66,4 +74,7 @@ productosRouter.put(
     authMiddleware,
     roleMiddleware,
     productoController.modificarProducto as RequestHandler);
+
 productosRouter.delete('/:id', (req, res) => productoController.eliminarProducto(req, res));
+
+

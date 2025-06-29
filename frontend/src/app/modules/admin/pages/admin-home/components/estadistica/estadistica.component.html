@@ -1,0 +1,10 @@
+<div
+  [ngClass]="[
+                claseColor,
+                'estadisticaBox bg-secundario rounded-2 border-suave p-3 d-flex gap-2 flex-column align-items-start justify-content-between'
+              ]">
+  <p class="text-secundario m-0 p-0">{{ titulo }}</p>
+  <div [class]="badge + ' badge bg-principal fs-6'">
+    {{ valor }}
+  </div>
+</div>

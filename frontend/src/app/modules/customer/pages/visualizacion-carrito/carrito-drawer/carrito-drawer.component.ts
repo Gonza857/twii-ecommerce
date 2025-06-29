@@ -1,51 +1,52 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
-import { CarritoService } from '../../../../../services/carrito.service';
-import { CarritoItemComponent } from '../carrito-item/carrito-item.component';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import {UsuarioService} from '../../../../../services/usuario/usuario.service';
+import { Component, effect, inject, type OnInit } from "@angular/core"
+import { CarritoItemComponent } from "../carrito-item/carrito-item.component"
+import { RouterModule } from "@angular/router"
+import { CommonModule } from "@angular/common"
+import { ButtonModule } from "primeng/button"
+import { UsuarioService } from "../../../../../services/usuario/usuario.service"
+import {CarritoService} from '../../../../../services/carrito/carrito.service';
 
 @Component({
-  selector: 'app-carrito-drawer',
+  selector: "app-carrito-drawer",
   imports: [CommonModule, CarritoItemComponent, RouterModule, ButtonModule],
-  templateUrl: './carrito-drawer.component.html',
+  templateUrl: "./carrito-drawer.component.html",
   standalone: true,
-  styleUrl: './carrito-drawer.component.scss'
+  styleUrl: "./carrito-drawer.component.scss",
 })
 export class CarritoDrawerComponent implements OnInit {
-  private readonly usuarioService = inject(UsuarioService);
-  public readonly carritoService = inject(CarritoService);
+  private readonly usuarioService = inject(UsuarioService)
+  public readonly carritoService = inject(CarritoService)
 
-  protected total$ = this.carritoService.total;
-  protected carrito$ = this.carritoService.carrito;
+  protected total$ = this.carritoService.total
+  protected carrito$ = this.carritoService.carrito
 
-  public usuarioId?: number;
-  public usuarioLogueado = false;
+  public usuarioId?: number
+  public usuarioLogueado = false
 
   constructor() {
     effect(() => {
-      this.usuarioLogueado = this.usuarioService.usuario() != null;
-
+      this.usuarioLogueado = this.usuarioService.usuario() != null
 
       if (this.usuarioLogueado) {
-        this.usuarioId = this.usuarioService.usuario()?.id;
-        this.carritoService.obtenerCarrito(this.usuarioId ?? 0);
+        this.usuarioId = this.usuarioService.usuario()?.id
+        this.carritoService.obtenerCarrito(this.usuarioId ?? 0)
       }
     })
   }
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual();
+    this.usuarioService.obtenerUsuarioActual()
   }
 
   vaciarCarrito(): void {
-    if (this.usuarioId && confirm('¿Seguro que querés vaciar el carrito?')) {
-      this.carritoService.vaciar(this.usuarioId);
+    if (this.usuarioId && confirm("¿Seguro que querés vaciar el carrito?")) {
+      this.carritoService.vaciar(this.usuarioId)
     }
   }
 
-
+  finalizarCompra(): void {
+    if (this.usuarioId) {
+      this.carritoService.finalizarCompra(this.usuarioId)
+    }
+  }
 }
-
-

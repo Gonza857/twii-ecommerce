@@ -10,6 +10,7 @@ import {
 import {IResultadoAccion} from "../models/main-models";
 import {IUsuarioService} from "../models/interfaces/services/usuario.service.interface";
 import {IUsuarioRepository} from "../models/interfaces/repositories/usuario.repository.interface";
+import {EstadisticasUsuarioDTO} from "../models/DTO/estadisticas.usuario.dto";
 
 class UsuarioService implements IUsuarioService {
 
@@ -21,9 +22,11 @@ class UsuarioService implements IUsuarioService {
     }
 
     public async obtenerUsuarioPorId(id: string): Promise<Usuario | null> {
+        debugger;
+        console.log(`piden por id ${id}`)
         // Lógica para buscar usuario en la BD
         const idBuscado = Number(id);
-        // if (typeof id === "NaN") throw new DatosIncorrectoException("El correo no existe.");
+        if (isNaN(idBuscado)) throw new DatosIncorrectoException("No se pudo encontrar un usuario");
         return await this.usuarioRepository.obtenerPorId(idBuscado);
     }
 
@@ -63,6 +66,15 @@ class UsuarioService implements IUsuarioService {
         if (!id) throw new Error("error amigo")
         const usuario = await this.usuarioRepository.obtenerPorId(id)
         if (!usuario?.validado) throw new Error("error amigo: no validado")
+    }
+
+    public async obtenerEstadisticas(): Promise<EstadisticasUsuarioDTO> {
+        return {
+            usuariosTotales: await this.usuarioRepository.obtenerTotal(),
+            usuariosValidados: await this.usuarioRepository.obtenerValidados(),
+            usuariosSinValidar: await this.usuarioRepository.obtenerSinValidar(),
+        }
+
     }
 
 }

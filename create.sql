@@ -17,3 +17,22 @@ CREATE TABLE rol (
 	nombre VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE pedido (
+    id SERIAL PRIMARY KEY,
+    usuarioid INTEGER NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado VARCHAR(50) NOT NULL DEFAULT 'pendiente',
+    total DECIMAL(10,2) NOT NULL,
+    CONSTRAINT fk_pedido_usuario FOREIGN KEY (usuarioid) REFERENCES usuario(id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+-- Tabla pedido_producto (tabla intermedia)
+CREATE TABLE pedido_producto (
+    id SERIAL PRIMARY KEY,
+    cantidad INTEGER NOT NULL,
+    precioUnitario DECIMAL(10,2) NOT NULL,
+    pedidoid INTEGER NOT NULL,
+    productoid INTEGER NOT NULL,
+    CONSTRAINT fk_pedido_pedido_producto FOREIGN KEY (pedidoid) REFERENCES pedido(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_producto_pedido_producto FOREIGN KEY (productoid) REFERENCES producto(id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);

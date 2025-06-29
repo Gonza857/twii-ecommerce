@@ -1,6 +1,3 @@
-import { ProductoDTO } from './interfaces/producto-dto';
-import {Producto} from "./entities/producto";
-
 export interface IMailerService {
     enviarCorreo(to: string, subject: string, html: string): any;
 }

@@ -9,6 +9,7 @@ import {IProductoRepository} from "../models/interfaces/repositories/producto.re
 import {Decimal} from "@prisma/client/runtime/library";
 import {IImagenService} from "../models/interfaces/services/imagen.service.interface";
 import {ArchivoDTO} from "../models/DTO/archivo.dto";
+import {EstadisticasProductoDTO} from "../models/DTO/estadisticas.producto.dto";
 
 class ProductoService implements IProductoService {
 
@@ -123,6 +124,12 @@ class ProductoService implements IProductoService {
         const producto: Producto | null = await this.productoRepository.obtenerPorId(id);
         if (!producto) return false;
         return producto.imagen != null
+    }
+
+    public async obtenerEstadisticas(): Promise<EstadisticasProductoDTO> {
+        return {
+            productosTotales: await this.productoRepository.obtenerTotalProductos()
+        }
     }
 }
 
