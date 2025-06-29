@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { undefined } from "zod";
-import { Producto, ProductoDTO } from "../models/entities/producto";
+import { Prisma, PrismaClient } from '@prisma/client';
+import { Clasificacion, Producto, ProductoDTO } from "../models/entities/producto";
 import { IProductoRepository } from "../models/interfaces/repositories/producto.repository.interface";
 
 export class ProductoRepository implements IProductoRepository {
@@ -11,22 +10,23 @@ export class ProductoRepository implements IProductoRepository {
     }
 
     public async obtenerTodos(): Promise<Producto[]> {
-        return this.prisma.producto.findMany();
+        return this.prisma.producto.findMany({
+            include: {
+                clasificacion: true
+            }
+        });
     }
 
     public async obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
+        clasificacion?: number;
         precioMin?: number;
         precioMax?: number;
         nombre?: string;
     }): Promise<Producto[]> {
-        const where: any = {};
+        const where: Prisma.productoWhereInput = {};
 
-        if (filtros.clasificacion) {
-            where.clasificacion = {
-                equals: filtros.clasificacion,
-                mode: 'insensitive'
-            };
+        if (filtros.clasificacion !== undefined && filtros.clasificacion !== null) {
+            where.idClasificacion = filtros.clasificacion;
         }
 
         // @ts-ignore
@@ -51,12 +51,27 @@ export class ProductoRepository implements IProductoRepository {
             };
         }
 
-        return this.prisma.producto.findMany({ where });
+        return this.prisma.producto.findMany({
+            where,
+            include: {
+                clasificacion: true // para devolver también el nombre de la clasificación
+            }
+        });
     }
 
     public async obtenerPorId(id: number): Promise<Producto | null> {
-        return this.prisma.producto.findUnique({ where: { id } });
+        return this.prisma.producto.findUnique({
+            where: { id },
+            include: {
+                clasificacion: true
+            }
+        });
+    }
 
+    public async obtenerClasificaciones(): Promise<Clasificacion[]> {
+        return this.prisma.clasificacion.findMany({
+            orderBy: { nombre: 'asc' }
+        });
     }
 
     async create(data: ProductoDTO): Promise<number> {

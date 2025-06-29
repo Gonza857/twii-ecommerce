@@ -1,8 +1,10 @@
+import { Clasificacion } from "../producto.service";
+
 export interface ProductoRest {
   id: number;
   nombre: string;
   descripcion: string;
-  clasificacion: string;
+  clasificacion: Clasificacion;
   precio: string;
   imagen: string | null;
 }
@@ -10,7 +12,7 @@ export interface ProductoRest {
 export interface ProductoActualizarRest {
   nombre: string;
   descripcion: string;
-  clasificacion: string;
+  clasificacion: Clasificacion;
   precio: string;
   imagen: string | null;
   cambioImagen: boolean;

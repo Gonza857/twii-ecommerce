@@ -1,15 +1,17 @@
-import {Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal} from '@angular/core';
-import {Dialog} from 'primeng/dialog';
-import {Producto, ProductoFormulario} from '../../../../../../services/producto/interfaces/producto.interface';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal } from '@angular/core';
+import { Dialog } from 'primeng/dialog';
+import { Producto, ProductoFormulario } from '../../../../../../services/producto/interfaces/producto.interface';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import ProductoMapper from '../../../../../../services/producto/mapping/producto.mapper';
-import {ProductoService} from '../../../../../../services/producto/producto.service';
+import { ProductoService, Clasificacion } from '../../../../../../services/producto/producto.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal-formulario',
   imports: [
     Dialog,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './modal-formulario.component.html',
   standalone: true,
@@ -23,8 +25,16 @@ export class ModalFormularioComponent {
   private readonly fb: FormBuilder = inject(FormBuilder)
   protected readonly productoService: ProductoService = inject(ProductoService);
   protected form!: FormGroup;
+  clasificaciones: Clasificacion[] = [];
 
   @Output() manejarModalFormulario = new EventEmitter<boolean>();
+
+  ngOnInit() {
+    this.productoService.obtenerClasificaciones().subscribe((data) => {
+      this.clasificaciones = data;
+    });
+  }
+
 
   constructor() {
     effect(() => {
@@ -79,7 +89,7 @@ export class ModalFormularioComponent {
     if (!input.files?.length) return;
 
     const file = input.files[0];
-    this.form.patchValue({imagen: file});
+    this.form.patchValue({ imagen: file });
     this.form.get('imagen')?.updateValueAndValidity();
   }
 

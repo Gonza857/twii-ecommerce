@@ -49,7 +49,7 @@
               </p>
             </td>
             <td>{{ producto.descripcion.length > 30 ? (producto.nombre | slice:0:30) + '...' : producto.descripcion }}</td>
-            <td>{{ producto.clasificacion }}</td>
+            <td>{{ producto.clasificacion.nombre}}</td>
             <td>{{ producto.precio.toString() | currency:'ARS' }}</td>
             <td>
               <div class="d-flex gap-2">

@@ -7,15 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model clasificacion {
+  id        Int        @id @default(autoincrement())
+  nombre    String     @unique
+  productos producto[]
+}
+
 model producto {
   id                Int                @id @default(autoincrement())
   nombre            String             @db.VarChar(50)
   descripcion       String
-  clasificacion     String             @db.VarChar(50)
+  idClasificacion   Int
   precio            Decimal            @db.Decimal(10, 2)
   imagen            String?            @db.VarChar(255)
   carrito_productos carrito_producto[]
   pedido_productos  pedido_producto[]
+  clasificacion     clasificacion      @relation(fields: [idClasificacion], references: [id])
 }
 
 model rol {

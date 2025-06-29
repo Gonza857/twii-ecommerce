@@ -28,11 +28,9 @@
 
     <div class="form-group mb-2">
       <label>Clasificación</label>
-      <input type="text"
-             class="form-control"
-             formControlName="clasificacion"
-             name="clasificacion"
-             required/>
+      <select class="form-control" formControlName="clasificacion" required>
+        <option *ngFor="let c of clasificaciones" [value]="c.id">{{ c.nombre}} </option>
+      </select>
     </div>
 
     <div class="form-group mb-2">
@@ -45,37 +43,33 @@
     </div>
 
     @if (this.productoActual()) {
-      @if (this.productoActual()?.imagen) {
-        <div class="form-group mb-2">
-          <div class="col-12 d-flex justify-content-between">
-            <label>Imagen</label>
-            <button class="btn btn-danger" (click)="quitarImagen()">Quitar</button>
-          </div>
-
-          <img
-            class="col-12 pt-2"
-            [src]="this.productoActual()?.imagen"
-            [alt]="this.productoActual()?.nombre"
-          />
-        </div>
-      } @else {
-        <div class="form-group mb-2">
-          <label>Imagen</label>
-          <input type="file" (change)="onFileChange($event)"/>
-        </div>
-      }
-    } @else {
-      <div class="form-group mb-2">
+    @if (this.productoActual()?.imagen) {
+    <div class="form-group mb-2">
+      <div class="col-12 d-flex justify-content-between">
         <label>Imagen</label>
-        <input type="file" (change)="onFileChange($event)"/>
+        <button class="btn btn-danger" (click)="quitarImagen()">Quitar</button>
       </div>
+
+      <img class="col-12 pt-2" [src]="this.productoActual()?.imagen" [alt]="this.productoActual()?.nombre" />
+    </div>
+    } @else {
+    <div class="form-group mb-2">
+      <label>Imagen</label>
+      <input type="file" (change)="onFileChange($event)" />
+    </div>
+    }
+    } @else {
+    <div class="form-group mb-2">
+      <label>Imagen</label>
+      <input type="file" (change)="onFileChange($event)" />
+    </div>
     }
 
     <div class="text-end mt-3">
       <button class="btn btn-secondary me-2" type="button" (click)="manejarModal(false)">Cancelar</button>
       <!-- Also closes the modal -->
-      <button class="btn btn-primary" type="submit"
-              (click)="enviarProducto()">{{ esModoEdicion() ? 'Guardar cambios' : 'Agregar' }}
+      <button class="btn btn-primary" type="submit" (click)="enviarProducto()">{{ esModoEdicion() ? 'Guardar cambios' :
+        'Agregar' }}
       </button>
     </div>
   </form>

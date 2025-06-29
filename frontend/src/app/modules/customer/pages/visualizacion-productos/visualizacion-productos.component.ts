@@ -1,3 +1,4 @@
+import { Clasificacion } from './../../../../services/producto/producto.service';
 import { Component, OnInit, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +22,8 @@ import { ButtonDirective } from 'primeng/button';
 })
 export class ListaProductosComponent implements OnInit {
   productos: Producto[] = [];
-  clasificacionSeleccionada: string = '';
+  clasificacionSeleccionada: number | null = null;
+  clasificaciones : Clasificacion [] = [];
   precioMin: number | null = null;
   precioMax: number | null = null;
   busquedaNombre: string = '';
@@ -43,12 +45,16 @@ export class ListaProductosComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario() != null
     this.usuarioId = this.usuarioService.usuario()?.id
 
+    this.productoService.obtenerClasificaciones().subscribe((data) => {
+      this.clasificaciones = data;
+    });
+
     const filtrosGuardados = localStorage.getItem('filtrosProductos');
 
     if (filtrosGuardados) {
       const filtros = JSON.parse(filtrosGuardados);
 
-      this.clasificacionSeleccionada = filtros.clasificacion || '';
+      this.clasificacionSeleccionada = filtros.clasificacion || null;
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
       this.busquedaNombre = filtros.nombre ?? '';
@@ -70,11 +76,11 @@ export class ListaProductosComponent implements OnInit {
 
   buscarPorNombre() {
 
-    this.actualizarProductos();  
+    this.actualizarProductos();
   }
 
-  filtrarPorClasificacion(clasificacion: string): void {
-    this.clasificacionSeleccionada = clasificacion;
+  filtrarPorClasificacion(idClasificacion: number | null): void {
+    this.clasificacionSeleccionada = idClasificacion;
     this.actualizarProductos();
   }
 
@@ -84,19 +90,19 @@ export class ListaProductosComponent implements OnInit {
     const min = this.precioMin;
     const max = this.precioMax;
 
-    
+
     if (min == null && max == null) {
       this.errorPrecio = 'Debes ingresar al menos un precio.';
       return;
     }
 
-    
+
     if ((min != null && min < 0) || (max != null && max < 0)) {
       this.errorPrecio = 'Los precios no pueden ser negativos.';
       return;
     }
 
-   
+
     if (min != null && max != null && min > max) {
       this.errorPrecio = 'El precio mínimo no puede ser mayor que el máximo.';
       return;
@@ -108,7 +114,7 @@ export class ListaProductosComponent implements OnInit {
   actualizarProductos(): void {
     const filtros: any = {};
 
-    if (this.clasificacionSeleccionada) {
+    if (this.clasificacionSeleccionada !== null && this.clasificacionSeleccionada !== undefined) {
       filtros.clasificacion = this.clasificacionSeleccionada;
     }
 
@@ -123,15 +129,15 @@ export class ListaProductosComponent implements OnInit {
     if (this.busquedaNombre && this.busquedaNombre.trim() !== '') {
       filtros.nombre = this.busquedaNombre.trim();
     }
-
+    
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
-    this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
+    this.productoService.obtenerFiltrados(filtros).subscribe((data: Producto[]) => {
       this.productos = data;
     });
   }
 
   limpiarFiltro(): void {
-    this.clasificacionSeleccionada = '';
+    this.clasificacionSeleccionada = null;
     this.precioMin = null;
     this.precioMax = null;
     this.busquedaNombre = '';

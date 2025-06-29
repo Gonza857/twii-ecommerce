@@ -2,7 +2,7 @@ import {z} from "zod";
 
 export const productoSchema = z.object({
     nombre: z.string(),
-    clasificacion: z.string(),
+    clasificacion: z.number(),
     descripcion: z.string(),
     precio: z.string(),
     imagen: z.string().nullable().optional()
@@ -10,7 +10,7 @@ export const productoSchema = z.object({
 
 export const productoEditarSchema = z.object({
     nombre: z.string(),
-    clasificacion: z.string(),
+    clasificacion: z.number(),
     descripcion: z.string(),
     precio: z.string(),
     imagen: z.string().nullable().optional(),

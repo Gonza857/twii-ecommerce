@@ -1,15 +1,20 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {computed, inject, Injectable, signal} from '@angular/core';
-import {catchError, delay, map, Observable, throwError} from 'rxjs';
-import {Producto, ProductoFormulario} from './interfaces/producto.interface';
-import {ProductoRest} from './interfaces/producto.interface.rest';
+import { clasificacion } from './../../../../../backend/node_modules/.prisma/client/index.d';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { catchError, delay, map, Observable, throwError } from 'rxjs';
+import { Producto, ProductoFormulario } from './interfaces/producto.interface';
+import { ProductoRest } from './interfaces/producto.interface.rest';
 import ProductoMapper from './mapping/producto.mapper';
 
+export interface Clasificacion {
+  id: number;
+  nombre: string;
+}
 
 export interface ProductoDTO {
   nombre: string;
   descripcion: string;
-  clasificacion: string;
+  clasificacion: Clasificacion;
   precio: number;
   imagen?: string;
 }
@@ -61,14 +66,13 @@ export class ProductoService {
     this.obtenerProductos()
   }
 
-  public limpiarProducto () {
+  public limpiarProducto() {
     this._productoDetalle.set({
       producto: null,
       loading: false,
       error: null
     })
   }
-
 
   public obtenerProductos(): void {
     this.http.get<ProductoRest[]>(`${this.apiUrl}`)
@@ -85,7 +89,7 @@ export class ProductoService {
       });
   }
 
-  public obtenerPorId(id: string): void{
+  public obtenerPorId(id: string): void {
     this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
       .pipe(
         map((res) => ProductoMapper.mapToProducto(res)),
@@ -120,11 +124,6 @@ export class ProductoService {
       });
   }
 
-  public obtenerPorClasificacion(clasificacion: string): Observable<Producto[]> {
-    const url = `${this.apiUrl}?clasificacion=${clasificacion}`;
-    return this.http.get<Producto[]>(url);
-  }
-
   obtenerPorPrecios(precioMin: number, precioMax: number
   ): Observable<Producto[]> {
     const url = `${this.apiUrl}?precioMin=${precioMin}&precioMax=${precioMax}`;
@@ -132,7 +131,7 @@ export class ProductoService {
   }
 
   obtenerFiltrados(filtros: {
-    clasificacion?: string;
+    clasificacion?: number;
     precioMin?: number;
     precioMax?: number;
     nombre?: string;
@@ -140,7 +139,7 @@ export class ProductoService {
     const params: string[] = [];
 
     if (filtros.clasificacion) {
-      params.push(`clasificacion=${encodeURIComponent(filtros.clasificacion)}`);
+      params.push(`clasificacion=${filtros.clasificacion}`);
     }
     if (filtros.precioMin !== undefined) {
       params.push(`precioMin=${filtros.precioMin}`);
@@ -148,12 +147,16 @@ export class ProductoService {
     if (filtros.precioMax !== undefined) {
       params.push(`precioMax=${filtros.precioMax}`);
     }
-    if(filtros.nombre){
+    if (filtros.nombre) {
       params.push(`nombre=${encodeURIComponent(filtros.nombre)}`);
     }
 
     const query = params.length ? `?${params.join('&')}` : '';
     return this.http.get<Producto[]>(`${this.apiUrl}${query}`);
+  }
+
+  obtenerClasificaciones(): Observable<Clasificacion[]> {
+    return this.http.get<Clasificacion[]>(`${this.apiUrl}/clasificaciones`);
   }
 
   public crearProducto(producto: ProductoFormulario): Observable<ProductoDTO> {

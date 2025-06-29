@@ -10,6 +10,8 @@ const productoController = container.productoController;
 
 productosRouter.get('/', (req, res) => productoController.getProductos(req, res));
 
+productosRouter.get('/clasificaciones', (req, res) => productoController.getClasificaciones(req, res));
+
 /**
  * @openapi
  * /api/producto/{id}:

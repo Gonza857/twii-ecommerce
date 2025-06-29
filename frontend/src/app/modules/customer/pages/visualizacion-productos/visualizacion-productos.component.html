@@ -13,19 +13,15 @@
       <h3>Filtrar por clasificación</h3>
 
       <div class="filtros-botones">
-        <button (click)="filtrarPorClasificacion('')" [class.activo]="!clasificacionSeleccionada">Todos</button>
-        <button (click)="filtrarPorClasificacion('bebidas')"
-          [class.activo]="clasificacionSeleccionada === 'bebidas'">Bebidas
-        </button>
-        <button (click)="filtrarPorClasificacion('limpieza')"
-          [class.activo]="clasificacionSeleccionada === 'limpieza'">Limpieza
-        </button>
-        <button (click)="filtrarPorClasificacion('almacén')"
-          [class.activo]="clasificacionSeleccionada === 'almacén'">Almacén
+        <button (click)="filtrarPorClasificacion(null)" [class.activo]="!clasificacionSeleccionada">Todos</button>
+
+        <button *ngFor="let c of clasificaciones" (click)="filtrarPorClasificacion(c.id)"
+          [class.activo]="clasificacionSeleccionada === c.id">
+          {{ c.nombre }}
         </button>
       </div>
     </section>
-
+    
     <section class="filtros-precio">
       <h3 class="m-0">Filtrar por precio</h3>
 
@@ -65,7 +61,7 @@
 
               <div>
                 <h5 class="card-title text-white">{{ producto.nombre }}</h5>
-                <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
+                <span class="badge bg-secundario mb-3">{{ producto.clasificacion.nombre }}</span>
               </div>
 
               <p class="h5 text-success mt-auto text-secundario">
