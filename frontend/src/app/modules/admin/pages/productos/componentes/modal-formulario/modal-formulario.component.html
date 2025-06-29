@@ -29,7 +29,7 @@
     <div class="form-group mb-2">
       <label>Clasificación</label>
       <select class="form-control" formControlName="clasificacion" required>
-        <option *ngFor="let c of clasificaciones" [value]="c.id">{{ c.nombre}} </option>
+        <option *ngFor="let c of clasificaciones" [ngValue]="c.id">{{ c.nombre}} </option>
       </select>
     </div>
 

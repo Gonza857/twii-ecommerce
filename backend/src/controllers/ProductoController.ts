@@ -65,10 +65,16 @@ class ProductoController {
             if (errorImagenProductoDTO) return res.status(400).send();
         }
 
+        // Antes de validar:
+        if (_req.body.clasificacion && typeof _req.body.clasificacion === 'string') {
+            _req.body.clasificacion = parseInt(_req.body.clasificacion, 10);
+        }
+
         // Validar cuerpo de petición
         const [productoCrearDTO, errorProductoCrearDTO] = safeSync<ProductoCrearDTO>(
             () => validate(productoSchema, _req.body)
         );
+
         if (errorProductoCrearDTO) return res.status(400).send();
 
         // Crear producto y obtener su id para asiginar a imagen
@@ -81,6 +87,11 @@ class ProductoController {
     }
 
     public modificarProducto = async (_req: Request, res: Response) => {
+        // Antes de validar:
+        if (_req.body.clasificacion && typeof _req.body.clasificacion === 'string') {
+            _req.body.clasificacion = parseInt(_req.body.clasificacion, 10);
+        }
+
         // Validar cuerpo de petición
         const [productoValidado, errorValidacionProducto] = safeSync<ProductoEditarDTO>(
             () => validate(productoEditarSchema, _req.body)

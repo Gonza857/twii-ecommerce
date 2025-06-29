@@ -35,15 +35,23 @@ export class ModalFormularioComponent {
     });
   }
 
-
   constructor() {
     effect(() => {
       if (this.esModoEdicion() && this.productoActual()) {
-        this.form.patchValue(this.productoActual()!);
+        const producto = this.productoActual()!;
+
+        this.form.patchValue({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion,
+          precio: producto.precio,
+          imagen: null,
+          cambioImagen: false,
+          clasificacion: producto.clasificacion.id
+        });
       } else {
         this.form = this.fb.group({
           nombre: ["", Validators.required],
-          clasificacion: ["", Validators.required],
+          clasificacion: [0, Validators.required],
           precio: [0, Validators.required],
           descripcion: ["", Validators.required],
           imagen: [null, Validators.required],

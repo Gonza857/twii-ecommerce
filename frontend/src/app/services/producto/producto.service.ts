@@ -14,7 +14,7 @@ export interface Clasificacion {
 export interface ProductoDTO {
   nombre: string;
   descripcion: string;
-  clasificacion: Clasificacion;
+  clasificacion: number;
   precio: number;
   imagen?: string;
 }
