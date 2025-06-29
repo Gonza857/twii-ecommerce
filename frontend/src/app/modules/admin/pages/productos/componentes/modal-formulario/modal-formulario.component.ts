@@ -1,15 +1,17 @@
-import {Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal} from '@angular/core';
-import {Dialog} from 'primeng/dialog';
-import {Producto, ProductoFormulario} from '../../../../../../services/producto/interfaces/producto.interface';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal } from '@angular/core';
+import { Dialog } from 'primeng/dialog';
+import { Producto, ProductoFormulario } from '../../../../../../services/producto/interfaces/producto.interface';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import ProductoMapper from '../../../../../../services/producto/mapping/producto.mapper';
-import {ProductoService} from '../../../../../../services/producto/producto.service';
+import { ProductoService, Clasificacion } from '../../../../../../services/producto/producto.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal-formulario',
   imports: [
     Dialog,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './modal-formulario.component.html',
   standalone: true,
@@ -23,17 +25,33 @@ export class ModalFormularioComponent {
   private readonly fb: FormBuilder = inject(FormBuilder)
   protected readonly productoService: ProductoService = inject(ProductoService);
   protected form!: FormGroup;
+  clasificaciones: Clasificacion[] = [];
 
   @Output() manejarModalFormulario = new EventEmitter<boolean>();
+
+  ngOnInit() {
+    this.productoService.obtenerClasificaciones().subscribe((data) => {
+      this.clasificaciones = data;
+    });
+  }
 
   constructor() {
     effect(() => {
       if (this.esModoEdicion() && this.productoActual()) {
-        this.form.patchValue(this.productoActual()!);
+        const producto = this.productoActual()!;
+
+        this.form.patchValue({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion,
+          precio: producto.precio,
+          imagen: null,
+          cambioImagen: false,
+          clasificacion: producto.clasificacion.id
+        });
       } else {
         this.form = this.fb.group({
           nombre: ["", Validators.required],
-          clasificacion: ["", Validators.required],
+          clasificacion: [0, Validators.required],
           precio: [0, Validators.required],
           descripcion: ["", Validators.required],
           imagen: [null, Validators.required],
@@ -79,7 +97,7 @@ export class ModalFormularioComponent {
     if (!input.files?.length) return;
 
     const file = input.files[0];
-    this.form.patchValue({imagen: file});
+    this.form.patchValue({ imagen: file });
     this.form.get('imagen')?.updateValueAndValidity();
   }
 

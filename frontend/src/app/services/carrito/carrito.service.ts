@@ -17,7 +17,7 @@ export interface ItemCarrito {
     id: number
     nombre: string
     descripcion: string
-    clasificacion: string
+    clasificacion: number
     precio: number | string
     imagen: string | null
   }

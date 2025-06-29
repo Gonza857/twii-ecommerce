@@ -1,14 +1,15 @@
-import {Producto, ProductoDTO} from "../../entities/producto";
+import {Clasificacion, Producto, ProductoDTO} from "../../entities/producto";
 
 export interface IProductoRepository {
     obtenerPorId(id: number): Promise<Producto | null>;
     obtenerTodos(): Promise<Producto[]>;
     obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
+        clasificacion?: number;
         precioMin?: number;
         precioMax?: number;
         nombre?: string;
     }): Promise<Producto[]>;
+    obtenerClasificaciones(): Promise<Clasificacion[]>;
     create(data: ProductoDTO): Promise<number>;
     update(id: number, data: ProductoDTO): Promise<Producto>;
     update2(id: number, data: ProductoDTO): Promise<void>

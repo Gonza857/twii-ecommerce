@@ -6,7 +6,7 @@ export interface Producto {
     id: number;
     nombre: string;
     descripcion: string;
-    clasificacion: string;
+    idClasificacion: number;
     precio: Decimal;
     imagen: string | null;
 }
@@ -14,9 +14,14 @@ export interface Producto {
 export interface ProductoDTO {
     nombre: string;
     descripcion: string;
-    clasificacion: string;
+    idClasificacion: number;
     precio: Decimal;
     imagen: string | null | undefined;
+}
+
+export interface Clasificacion{
+    id: number;
+    nombre: string;
 }
 
 export type ImagenProductoDTO = z.infer<typeof imagenProductoSchema>;
