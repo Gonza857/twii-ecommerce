@@ -1,46 +1,52 @@
 <main class="styledMain pt-4">
-<div class="col-10 mx-auto">
-  <h2 class="page-title mb-4">Mis Pedidos</h2>
+<div class="col-8 mx-auto">
+  <h2 class="page-title mb-4 text-secundario">Mis Pedidos</h2>
 
-  @if (isLoading()) {
+  @if (this.pedidoService.respuestaServer()?.isLoading) {
     <div class="text-center text-dark-text">
       <p>Cargando tus pedidos...</p>
       <p-progress-spinner ariaLabel="loading"/>
     </div>
-  } @else if (error()) {
+  } @else if (this.pedidoService.respuestaServer()?.error) {
     <div class="alert alert-danger text-center" role="alert">
-      {{ error() }}
+      {{ this.pedidoService.respuestaServer()?.error }}
     </div>
-  } @else if (pedidos().length === 0) {
+  } @else if (this.pedidoService.pedidos().length === 0) {
     <div class="alert alert-info text-center" role="alert">
       No tienes pedidos realizados aún.
     </div>
   } @else {
     <div class="pedidos-grid">
-      @for (pedido of pedidos(); track pedido.id) {
-        <div class="order-card">
+      @for (pedido of this.pedidoService.pedidos(); track pedido.id) {
+        <div class="order-card bg-secundario">
           <div class="order-header">
-            <div class="order-title">
+            <div class="order-title text-primario">
               <h4>Pedido #{{ pedido.id }}</h4>
-              <span class="order-date">{{ pedido.fecha | date:'medium' }}</span>
+              <span class="order-date text-secundario">{{ pedido.fecha | date:'medium' }}</span>
             </div>
             <p-tag [value]="pedido.estado" [severity]="getSeverity(pedido.estado)"></p-tag>
           </div>
 
           <div class="order-body">
-            <p class="products-heading">Productos:</p>
+            <p class="products-heading text-claro">Productos:</p>
             <div class="product-list">
               @for (item of pedido.pedido_productos ?? []; track item.id) {
                 <div class="product-item">
-                  <span class="product-name">{{ item.producto?.nombre }}</span>
-                  <span class="product-details">{{ item.cantidad }}x ${{ item.precioUnitario | number:'1.2-2' }}</span>
-                  <span class="product-subtotal">{{ (item.cantidad * item.precioUnitario) | currency:'ARS':'symbol':'1.2-2' }}</span>
+                  <span class="product-name text-secundario">
+                    {{ item.producto?.nombre }}
+                  </span>
+                  <span class="product-details text-secundario">
+                    {{ item.cantidad }}x ${{ item.precioUnitario }}
+                  </span>
+                  <span class="product-subtotal text-secundario">
+                    {{ this.getSubtototal(item.cantidad, item.precioUnitario) | currency:'ARS' }}
+                  </span>
                 </div>
               }
             </div>
             <div class="order-total">
-              <span>Total:</span>
-              <span class="total-amount">{{ pedido.total | currency:'ARS':'symbol':'1.2-2' }}</span>
+              <span class="text-primario">Total:</span>
+              <span class="text-claro">{{ pedido.total | currency:'ARS' }}</span>
             </div>
           </div>
         </div>

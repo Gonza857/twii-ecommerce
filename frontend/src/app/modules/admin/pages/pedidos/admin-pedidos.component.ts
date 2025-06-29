@@ -1,6 +1,4 @@
 import { Component, inject, type OnInit, signal } from "@angular/core"
-import { PedidoService } from "../../../../services/pedido.service"
-import type { Pedido } from "../../../customer/pages/mis-pedidos/interfaces/pedido.interface"
 import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common"
 import { TableModule } from "primeng/table"
 import { TagModule } from "primeng/tag"
@@ -10,6 +8,8 @@ import { DropdownModule } from "primeng/dropdown"
 import { FormsModule } from "@angular/forms"
 import { MessageService } from "primeng/api"
 import { ProgressSpinnerModule } from "primeng/progressspinner"
+import {PedidoService} from '../../../../services/pedido/pedido.service';
+import {Pedido} from '../../../../services/pedido/interfaces/pedido.interface';
 
 @Component({
   selector: "app-admin-pedidos",
@@ -85,7 +85,7 @@ export class AdminPedidosComponent implements OnInit {
             summary: "Éxito",
             detail: `Estado del pedido #${pedido.id} actualizado a "${newEstado}"`,
           })
-          this.cargarPedidos() 
+          this.cargarPedidos()
         },
         error: (err) => {
           console.error("Error al actualizar estado:", err)

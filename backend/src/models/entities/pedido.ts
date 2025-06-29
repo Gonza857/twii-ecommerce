@@ -4,7 +4,7 @@ import type { CarritoItemDTO } from "../DTO/carrito-item.dto"
 export interface Pedido {
   id: number
   usuarioid: number
-  fecha: Date
+  fecha: Date | null
   estado: string
   total: Decimal
   pedido_productos?: PedidoProducto[]
@@ -19,7 +19,7 @@ export interface Pedido {
 export interface PedidoProducto {
   id: number
   cantidad: number
-  precioUnitario: Decimal
+  preciounitario: Decimal
   pedidoid: number
   productoid: number
   producto?: {

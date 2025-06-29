@@ -14,7 +14,8 @@ import {NgClass} from '@angular/common';
   imports: [
     CardModule,
     EstadisticaComponent,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './admin-home.component.html',
   standalone: true,
@@ -32,12 +33,6 @@ export class AdminHomeComponent implements OnInit {
 
     if (estadisticasUsuarioSignal && estadisticasProductoSignal) {
       return [
-        {
-          titulo: 'Usuarios totales',
-          valor: estadisticasUsuarioSignal?.usuariosTotales,
-          claseColor: 'text-primario',
-          badge: "text-primario"
-        },
         {
           titulo: 'Usuarios totales',
           valor: estadisticasUsuarioSignal?.usuariosTotales,

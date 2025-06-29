@@ -56,7 +56,12 @@
 </nav>
 
   <div>
-    <p-drawer header="Carrito" [visible]="carritoService.drawerVisible()" (onHide)="carritoService.cerrarDrawer()" position="right" [style]="{ width: '25vw' }">
+    <p-drawer
+      header="Carrito"
+      [visible]="carritoService.drawerVisible()"
+      (onHide)="carritoService.cerrarDrawer()"
+      position="right"
+      [style]="{ width: '25vw' }">
         <app-carrito-drawer></app-carrito-drawer>
       </p-drawer>
   </div>

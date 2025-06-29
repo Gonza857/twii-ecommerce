@@ -5,8 +5,8 @@ import {CurrencyPipe, ViewportScroller} from '@angular/common';
 import {ButtonDirective} from 'primeng/button';
 import { ProgressSpinnerModule} from 'primeng/progressspinner';
 import {StyleClass} from 'primeng/styleclass';
-import {CarritoService} from '../../../../services/carrito.service';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
+import {CarritoService} from '../../../../services/carrito/carrito.service';
 
 
 @Component({

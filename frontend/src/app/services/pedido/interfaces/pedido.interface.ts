@@ -1,10 +1,12 @@
+import Decimal from "decimal.js";
+
 export interface Pedido {
   id: number
   usuarioid: number
-  fecha: Date
-  estado: string 
-  total: number 
-  pedido_productos?: PedidoProducto[]
+  fecha: Date | null
+  estado: string
+  total: number
+  pedido_productos: PedidoProducto[]
   usuario?: {
     id: number
     nombre: string
@@ -16,7 +18,8 @@ export interface Pedido {
 export interface PedidoProducto {
   id: number
   cantidad: number
-  precioUnitario: number 
+  //@ts-ignore
+  precioUnitario: Decimal
   pedidoid: number
   productoid: number
   producto?: {

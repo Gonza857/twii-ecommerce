@@ -1,23 +1,14 @@
-<<<<<<< HEAD
-import {inject, Injectable, OnInit, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
-import {
+import { inject, Injectable, signal } from "@angular/core"
+import { HttpClient } from "@angular/common/http"
+import { map, type Observable, tap } from "rxjs" // Import tap
+import type {
   EstadisticasUsuarioRest,
   UsuarioLoginRest,
   UsuarioRecuperarRest,
   UsuarioRest
-} from './interfaces/usuario.interface.rest';
-import UsuarioMapper from './mapping/usuario.mapper';
-import {EstadisticasUsuario, Usuario, UsuarioRegister} from './interfaces/usuario.interface';
-=======
-import { inject, Injectable, signal } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-import { map, type Observable, tap } from "rxjs" // Import tap
-import type { UsuarioLoginRest, UsuarioRecuperarRest, UsuarioRest } from "./interfaces/usuario.interface.rest"
+} from "./interfaces/usuario.interface.rest"
 import UsuarioMapper from "./mapping/usuario.mapper"
-import type { Usuario, UsuarioRegister } from "./interfaces/usuario.interface"
->>>>>>> e07b6a869a702c7a997c569c852ea04a17d52ed0
+import type {EstadisticasUsuario, Usuario, UsuarioRegister} from "./interfaces/usuario.interface"
 
 interface algo {
   exito?: boolean
@@ -37,18 +28,12 @@ type ResultadoRequest = {
   providedIn: "root",
 })
 export class UsuarioService {
-<<<<<<< HEAD
   private apiUrl: string = "http://localhost:3000/api";
   private apiAuthUrl: string = "http://localhost:3000/api/auth";
   private readonly http: HttpClient = inject(HttpClient);
   private credenciales = {
     withCredentials: true
   }
-=======
-  private apiUrl = "http://localhost:3000/api"
-  private apiAuthUrl = "http://localhost:3000/api/auth"
-  private readonly http: HttpClient = inject(HttpClient)
->>>>>>> e07b6a869a702c7a997c569c852ea04a17d52ed0
 
   private usuarioSignal = signal<Usuario | null>(null)
   public readonly usuario = this.usuarioSignal.asReadonly()
@@ -212,7 +197,6 @@ export class UsuarioService {
   }
 
   public obtenerUsuarios(): Observable<algo> {
-<<<<<<< HEAD
     return this.http.get<algo>(`${this.apiUrl}/usuarios`, this.credenciales);
   }
 
@@ -230,12 +214,6 @@ export class UsuarioService {
           console.log("Error", e)
         }
       })
-=======
-    const credenciales = {
-      withCredentials: true,
-    }
-    return this.http.get<algo>(`${this.apiUrl}/usuarios`, credenciales)
->>>>>>> e07b6a869a702c7a997c569c852ea04a17d52ed0
   }
 
   public limpiarRespuesta() {

@@ -2,9 +2,9 @@ import { Component, effect, inject, type OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
 import { DrawerModule } from "primeng/drawer"
 import { CarritoDrawerComponent } from "../pages/visualizacion-carrito/carrito-drawer/carrito-drawer.component"
-import { CarritoService } from "../../../services/carrito.service"
 import { UsuarioService } from "../../../services/usuario/usuario.service"
 import type { Usuario } from "../../../services/usuario/interfaces/usuario.interface"
+import {CarritoService} from '../../../services/carrito/carrito.service';
 
 @Component({
   selector: "app-home",
@@ -15,14 +15,14 @@ import type { Usuario } from "../../../services/usuario/interfaces/usuario.inter
 })
 export class CustomerLayoutComponent implements OnInit {
   private readonly usuarioService: UsuarioService = inject(UsuarioService)
-  protected usuarioActual: Usuario | null = null 
-  carritoVisible = false
+  protected usuarioActual: Usuario | null = null
+  carritoVisible: boolean = false
   public readonly carritoService = inject(CarritoService)
 
   constructor() {
     effect(() => {
       this.carritoVisible = this.carritoService.drawerVisible()
-      this.usuarioActual = this.usuarioService.usuario() 
+      this.usuarioActual = this.usuarioService.usuario()
     })
   }
 

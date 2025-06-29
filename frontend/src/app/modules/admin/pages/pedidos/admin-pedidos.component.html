@@ -1,5 +1,5 @@
 <main class="styledMain pt-4">
-  <div class="col-10 mx-auto">
+  <div class="col-8 mx-auto">
     <h2 class="page-title mb-4">Gestión de Pedidos</h2>
 
     @if (isLoading()) {
@@ -18,21 +18,31 @@
     } @else {
       <div class="pedidos-grid">
         @for (pedido of pedidos(); track pedido.id) {
-          <div class="order-card">
+          <div class="order-card bg-secundario">
             <div class="order-header">
-              <div class="order-title">
+              <div class="order-title text-primario">
                 <h4>Pedido #{{ pedido.id }}</h4>
-                <span class="order-date">{{ pedido.fecha | date:'medium' }}</span>
+                <span class="order-date text-secundario">{{ pedido.fecha | date:'medium' }}</span>
               </div>
               <p-tag [value]="pedido.estado" [severity]="getSeverity(pedido.estado)"></p-tag>
             </div>
 
             <div class="order-body">
-              <p><strong>Usuario:</strong> {{ pedido.usuario?.nombre }} {{ pedido.usuario?.apellido }} ({{ pedido.usuario?.email }})</p>
-              <p><strong>Total:</strong> {{ pedido.total | currency:'ARS':'symbol':'1.2-2' }}</p>
+              <p
+                class="text-secundario"
+              >
+                <strong>Usuario:</strong>
+                {{ pedido.usuario?.nombre }} {{ pedido.usuario?.apellido }} ({{ pedido.usuario?.email }})
+              </p>
+              <p
+                class="text-secundario"
+              >
+                <strong>Total:</strong>
+                {{ pedido.total | currency:'ARS':'symbol':'1.2-2' }}
+              </p>
 
               <div class="d-flex align-items-center gap-2 mt-3 mb-3">
-                <label for="estado-{{pedido.id}}" class="fw-bold">Cambiar Estado:</label>
+                <label for="estado-{{pedido.id}}" class="fw-bold text-claro">Cambiar Estado:</label>
                 <p-dropdown
                   [options]="estadosDisponibles"
                   [(ngModel)]="pedido.estado"
@@ -44,13 +54,17 @@
                 ></p-dropdown>
               </div>
 
-              <p class="products-heading">Productos:</p>
+              <p class="products-heading text-claro">Productos:</p>
               <div class="product-list">
                 @for (item of pedido.pedido_productos ?? []; track item.id) {
                   <div class="product-item">
-                    <span class="product-name">{{ item.producto?.nombre }}</span>
-                    <span class="product-details">{{ item.cantidad }}x ${{ item.precioUnitario | number:'1.2-2' }}</span>
-                    <span class="product-subtotal">{{ (item.cantidad * item.precioUnitario) | currency:'ARS':'symbol':'1.2-2' }}</span>
+                    <span class="product-name text-secundario">{{ item.producto?.nombre }}</span>
+                    <span class="product-details text-secundario">{{ item.cantidad }}
+                      x ${{ item.precioUnitario }}</span>
+<!--                    <span-->
+<!--                      class="product-subtotal">-->
+<!--                      {{ (item.cantidad * item.precioUnitario) | currency:'ARS' }}-->
+<!--                    </span>-->
                   </div>
                 }
               </div>

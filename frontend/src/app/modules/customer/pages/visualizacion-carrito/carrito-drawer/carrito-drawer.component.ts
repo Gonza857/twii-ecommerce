@@ -1,10 +1,10 @@
 import { Component, effect, inject, type OnInit } from "@angular/core"
-import { CarritoService } from "../../../../../services/carrito.service"
 import { CarritoItemComponent } from "../carrito-item/carrito-item.component"
 import { RouterModule } from "@angular/router"
 import { CommonModule } from "@angular/common"
 import { ButtonModule } from "primeng/button"
 import { UsuarioService } from "../../../../../services/usuario/usuario.service"
+import {CarritoService} from '../../../../../services/carrito/carrito.service';
 
 @Component({
   selector: "app-carrito-drawer",

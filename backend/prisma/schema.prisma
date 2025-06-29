@@ -25,23 +25,21 @@ model rol {
 }
 
 model usuario {
-  id         Int       @id @default(autoincrement())
-  direccion  String?   @db.VarChar(255)
-  apellido   String    @db.VarChar(100)
-  nombre     String    @db.VarChar(100)
-  email      String    @unique @db.VarChar(100)
-  contrasena String    @db.VarChar(255)
+  id         Int      @id @default(autoincrement())
+  direccion  String?  @db.VarChar(255)
+  apellido   String   @db.VarChar(100)
+  nombre     String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(100)
+  contrasena String   @db.VarChar(255)
   rolid      Int
-  validado   Boolean?  @default(false)
-  carrito    carrito[]
+  validado   Boolean  @default(false)
   pedidos    pedido[]
-  rol        rol       @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
+  rol        rol      @relation(fields: [rolid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rol_usuario")
 }
 
 model carrito {
   id        Int                @id @default(autoincrement())
   usuarioid Int
-  usuario   usuario            @relation(fields: [usuarioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carrito_usuario")
   productos carrito_producto[]
 }
 
@@ -57,8 +55,8 @@ model carrito_producto {
 model pedido {
   id               Int               @id @default(autoincrement())
   usuarioid        Int
-  fecha            DateTime          @default(now())
-  estado           String            @db.VarChar(50)
+  fecha            DateTime?         @default(now()) @db.Timestamp(6)
+  estado           String            @default("pendiente") @db.VarChar(50)
   total            Decimal           @db.Decimal(10, 2)
   usuario          usuario           @relation(fields: [usuarioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_usuario")
   pedido_productos pedido_producto[]
@@ -67,7 +65,7 @@ model pedido {
 model pedido_producto {
   id             Int      @id @default(autoincrement())
   cantidad       Int
-  precioUnitario Decimal  @db.Decimal(10, 2)
+  preciounitario Decimal  @db.Decimal(10, 2)
   pedidoid       Int
   productoid     Int
   pedido         pedido   @relation(fields: [pedidoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_pedido_producto")

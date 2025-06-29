@@ -1,10 +1,10 @@
 import { Component, inject, Input } from '@angular/core';
-import { CarritoService, ItemCarrito } from '../../../../../services/carrito.service';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import Decimal from 'decimal.js';
+import {CarritoService, ItemCarrito} from '../../../../../services/carrito/carrito.service';
 
 @Component({
   selector: 'app-carrito-item',

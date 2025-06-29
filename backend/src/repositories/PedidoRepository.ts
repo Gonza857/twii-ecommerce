@@ -12,7 +12,7 @@ class PedidoRepository implements IPedidoRepository {
   }
 
   async create(usuarioId: number, total: Decimal, items: CarritoItemDTO[]): Promise<Pedido> {
-    const newPedido = await this.prisma.pedido.create({
+    return this.prisma.pedido.create({
       data: {
         usuarioid: usuarioId,
         total: total,
@@ -21,7 +21,7 @@ class PedidoRepository implements IPedidoRepository {
           create: items.map((item) => ({
             productoid: item.productoid,
             cantidad: item.cantidad,
-            precioUnitario: new Decimal(item.producto.precio), 
+            preciounitario: new Decimal(item.producto.precio),
           })),
         },
       },
@@ -33,7 +33,6 @@ class PedidoRepository implements IPedidoRepository {
         },
       },
     })
-    return newPedido
   }
 
   async findByUserId(userId: number): Promise<Pedido[]> {

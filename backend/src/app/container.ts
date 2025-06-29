@@ -33,7 +33,7 @@ const mailerService: IMailerService = new MailerService()
 const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma)
 const carritoRepository: ICarritoRepository = new CarritoRepository(prisma)
 const productoRepository: IProductoRepository = new ProductoRepository(prisma)
-const pedidoRepository: IPedidoRepository = new PedidoRepository(prisma) // Instantiate new repository
+const pedidoRepository: IPedidoRepository = new PedidoRepository(prisma)
 
 // Servicios -> logica de negocio
 const productoImagenService: IImagenService = new ProductoImageService("http://localhost:3000")
