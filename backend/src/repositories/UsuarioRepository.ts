@@ -59,6 +59,28 @@ class UsuarioRepository implements IUsuarioRepository {
             }
         });
     }
+
+    public async obtenerTotal(): Promise<number> {
+        return this.prisma.usuario.count()
+    }
+
+    public async obtenerValidados(): Promise<number> {
+
+        return this.prisma.usuario.count({
+            where: {
+                validado: true
+            }
+        })
+    }
+
+    public async obtenerSinValidar(): Promise<number> {
+        return this.prisma.usuario.count({
+            where: {
+                validado: false
+            }
+        })
+    }
+
 }
 
 export default UsuarioRepository;

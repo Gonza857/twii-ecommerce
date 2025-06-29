@@ -10,6 +10,7 @@ export const roleMiddleware = async (
     res: Response,
     next: NextFunction
 ) => {
+    console.log("MW: autorizando...")
     console.log(req.user)
 
     const idUsuario = req.user; // asumimos que viene del middleware de auth
@@ -19,8 +20,12 @@ export const roleMiddleware = async (
         return;
     }
 
+    if (isNaN(idUsuario)) {
+        res.status(401).json({mensaje: "No encontrado"})
+    }
+
     const usuario: Usuario | null = await usuarioService.obtenerUsuarioPorId(idUsuario);
-    console.log("Usuario BD", usuario)
+
     if (!usuario) {
         res.status(401).json({mensaje: "No autenticado"})
         return
@@ -29,6 +34,8 @@ export const roleMiddleware = async (
         res.status(403).json({mensaje: "Sin permisos"})
         return;
     }
+
+    console.log("MW: autorización OK")
 
     next();
 };

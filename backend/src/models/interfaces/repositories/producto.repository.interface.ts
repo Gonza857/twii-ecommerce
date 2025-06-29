@@ -13,5 +13,7 @@ export interface IProductoRepository {
     update(id: number, data: ProductoDTO): Promise<Producto>;
     update2(id: number, data: ProductoDTO): Promise<void>
     delete(id: number): Promise<void>;
+    obtenerTotalProductos(): Promise<number>
+
 }
 

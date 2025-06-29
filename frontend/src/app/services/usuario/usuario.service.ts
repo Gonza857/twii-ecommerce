@@ -1,9 +1,14 @@
 import {inject, Injectable, OnInit, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {UsuarioLoginRest, UsuarioRecuperarRest, UsuarioRest} from './interfaces/usuario.interface.rest';
+import {
+  EstadisticasUsuarioRest,
+  UsuarioLoginRest,
+  UsuarioRecuperarRest,
+  UsuarioRest
+} from './interfaces/usuario.interface.rest';
 import UsuarioMapper from './mapping/usuario.mapper';
-import {Usuario, UsuarioRegister} from './interfaces/usuario.interface';
+import {EstadisticasUsuario, Usuario, UsuarioRegister} from './interfaces/usuario.interface';
 
 interface algo {
   exito?: boolean,
@@ -26,12 +31,18 @@ export class UsuarioService {
   private apiUrl: string = "http://localhost:3000/api";
   private apiAuthUrl: string = "http://localhost:3000/api/auth";
   private readonly http: HttpClient = inject(HttpClient);
+  private credenciales = {
+    withCredentials: true
+  }
 
   private usuarioSignal = signal<Usuario | null>(null);
   public readonly usuario = this.usuarioSignal.asReadonly();
 
   private respuestaServidorSignal = signal<ResultadoRequest | null>(null);
   public readonly respuestaServidor = this.respuestaServidorSignal.asReadonly();
+
+  private estadisticasSignal = signal<EstadisticasUsuario | null>(null);
+  public readonly estadisticas = this.estadisticasSignal.asReadonly();
 
   public iniciarSesion(datos: UsuarioLoginRest): void {
     const credenciales = {
@@ -199,12 +210,24 @@ export class UsuarioService {
       });
   }
 
-
   public obtenerUsuarios(): Observable<algo> {
-    const credenciales = {
-      withCredentials: true
-    }
-    return this.http.get<algo>(`${this.apiUrl}/usuarios`, credenciales);
+    return this.http.get<algo>(`${this.apiUrl}/usuarios`, this.credenciales);
+  }
+
+  public obtenerEstadisticas(): void {
+    this.http.get<EstadisticasUsuario>(`${this.apiUrl}/usuarios/estadisticas`, this.credenciales)
+      .pipe(
+        map((res: EstadisticasUsuarioRest) => UsuarioMapper.mapToEstatisticas(res))
+      )
+      .subscribe({
+        next: (estadisticas: EstadisticasUsuario) => {
+          console.log("Estadisticas conseguidas", estadisticas);
+          this.estadisticasSignal.set(estadisticas)
+        },
+        error: (e: any) => {
+          console.log("Error", e)
+        }
+      })
   }
 
   public limpiarRespuesta() {

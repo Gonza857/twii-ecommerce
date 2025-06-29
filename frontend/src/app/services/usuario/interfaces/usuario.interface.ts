@@ -30,6 +30,8 @@ export interface UsuarioRecuperar {
   token: string,
 }
 
-export interface UsuarioReenviarConfirmacion {
-
+export interface EstadisticasUsuario {
+  usuariosTotales: number,
+  usuariosValidados: number,
+  usuariosSinValidar: number,
 }

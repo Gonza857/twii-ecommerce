@@ -1,4 +1,5 @@
-import {Usuario, UsuarioLogin, UsuarioRegisterDTO} from "../usuario-model";
+import {Usuario, UsuarioLogin, UsuarioRegisterDTO} from "../../usuario-model";
+
 
 export interface IUsuarioRepository {
     obtenerPorEmailParaLogin(email: string): Promise<UsuarioLogin | null>;
@@ -7,4 +8,7 @@ export interface IUsuarioRepository {
     actualizarContrasena(id: number, contrasena: string): Promise<void>;
     obtenerTodos(): Promise<Usuario[]>;
     actualizarEstado(estado: boolean, id: number | undefined): Promise<void>;
+    obtenerTotal(): Promise<number>;
+    obtenerValidados(): Promise<number>;
+    obtenerSinValidar(): Promise<number>
 }

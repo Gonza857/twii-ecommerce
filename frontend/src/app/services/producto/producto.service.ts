@@ -1,8 +1,8 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {computed, inject, Injectable, signal} from '@angular/core';
 import {catchError, delay, map, Observable, throwError} from 'rxjs';
-import {Producto, ProductoFormulario} from './interfaces/producto.interface';
-import {ProductoRest} from './interfaces/producto.interface.rest';
+import {EstadisticasProductos, Producto, ProductoFormulario} from './interfaces/producto.interface';
+import {EstadisticasProductosRest, ProductoRest} from './interfaces/producto.interface.rest';
 import ProductoMapper from './mapping/producto.mapper';
 
 
@@ -37,11 +37,18 @@ export class ProductoService {
   private apiUrl: string = "http://localhost:3000/api/producto";
   private readonly http: HttpClient = inject(HttpClient);
 
+  private credenciales = {
+    withCredentials: true
+  }
+
   private productos = signal<Producto[]>([]);
   public readonly signalProductos = this.productos.asReadonly()
 
   private productoDetalle = signal<Producto | null>(null);
   public readonly signalProductoDetalle = this.productoDetalle.asReadonly()
+
+  private estadisticas = signal<EstadisticasProductos | null>(null)
+  public signalEstadisticas = this.estadisticas.asReadonly()
 
   // --- NUEVO: Signal principal que contiene el estado completo ---
   private _productoDetalle = signal<ProductoDetailState>({
@@ -61,7 +68,7 @@ export class ProductoService {
     this.obtenerProductos()
   }
 
-  public limpiarProducto () {
+  public limpiarProducto() {
     this._productoDetalle.set({
       producto: null,
       loading: false,
@@ -85,7 +92,7 @@ export class ProductoService {
       });
   }
 
-  public obtenerPorId(id: string): void{
+  public obtenerPorId(id: string): void {
     this.http.get<ProductoRest>(`${this.apiUrl}/${id}`)
       .pipe(
         map((res) => ProductoMapper.mapToProducto(res)),
@@ -148,7 +155,7 @@ export class ProductoService {
     if (filtros.precioMax !== undefined) {
       params.push(`precioMax=${filtros.precioMax}`);
     }
-    if(filtros.nombre){
+    if (filtros.nombre) {
       params.push(`nombre=${encodeURIComponent(filtros.nombre)}`);
     }
 
@@ -185,5 +192,20 @@ export class ProductoService {
 
       }
     });
+  }
+
+  public obtenerEstadisticas(): void {
+    this.http.get<EstadisticasProductos>(`${this.apiUrl}/estadisticas`, this.credenciales)
+      .pipe(
+        map((res: EstadisticasProductosRest) => ProductoMapper.mapToEstadisticasProducto(res))
+      )
+      .subscribe({
+        next: (res: EstadisticasProductos) => {
+          this.estadisticas.set(res)
+        },
+        error: (e: any) => {
+          console.log("Error", e)
+        }
+      })
   }
 }

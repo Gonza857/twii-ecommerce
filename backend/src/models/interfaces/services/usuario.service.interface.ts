@@ -1,5 +1,7 @@
-import {Usuario, UsuarioLogin, UsuarioLoginDTO, UsuarioRecoverDTO, UsuarioRegisterDTO} from "../usuario-model";
-import {IResultadoAccion} from "../main-models";
+
+import {EstadisticasUsuarioDTO} from "../../DTO/estadisticas.usuario.dto";
+import {IResultadoAccion} from "../../main-models";
+import {Usuario, UsuarioLogin, UsuarioRegisterDTO} from "../../usuario-model";
 
 export interface IUsuarioService {
     obtenerUsuarioParaLoginPorCorreo (email: string): Promise<UsuarioLogin | null>
@@ -9,4 +11,5 @@ export interface IUsuarioService {
     guardar(usuario: UsuarioRegisterDTO): Promise<number | null>
     obtenerTodos(): Promise<Usuario[]>
     cambiarEstadoCuenta(email: string): Promise<string>
+    obtenerEstadisticas(): Promise<EstadisticasUsuarioDTO>
 }

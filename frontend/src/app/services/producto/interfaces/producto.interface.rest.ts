@@ -16,3 +16,6 @@ export interface ProductoActualizarRest {
   cambioImagen: boolean;
 }
 
+export interface EstadisticasProductosRest {
+  productosTotales: number,
+}

@@ -28,4 +28,9 @@ export interface Producto extends ProductoBase, ImagenProducto, IdProducto {
 
 }
 
+export interface EstadisticasProductos {
+  productosTotales: number,
+}
+
+
 

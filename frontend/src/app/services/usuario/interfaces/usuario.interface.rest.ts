@@ -29,3 +29,10 @@ export interface UsuarioRecuperarRest {
   contrasena: string;
   token: string;
 }
+
+export interface EstadisticasUsuarioRest {
+  usuariosTotales: number,
+  usuariosValidados: number,
+  usuariosSinValidar: number,
+}
+
