@@ -1,29 +1,34 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { CustomerLayoutComponent } from './customer-layout/customer-layout.component';
+import { NgModule } from "@angular/core"
+import { RouterModule, type Routes } from "@angular/router"
+import { CustomerLayoutComponent } from "./customer-layout/customer-layout.component"
+import { authGuard } from "../../guards/auth.guard" // Assuming you have an auth guard
+
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     component: CustomerLayoutComponent,
     children: [
       {
-        path: 'productos',
+        path: "productos",
         loadComponent: () =>
-          import(
-            './pages/visualizacion-productos/visualizacion-productos.component'
-          ).then((c) => c.ListaProductosComponent),
+          import("./pages/visualizacion-productos/visualizacion-productos.component").then(
+            (c) => c.ListaProductosComponent,
+          ),
       },
       {
-        path: 'producto/:id',
+        path: "producto/:id",
         loadComponent: () =>
-          import(
-            './pages/detalle-producto/detalle-producto.component'
-            ).then((c) => c.DetalleProductoComponent),
+          import("./pages/detalle-producto/detalle-producto.component").then((c) => c.DetalleProductoComponent),
       },
-      // { path: '', redirectTo: 'productos', pathMatch: 'full' }
+      {
+        path: "mis-pedidos",
+        loadComponent: () => import("./pages/mis-pedidos/mis-pedidos.component").then((c) => c.MisPedidosComponent),
+        canActivate: [authGuard], // Protect this route
+      },
+      
     ],
   },
-];
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
