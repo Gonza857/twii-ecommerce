@@ -14,7 +14,7 @@ import {CarritoService} from '../../../services/carrito/carrito.service';
   styleUrl: "./customer-layout.component.scss",
 })
 export class CustomerLayoutComponent implements OnInit {
-  private readonly usuarioService: UsuarioService = inject(UsuarioService)
+  protected readonly usuarioService: UsuarioService = inject(UsuarioService)
   protected usuarioActual: Usuario | null = null
   carritoVisible: boolean = false
   public readonly carritoService = inject(CarritoService)

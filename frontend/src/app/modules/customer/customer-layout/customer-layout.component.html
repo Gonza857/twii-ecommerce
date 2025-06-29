@@ -29,24 +29,21 @@
           <a class="nav-link" [routerLink]="'/mis-pedidos'">Mis Pedidos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" [routerLink]="'/admin'">Admin</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Perfil</a>
         </li>
         <li class="nav-item">
           <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
-        @if (this.usuarioActual) {
+        @if (this.usuarioService.usuario()) {
           <li class="nav-item">
             <a (click)="cerrarSesion()" class="nav-link">Cerrar sesión</a>
           </li>
         } @else {
           <li class="nav-item">
             <a class="nav-link" style="cursor: pointer;" routerLink="/cuenta/login">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/cuenta/register'">Registro</a>
           </li>
         }
 
