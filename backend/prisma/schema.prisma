@@ -8,21 +8,21 @@ datasource db {
 }
 
 model clasificacion {
-  id        Int        @id @default(autoincrement())
-  nombre    String     @unique
-  productos producto[]
+  id       Int        @id @default(autoincrement())
+  nombre   String     @unique @db.VarChar(255)
+  producto producto[]
 }
 
 model producto {
   id                Int                @id @default(autoincrement())
   nombre            String             @db.VarChar(50)
   descripcion       String
-  idClasificacion   Int
   precio            Decimal            @db.Decimal(10, 2)
   imagen            String?            @db.VarChar(255)
+  idclasificacion   Int                @map("idclasificacion")
   carrito_productos carrito_producto[]
   pedido_productos  pedido_producto[]
-  clasificacion     clasificacion      @relation(fields: [idClasificacion], references: [id])
+  clasificacion     clasificacion      @relation(fields: [idclasificacion], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_producto_clasificacion")
 }
 
 model rol {

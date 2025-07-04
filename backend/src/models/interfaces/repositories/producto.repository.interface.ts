@@ -11,8 +11,7 @@ export interface IProductoRepository {
     }): Promise<Producto[]>;
     obtenerClasificaciones(): Promise<Clasificacion[]>;
     create(data: ProductoDTO): Promise<number>;
-    update(id: number, data: ProductoDTO): Promise<Producto>;
-    update2(id: number, data: ProductoDTO): Promise<void>
+    update(id: number, data: ProductoDTO): Promise<void>;
     delete(id: number): Promise<void>;
     obtenerTotalProductos(): Promise<number>
 

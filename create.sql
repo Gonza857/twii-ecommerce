@@ -36,3 +36,11 @@ CREATE TABLE pedido_producto (
     CONSTRAINT fk_pedido_pedido_producto FOREIGN KEY (pedidoid) REFERENCES pedido(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_producto_pedido_producto FOREIGN KEY (productoid) REFERENCES producto(id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+
+CREATE TABLE clasificacion (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  nombre VARCHAR(255) UNIQUE NOT NULL
+);
+ALTER TABLE producto
+DROP COLUMN clasificacion;

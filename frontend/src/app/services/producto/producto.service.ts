@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {computed, inject, Injectable, signal} from '@angular/core';
-import {catchError, delay, map, Observable, throwError} from 'rxjs';
-import {EstadisticasProductos, Producto, ProductoFormulario} from './interfaces/producto.interface';
-import {EstadisticasProductosRest, ProductoRest} from './interfaces/producto.interface.rest';
-=======
-import { clasificacion } from './../../../../../backend/node_modules/.prisma/client/index.d';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, delay, map, Observable, throwError } from 'rxjs';
-import { Producto, ProductoFormulario } from './interfaces/producto.interface';
-import { ProductoRest } from './interfaces/producto.interface.rest';
->>>>>>> 13f37a4d0c05191e8caa55101bd6b566e2ed7a32
+import {EstadisticasProductos, Producto, ProductoFormulario} from './interfaces/producto.interface';
+import {EstadisticasProductosRest, ProductoRest} from './interfaces/producto.interface.rest';
 import ProductoMapper from './mapping/producto.mapper';
 
 export interface Clasificacion {

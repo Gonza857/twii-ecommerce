@@ -58,7 +58,7 @@ const carritoSchema = z.object({
                 }),
                 descripcion: z.string().nullable(),
                 imagen: z.string().nullable().optional(),
-                idClasificacion: z.number()
+                idclasificacion: z.number()
             })
         })
     )

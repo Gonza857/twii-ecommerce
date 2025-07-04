@@ -14,7 +14,7 @@ export interface IProductoService {
     obtenerClasificaciones(): Promise<Clasificacion[]>;
     obtenerProductoPorId(id: number): Promise<Producto | null>;
     crearProducto(data: ProductoCrearDTO, imagen: ArchivoDTO): Promise<void>;
-    actualizarProducto(id: number, data: ProductoEditarDTO, archivo: ArchivoDTO | null): Promise<Producto>;
+    actualizarProducto(id: number, data: ProductoEditarDTO, archivo: ArchivoDTO | null): Promise<void>;
     eliminarProducto(id: number): Promise<void>;
     guardarImagenProducto(url: string, idProducto: number): Promise<void>;
     saberSiProductoTieneImagen(id: number): Promise<boolean>;

@@ -6,7 +6,8 @@ export interface Producto {
     id: number;
     nombre: string;
     descripcion: string;
-    idClasificacion: number;
+    idclasificacion: number;
+    clasificacion: { id: number; nombre: string; }
     precio: Decimal;
     imagen: string | null;
 }
@@ -14,12 +15,12 @@ export interface Producto {
 export interface ProductoDTO {
     nombre: string;
     descripcion: string;
-    idClasificacion: number;
+    idclasificacion: number;
     precio: Decimal;
     imagen: string | null | undefined;
 }
 
-export interface Clasificacion{
+export interface Clasificacion {
     id: number;
     nombre: string;
 }
