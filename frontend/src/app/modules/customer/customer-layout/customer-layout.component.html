@@ -28,9 +28,11 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/mis-pedidos'">Mis Pedidos</a>
         </li>
+        @if (this.esAdmin) {
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'/admin'">Admin</a>
         </li>
+        }
         <li class="nav-item">
           <a (click)="toggleCarrito()" class="nav-link"><i class="pi pi-shopping-cart"></i></a>
         </li>
@@ -82,7 +84,9 @@
         <li><a routerLink="/mis-pedidos" class="footer-link">Mis Pedidos</a></li>
         <li><a routerLink="/cuenta/login" class="footer-link">Login</a></li>
         <li><a routerLink="/cuenta/register" class="footer-link">Registro</a></li>
-        <li><a routerLink="/admin" class="footer-link">Admin</a></li>
+        @if (this.esAdmin) {
+          <li><a routerLink="/admin" class="footer-link">Admin</a></li>
+        }
       </ul>
     </div>
 

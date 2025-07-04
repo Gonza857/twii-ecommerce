@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
-import { map, type Observable, tap } from "rxjs" // Import tap
+import { catchError, map, type Observable, of, tap } from "rxjs" // Import tap
 import type {
   EstadisticasUsuarioRest,
   UsuarioLoginRest,
@@ -91,19 +91,15 @@ export class UsuarioService {
     const credenciales = {
       withCredentials: true,
     }
-    return this.http.get<UsuarioRest>(`${this.apiAuthUrl}/validar`, credenciales).pipe(
-      map((usuarioRest: UsuarioRest) => UsuarioMapper.mapUsuarioRestToUsuario(usuarioRest)),
-      tap((usuario: Usuario) => {
-        this.usuarioSignal.set(usuario)
-      }),
-      // Handle 404 specifically if needed, or let the error propagate
-      // catchError((error: any) => {
-      //   if (error.status === 404) {
-      //     this.usuarioSignal.set(null);
-      //   }
-      //   return throwError(() => error);
-      // })
-    )
+    return this.http.get<UsuarioRest>(`${this.apiAuthUrl}/validar`, this.credenciales).pipe(
+    map((usuarioRest: UsuarioRest) => UsuarioMapper.mapUsuarioRestToUsuario(usuarioRest)),
+    tap((usuario: Usuario) => this.usuarioSignal.set(usuario)),
+    catchError((error) => {
+      console.warn("Error al obtener usuario actual:", error);
+      this.usuarioSignal.set(null);
+      return of(null);
+    })
+  )
   }
 
   public reenviarCorreo(id: number): void {

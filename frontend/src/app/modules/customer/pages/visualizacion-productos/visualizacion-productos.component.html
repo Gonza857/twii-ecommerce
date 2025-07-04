@@ -21,7 +21,7 @@
         </button>
       </div>
     </section>
-    
+
     <section class="filtros-precio">
       <h3 class="m-0">Filtrar por precio</h3>
 
@@ -71,7 +71,7 @@
           </a>
           <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">
             <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">
-              <p-select class="flex-grow-1" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
+              <p-select class="flex-grow-1" appendTo="body" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
                 (onChange)="cambiarCantidad(item)" optionValue="value" optionLabel="label"
                 [style]="{ height: '100%' }"></p-select>
 

@@ -12,7 +12,6 @@ import { ToastModule } from "primeng/toast"
   templateUrl: "./app.component.html",
   standalone: true,
   styleUrl: "./app.component.scss",
-  providers: [MessageService], 
 })
 export class AppComponent {
   title(title: any) {

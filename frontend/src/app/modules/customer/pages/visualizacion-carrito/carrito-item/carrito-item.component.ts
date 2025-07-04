@@ -4,7 +4,8 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import Decimal from 'decimal.js';
-import {CarritoService, ItemCarrito} from '../../../../../services/carrito/carrito.service';
+import {CarritoService} from '../../../../../services/carrito/carrito.service';
+import { CarritoProducto } from '../../../../../services/carrito/interfaces/carrito.interface';
 
 @Component({
   selector: 'app-carrito-item',
@@ -13,7 +14,7 @@ import {CarritoService, ItemCarrito} from '../../../../../services/carrito/carri
   standalone: true,
 })
 export class CarritoItemComponent {
-  @Input() item!: ItemCarrito;
+  @Input() item!: CarritoProducto;
   @Input() usuarioId!: number;
   private readonly carritoService = inject(CarritoService);
 
