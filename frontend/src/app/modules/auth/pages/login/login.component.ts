@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,12 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { Router, RouterLink } from '@angular/router';
-import { PasswordModule } from 'primeng/password';
+import {CardModule} from 'primeng/card';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import {MessageModule} from 'primeng/message';
+import {Router, RouterLink} from '@angular/router';
+import {PasswordModule} from 'primeng/password';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
 import UsuarioMapper from '../../../../services/usuario/mapping/usuario.mapper';
 
@@ -31,7 +31,7 @@ import UsuarioMapper from '../../../../services/usuario/mapping/usuario.mapper';
   standalone: true,
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private servicioUsuario: UsuarioService = inject(UsuarioService);
   private router: Router = inject(Router);
   private fb: FormBuilder = inject(FormBuilder);
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       if (!resultado) return;
 
       this.enviando = false;
-      this.exito =  resultado.exito ?? false
+      this.exito = resultado.exito ?? false
       if (resultado.exito) {
         setTimeout(() => {
           this.router.navigate(['/']);
@@ -66,11 +66,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      email: [
-        'gonzaloalexramos@gmail.com',
-        [Validators.required, Validators.email],
-      ],
-      password: ['gonzalo', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
@@ -91,5 +88,9 @@ export class LoginComponent implements OnInit {
     const usuarioRest = UsuarioMapper.mapLoginToLoginRest(usuario);
 
     this.servicioUsuario.iniciarSesion(usuarioRest);
+  }
+
+  ngOnDestroy(): void {
+    this.servicioUsuario.limpiarRespuesta()
   }
 }

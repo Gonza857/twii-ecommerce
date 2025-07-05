@@ -9,7 +9,14 @@
     <form [formGroup]="form" class="col-12 d-flex flex-column gap-3 p-0">
       <div class="form-group">
         <label for="email" class="form-label">Correo</label>
-        <input type="text" pInputText id="email" formControlName="email" class="form-control"/>
+        <input
+          type="text"
+          pInputText
+          id="email"
+          formControlName="email"
+          class="form-control"
+          placeholder="johndoe@mail.com"
+        />
         @if (form.get("email")?.hasError("required") && form.get("email")?.touched) {
           <p class="text-danger mt-1">Este campo es requerido</p>
         }
@@ -25,6 +32,7 @@
           formControlName="password"
           [feedback]="false"
           [toggleMask]="true"
+          placeholder="Contraseña"
           fluid
         ></p-password>
         @if (form.get("password")?.hasError("required") && form.get("password")?.touched) {

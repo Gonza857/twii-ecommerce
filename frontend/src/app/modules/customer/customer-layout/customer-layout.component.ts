@@ -35,6 +35,7 @@ export class CustomerLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("Layout montado")
     this.usuarioService.obtenerUsuarioActual().subscribe()
   }
 
