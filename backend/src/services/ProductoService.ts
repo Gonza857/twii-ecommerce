@@ -1,4 +1,5 @@
 import {
+    Clasificacion,
     Producto,
     ProductoCrearDTO,
     ProductoDTO,
@@ -6,9 +7,9 @@ import {
 } from "../models/entities/producto";
 import {IProductoService} from "../models/interfaces/services/producto.service.interface";
 import {IProductoRepository} from "../models/interfaces/repositories/producto.repository.interface";
-import {Decimal} from "@prisma/client/runtime/library";
 import {IImagenService} from "../models/interfaces/services/imagen.service.interface";
 import {ArchivoDTO} from "../models/DTO/archivo.dto";
+import {Decimal} from "@prisma/client/runtime/library";
 import {EstadisticasProductoDTO} from "../models/DTO/estadisticas.producto.dto";
 
 class ProductoService implements IProductoService {
@@ -26,12 +27,16 @@ class ProductoService implements IProductoService {
     }
 
     public async obtenerProductosFiltrados(filtros: {
-        clasificacion?: string;
+        clasificacion?: number;
         precioMin?: number;
         precioMax?: number;
         nombre?: string;
     }): Promise<Producto[]> {
         return await this.productoRepository.obtenerProductosFiltrados(filtros);
+    }
+
+    public async obtenerClasificaciones(): Promise<Clasificacion[]> {
+        return await this.productoRepository.obtenerClasificaciones();
     }
 
     public async obtenerPorId(id: number): Promise<Producto | null> {
@@ -45,7 +50,7 @@ class ProductoService implements IProductoService {
     async crearProducto(data: ProductoCrearDTO, imagen: ArchivoDTO): Promise<void> {
         const productoNuevo: ProductoDTO = {
             imagen: null,
-            clasificacion: data.clasificacion,
+            idclasificacion: data.clasificacion,
             precio: new Decimal(data.precio.toString()),
             nombre: data.nombre,
             descripcion: data.descripcion,
@@ -88,7 +93,7 @@ class ProductoService implements IProductoService {
     public async actualizarProducto(
         id: number, data: ProductoEditarDTO,
         archivo: ArchivoDTO | null = null
-    ): Promise<Producto> {
+    ): Promise<void> {
         const productoDB = await this.productoRepository.obtenerPorId(id)
         if (!productoDB) throw new Error("Producto inexistente")
 
@@ -100,12 +105,13 @@ class ProductoService implements IProductoService {
 
         const productoActualizado: ProductoDTO = {
             imagen: data.imagen,
-            clasificacion: data.clasificacion,
+            idclasificacion: data.clasificacion,
             precio: new Decimal(data.precio.toString()),
             nombre: data.nombre,
             descripcion: data.descripcion,
         }
-        return this.productoRepository.update(id, productoActualizado);
+
+        await this.productoRepository.update(id, productoActualizado);
     }
 
     eliminarProducto(id: number): Promise<void> {
@@ -116,8 +122,14 @@ class ProductoService implements IProductoService {
         const producto: Producto | null = await this.productoRepository.obtenerPorId(idProducto);
         if (!producto) return;
         producto.imagen = url;
-        const {id, ...dataSinId} = producto;
-        await this.productoRepository.update2(idProducto, dataSinId);
+        const productoDTO: ProductoDTO = {
+            imagen: producto.imagen,
+            idclasificacion: producto.idclasificacion,
+            descripcion: producto.descripcion,
+            nombre: producto.nombre,
+            precio: producto.precio
+        }
+        await this.productoRepository.update(idProducto, productoDTO);
     }
 
     public async saberSiProductoTieneImagen(id: number): Promise<boolean> {

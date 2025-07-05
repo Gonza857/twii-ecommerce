@@ -2,26 +2,10 @@ import {Injectable, inject, signal, WritableSignal} from "@angular/core"
 import {HttpClient} from "@angular/common/http"
 import {MessageService} from "primeng/api"
 import {PedidoService} from '../pedido/pedido.service';
-
-interface CarritoResponse {
-  productos: ItemCarrito[]
-  total: number
-}
-
-export interface ItemCarrito {
-  id: number
-  cantidad: number
-  carritoid: number
-  productoid: number
-  producto: {
-    id: number
-    nombre: string
-    descripcion: string
-    clasificacion: string
-    precio: number | string
-    imagen: string | null
-  }
-}
+import { CarritoProducto } from "./interfaces/carrito.interface";
+import { CarritoRest } from "./interfaces/carrito.interface.rest";
+import CarritoMapper from "./mapping/carrito.mapper";
+import { map } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -32,7 +16,7 @@ export class CarritoService {
   private readonly pedidoService = inject(PedidoService)
   private apiUrl = "http://localhost:3000/api/carrito"
 
-  private carritoSignal = signal<ItemCarrito[]>([])
+  private carritoSignal = signal<CarritoProducto[]>([])
   public readonly carrito = this.carritoSignal.asReadonly()
 
   private totalSignal = signal<number>(0)
@@ -49,7 +33,10 @@ export class CarritoService {
   }
 
   obtenerCarrito(usuarioId: number): void {
-    this.http.get<CarritoResponse>(`${this.apiUrl}/${usuarioId}`).subscribe({
+    this.http.get<CarritoRest>(`${this.apiUrl}/${usuarioId}`)
+      .pipe(
+        map((res: CarritoRest) => CarritoMapper.mapToCarrito(res))
+      ).subscribe({
       next: (data) => {
         this.carritoSignal.set(data.productos)
         this.totalSignal.set(data.total)
@@ -124,7 +111,7 @@ export class CarritoService {
 
     this.pedidoService.crearPedido(usuarioId, this.carrito()).subscribe({
       next: () => {
-        this.toast.add({severity: "success", summary: "Éxito", detail: "Compra finalizada. Tiene un nuevo pedido."})
+        this.toast.add({severity: "success", summary: "Éxito", detail: "Compra finalizada. Tiene un nuevo pedido en proceso."})
         this.vaciar(usuarioId)
         this.cerrarDrawer()
       },

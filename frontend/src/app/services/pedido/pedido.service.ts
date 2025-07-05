@@ -1,10 +1,10 @@
 import {Injectable, inject, signal} from "@angular/core"
 import {HttpClient} from "@angular/common/http"
 import {map, Observable} from "rxjs"
-import {ItemCarrito} from '../carrito/carrito.service';
 import {PedidoRest} from './interfaces/pedido.interface.rest';
 import {Pedido} from './interfaces/pedido.interface';
 import PedidoMapper from './mapping/pedido.mapper';
+import { CarritoProducto } from "../carrito/interfaces/carrito.interface";
 
 type RespuestaServer = {
   isLoading: boolean;
@@ -27,7 +27,7 @@ export class PedidoService {
   constructor() {
   }
 
-  crearPedido(usuarioId: number, items: ItemCarrito[]): Observable<any> {
+  crearPedido(usuarioId: number, items: CarritoProducto[]): Observable<any> {
     return this.http.post(`${this.apiUrl}/`, {usuarioId, items})
   }
 

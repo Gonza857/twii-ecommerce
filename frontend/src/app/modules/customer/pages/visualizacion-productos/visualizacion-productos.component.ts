@@ -1,3 +1,4 @@
+import { Clasificacion } from './../../../../services/producto/producto.service';
 import { Component, OnInit, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,25 +11,27 @@ import { RouterLink } from "@angular/router";
 import { UsuarioService } from '../../../../services/usuario/usuario.service';
 import { SelectModule } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
-import {CarritoService, ItemCarrito} from '../../../../services/carrito/carrito.service';
+import {CarritoService} from '../../../../services/carrito/carrito.service';
+import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule, PrimeTemplate, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective],
+  imports: [CommonModule, FormsModule, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })
 export class ListaProductosComponent implements OnInit {
   productos: Producto[] = [];
-  clasificacionSeleccionada: string = '';
+  clasificacionSeleccionada: number | null = null;
+  clasificaciones : Clasificacion [] = [];
   precioMin: number | null = null;
   precioMax: number | null = null;
   busquedaNombre: string = '';
   errorPrecio: string = '';
   usuarioId?: number;
   usuarioLogueado: boolean = false;
-  carrito!: Signal<ItemCarrito[]>;
+  carrito!: Signal<CarritoProducto[]>;
   opcionesCantidad = Array.from({ length: 10 }, (_, i) => ({
     label: `${i + 1}`,
     value: i + 1
@@ -39,16 +42,21 @@ export class ListaProductosComponent implements OnInit {
     private usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual();
-    this.usuarioLogueado = this.usuarioService.usuario() != null
-    this.usuarioId = this.usuarioService.usuario()?.id
+    this.usuarioService.obtenerUsuarioActual().subscribe(() => {
+      this.usuarioLogueado = this.usuarioService.usuario() != null;
+      this.usuarioId = this.usuarioService.usuario()?.id;
+    });
+
+    this.productoService.obtenerClasificaciones().subscribe((data) => {
+      this.clasificaciones = data;
+    });
 
     const filtrosGuardados = localStorage.getItem('filtrosProductos');
 
     if (filtrosGuardados) {
       const filtros = JSON.parse(filtrosGuardados);
 
-      this.clasificacionSeleccionada = filtros.clasificacion || '';
+      this.clasificacionSeleccionada = filtros.clasificacion || null;
       this.precioMin = filtros.precioMin ?? null;
       this.precioMax = filtros.precioMax ?? null;
       this.busquedaNombre = filtros.nombre ?? '';
@@ -73,8 +81,8 @@ export class ListaProductosComponent implements OnInit {
     this.actualizarProductos();
   }
 
-  filtrarPorClasificacion(clasificacion: string): void {
-    this.clasificacionSeleccionada = clasificacion;
+  filtrarPorClasificacion(idClasificacion: number | null): void {
+    this.clasificacionSeleccionada = idClasificacion;
     this.actualizarProductos();
   }
 
@@ -108,7 +116,7 @@ export class ListaProductosComponent implements OnInit {
   actualizarProductos(): void {
     const filtros: any = {};
 
-    if (this.clasificacionSeleccionada) {
+    if (this.clasificacionSeleccionada !== null && this.clasificacionSeleccionada !== undefined) {
       filtros.clasificacion = this.clasificacionSeleccionada;
     }
 
@@ -125,13 +133,13 @@ export class ListaProductosComponent implements OnInit {
     }
 
     localStorage.setItem('filtrosProductos', JSON.stringify(filtros));
-    this.productoService.obtenerFiltrados(filtros).subscribe((data: any) => {
+    this.productoService.obtenerFiltrados(filtros).subscribe((data: Producto[]) => {
       this.productos = data;
     });
   }
 
   limpiarFiltro(): void {
-    this.clasificacionSeleccionada = '';
+    this.clasificacionSeleccionada = null;
     this.precioMin = null;
     this.precioMax = null;
     this.busquedaNombre = '';
@@ -148,15 +156,15 @@ export class ListaProductosComponent implements OnInit {
     this.carritoService.abrirDrawer();
   }
 
-  getItemCarrito(productoId: number): ItemCarrito | undefined {
+  getItemCarrito(productoId: number): CarritoProducto | undefined {
     return this.carrito().find(item => item.productoid === productoId);
   }
 
-  cambiarCantidad(item: ItemCarrito) {
+  cambiarCantidad(item: CarritoProducto) {
     this.carritoService.cambiarCantidad(this.usuarioId!, item.productoid, item.cantidad);
   }
 
-  eliminarProducto(item: ItemCarrito): void {
+  eliminarProducto(item: CarritoProducto): void {
     if (!this.usuarioId) return;
     this.carritoService.quitarProducto(this.usuarioId, item.productoid);
   }

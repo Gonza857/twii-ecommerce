@@ -37,4 +37,8 @@ export class CustomerLayoutComponent implements OnInit {
   ngOnInit(): void {
     this.usuarioService.obtenerUsuarioActual().subscribe()
   }
+
+  get esAdmin(): boolean {
+    return this.usuarioActual?.rol?.id === 1;
+  }
 }

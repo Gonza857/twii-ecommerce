@@ -13,15 +13,11 @@
       <h3>Filtrar por clasificación</h3>
 
       <div class="filtros-botones">
-        <button (click)="filtrarPorClasificacion('')" [class.activo]="!clasificacionSeleccionada">Todos</button>
-        <button (click)="filtrarPorClasificacion('bebidas')"
-          [class.activo]="clasificacionSeleccionada === 'bebidas'">Bebidas
-        </button>
-        <button (click)="filtrarPorClasificacion('limpieza')"
-          [class.activo]="clasificacionSeleccionada === 'limpieza'">Limpieza
-        </button>
-        <button (click)="filtrarPorClasificacion('almacén')"
-          [class.activo]="clasificacionSeleccionada === 'almacén'">Almacén
+        <button (click)="filtrarPorClasificacion(null)" [class.activo]="!clasificacionSeleccionada">Todos</button>
+
+        <button *ngFor="let c of clasificaciones" (click)="filtrarPorClasificacion(c.id)"
+          [class.activo]="clasificacionSeleccionada === c.id">
+          {{ c.nombre }}
         </button>
       </div>
     </section>
@@ -65,7 +61,7 @@
 
               <div>
                 <h5 class="card-title text-white">{{ producto.nombre }}</h5>
-                <span class="badge bg-secundario mb-3">{{ producto.clasificacion }}</span>
+                <span class="badge bg-secundario mb-3">{{ producto.clasificacion.nombre }}</span>
               </div>
 
               <p class="h5 text-success mt-auto text-secundario">
@@ -75,7 +71,7 @@
           </a>
           <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">
             <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">
-              <p-select class="flex-grow-1" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
+              <p-select class="flex-grow-1" appendTo="body" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
                 (onChange)="cambiarCantidad(item)" optionValue="value" optionLabel="label"
                 [style]="{ height: '100%' }"></p-select>
 

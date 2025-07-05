@@ -25,17 +25,18 @@ export class CarritoDrawerComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      this.usuarioLogueado = this.usuarioService.usuario() != null
+    const usuario = this.usuarioService.usuario();
+    this.usuarioLogueado = usuario != null;
 
-      if (this.usuarioLogueado) {
-        this.usuarioId = this.usuarioService.usuario()?.id
-        this.carritoService.obtenerCarrito(this.usuarioId ?? 0)
+      if (usuario?.id) {
+        this.usuarioId = usuario.id;
+        this.carritoService.obtenerCarrito(usuario.id);
       }
     })
   }
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioActual()
+    this.usuarioService.obtenerUsuarioActual().subscribe()
   }
 
   vaciarCarrito(): void {

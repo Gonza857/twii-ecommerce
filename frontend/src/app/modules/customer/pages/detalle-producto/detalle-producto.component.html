@@ -30,7 +30,7 @@
           <div class="col-md-7">
             <h2 class="mb-3">{{ producto()!.nombre }}</h2>
             <hr class="separator"/>
-            <span class="badge bg-primario mb-2">{{ producto()!.clasificacion }}</span>
+            <span class="badge bg-primario mb-2">{{ producto()?.clasificacion?.nombre }}</span>
             <h4 class="text-success fw-bold mb-3 text-secundario">
               {{ producto()!.precio.toString() | currency:'ARS':'symbol':'1.2-2' }}
             </h4>

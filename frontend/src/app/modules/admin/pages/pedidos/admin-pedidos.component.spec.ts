@@ -1,9 +1,9 @@
 import { type ComponentFixture, TestBed } from "@angular/core/testing"
 import { AdminPedidosComponent } from "./admin-pedidos.component"
-import { PedidoService } from "../../../../services/pedido.service"
 import { MessageService } from "primeng/api"
 import { of, throwError } from "rxjs"
 import { NO_ERRORS_SCHEMA } from "@angular/core"
+import { PedidoService } from "../../../../services/pedido/pedido.service"
 
 
 describe("AdminPedidosComponent", () => {
@@ -22,7 +22,7 @@ describe("AdminPedidosComponent", () => {
     }
 
     await TestBed.configureTestingModule({
-      declarations: [AdminPedidosComponent], 
+      declarations: [AdminPedidosComponent],
       providers: [
         { provide: PedidoService, useValue: mockPedidoService },
         { provide: MessageService, useValue: mockMessageService },
@@ -62,7 +62,7 @@ describe("AdminPedidosComponent", () => {
   })
 
   it("should update order status and show success toast", () => {
-    spyOn(window, "confirm").and.returnValue(true) 
+    spyOn(window, "confirm").and.returnValue(true)
     const testPedido = { id: 1, estado: "pendiente" } as any
     component.onEstadoChange(testPedido, "completado")
 
@@ -72,7 +72,7 @@ describe("AdminPedidosComponent", () => {
       summary: "Éxito",
       detail: 'Estado del pedido #1 actualizado a "completado"',
     })
-    expect(mockPedidoService.obtenerTodosLosPedidos).toHaveBeenCalledTimes(2) 
+    expect(mockPedidoService.obtenerTodosLosPedidos).toHaveBeenCalledTimes(2)
   })
 
   it("should not update order status if confirm is false", () => {
@@ -95,6 +95,6 @@ describe("AdminPedidosComponent", () => {
       summary: "Error",
       detail: "No se pudo actualizar el estado del pedido.",
     })
-    expect(mockPedidoService.obtenerTodosLosPedidos).toHaveBeenCalledTimes(2) 
+    expect(mockPedidoService.obtenerTodosLosPedidos).toHaveBeenCalledTimes(2)
   })
 })
