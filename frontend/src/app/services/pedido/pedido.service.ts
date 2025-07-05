@@ -60,8 +60,8 @@ export class PedidoService {
       })
   }
 
-  obtenerTodosLosPedidos(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${this.apiUrl}/admin`)
+  obtenerTodosLosPedidos(): Observable<PedidoRest[]> {
+    return this.http.get<PedidoRest[]>(`${this.apiUrl}/admin`)
   }
 
   actualizarEstadoPedido(pedidoId: number, estado: string): Observable<any> {

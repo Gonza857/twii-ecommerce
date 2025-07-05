@@ -50,45 +50,11 @@
       @defer (when productos.length > 0) {
       @for (producto of productos; track producto.id) {
       <div class="col">
-        <p-card class="h-100 shadow border-0 text-white d-flex flex-column overflow-hidden position-relative">
-
-          <a [routerLink]="['/producto', producto.id]" class="text-decoration-none text-white">
-            <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
-              <div class="mb-3 d-flex align-items-center justify-content-center">
-                <img [src]="producto.imagen" [alt]="producto.nombre" height="200" class="rounded"
-                  style="object-fit: cover;" />
-              </div>
-
-              <div>
-                <h5 class="card-title text-white">{{ producto.nombre }}</h5>
-                <span class="badge bg-secundario mb-3">{{ producto.clasificacion.nombre }}</span>
-              </div>
-
-              <p class="h5 text-success mt-auto text-secundario">
-                {{ producto.precio.toString() | currency: 'ARS' }}
-              </p>
-            </div>
-          </a>
-          <ng-container *ngIf="getItemCarrito(producto.id) as item; else agregar">
-            <div class="d-flex gap-2 mt-2 align-items-stretch" style="height: 40px;">
-              <p-select class="flex-grow-1" appendTo="body" [options]="opcionesCantidad" [(ngModel)]="item.cantidad"
-                (onChange)="cambiarCantidad(item)" optionValue="value" optionLabel="label"
-                [style]="{ height: '100%' }"></p-select>
-
-              <button pButton icon="pi pi-trash" (click)="eliminarProducto(item)" title="Quitar del carrito"
-                [style]="{ height: '100%' }"></button>
-            </div>
-          </ng-container>
-
-          <ng-template #agregar>
-            <div class="d-flex mt-2 align-items-stretch" style="height: 40px;">
-              <button class="btn-primario col-12" (click)="agregarAlCarrito(producto)" [disabled]="!usuarioLogueado"
-                [style]="{ height: '100%' }">
-                Agregar al carrito
-              </button>
-            </div>
-          </ng-template>
-        </p-card>
+        <app-producto
+          [usuarioLogueado]="this.usuarioLogueado!"
+          [usuarioId]="this.usuarioId!"
+          [producto]="producto"
+        />
       </div>
       }
 

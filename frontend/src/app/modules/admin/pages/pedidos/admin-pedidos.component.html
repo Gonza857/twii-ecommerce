@@ -61,10 +61,10 @@
                     <span class="product-name text-secundario">{{ item.producto?.nombre }}</span>
                     <span class="product-details text-secundario">{{ item.cantidad }}
                       x ${{ item.precioUnitario }}</span>
-<!--                    <span-->
-<!--                      class="product-subtotal">-->
-<!--                      {{ (item.cantidad * item.precioUnitario) | currency:'ARS' }}-->
-<!--                    </span>-->
+                    <span
+                      class="product-subtotal text-claro">
+                      ${{ this.calcularTotal(item.cantidad, item.precioUnitario.toString()) }}
+                    </span>
                   </div>
                 }
               </div>

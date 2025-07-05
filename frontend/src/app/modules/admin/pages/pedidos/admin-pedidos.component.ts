@@ -1,15 +1,19 @@
-import { Component, inject, type OnInit, signal } from "@angular/core"
-import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common"
-import { TableModule } from "primeng/table"
-import { TagModule } from "primeng/tag"
-import { PanelModule } from "primeng/panel"
-import { ButtonModule } from "primeng/button"
-import { DropdownModule } from "primeng/dropdown"
-import { FormsModule } from "@angular/forms"
-import { MessageService } from "primeng/api"
-import { ProgressSpinnerModule } from "primeng/progressspinner"
+import {Component, inject, type OnInit, signal} from "@angular/core"
+import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common"
+import {TableModule} from "primeng/table"
+import {TagModule} from "primeng/tag"
+import {PanelModule} from "primeng/panel"
+import {ButtonModule} from "primeng/button"
+import {DropdownModule} from "primeng/dropdown"
+import {FormsModule} from "@angular/forms"
+import {MessageService} from "primeng/api"
+import {ProgressSpinnerModule} from "primeng/progressspinner"
 import {PedidoService} from '../../../../services/pedido/pedido.service';
 import {Pedido} from '../../../../services/pedido/interfaces/pedido.interface';
+import Decimal from 'decimal.js';
+import {map} from 'rxjs';
+import {PedidoRest} from '../../../../services/pedido/interfaces/pedido.interface.rest';
+import PedidoMapper from '../../../../services/pedido/mapping/pedido.mapper';
 
 @Component({
   selector: "app-admin-pedidos",
@@ -38,20 +42,29 @@ export class AdminPedidosComponent implements OnInit {
   error = signal<string | null>(null)
 
   estadosDisponibles = [
-    { label: "Pendiente", value: "pendiente" },
-    { label: "Completado", value: "completado" },
-    { label: "Cancelado", value: "cancelado" },
+    {label: "Pendiente", value: "pendiente"},
+    {label: "Completado", value: "completado"},
+    {label: "Cancelado", value: "cancelado"},
   ]
 
   ngOnInit(): void {
     this.cargarPedidos()
   }
 
+  protected calcularTotal(cantidad: number, precio: string) {
+    return cantidad * parseFloat(precio)
+  }
+
   cargarPedidos(): void {
     this.isLoading.set(true)
     this.error.set(null)
-    this.pedidoService.obtenerTodosLosPedidos().subscribe({
+    this.pedidoService.obtenerTodosLosPedidos()
+      .pipe(
+        map((pedidosRest: PedidoRest[]) => PedidoMapper.mapToPedidosArray(pedidosRest))
+      )
+      .subscribe({
       next: (data) => {
+        console.log("pedidos", data);
         this.pedidos.set(data)
         this.isLoading.set(false)
       },
@@ -89,7 +102,7 @@ export class AdminPedidosComponent implements OnInit {
         },
         error: (err) => {
           console.error("Error al actualizar estado:", err)
-          this.toast.add({ severity: "error", summary: "Error", detail: "No se pudo actualizar el estado del pedido." })
+          this.toast.add({severity: "error", summary: "Error", detail: "No se pudo actualizar el estado del pedido."})
         },
       })
     }

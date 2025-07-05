@@ -1,0 +1,48 @@
+<article class="col-12 d-flex flex-column">
+  <div class="d-flex flex-column col-7 mx-auto">
+
+    <div class="mx-auto">
+      <img
+        alt="Imagen Home"
+        class="col-12"
+        src="https://static.vecteezy.com/system/resources/previews/003/692/287/non_2x/big-sale-discount-promotion-banner-template-with-blank-product-podium-scene-graphic-free-vector.jpg"
+      />
+    </div>
+
+    <!--    <h3 class="text-secundario py-2 mt-4">Categorias</h3>-->
+
+    <!--    <div class="wrapper-clasificaciones m-0 row mx-auto">-->
+    <!--      @for (clasificacion of this.clasificaciones; track clasificacion?.id) {-->
+    <!--        <div class="col p-2 px-3 bg-secundario rounded-2 border-suave text-claro d-flex justify-content-center align-items-center">-->
+    <!--          <p class="m-0 p-0">{{ clasificacion.nombre }}</p>-->
+    <!--        </div>-->
+    <!--      }-->
+    <!--    </div>-->
+
+    <div class="d-flex justify-content-between align-items-center my-4 pb-2">
+      <h3 class="text-secundario">Productos</h3>
+
+      <button class="btn-primario" routerLink="/productos">
+        Ver todos
+      </button>
+    </div>
+
+    <div class="col-12 mx-auto overflow-hidden">
+      <p-carousel
+        [value]="this.servicioProducto.signalProductos()"
+        [numVisible]="4"
+        [numScroll]="4"
+      >
+        <ng-template let-product #item>
+          <app-producto
+            [producto]="product"
+            [usuarioId]="this.usuarioId!"
+            [usuarioLogueado]="this.usuarioLogueado!"
+          />
+        </ng-template>
+      </p-carousel>
+    </div>
+
+  </div>
+</article>
+
