@@ -30,7 +30,7 @@
           <div class="order-body">
             <p class="products-heading text-claro">Productos:</p>
             <div class="product-list">
-              @for (item of pedido.pedido_productos ?? []; track item.id) {
+              @for (item of pedido.pedido_productos; track item.id) {
                 <div class="product-item">
                   <span class="product-name text-secundario">
                     {{ item.producto?.nombre }}
@@ -49,10 +49,15 @@
               <span class="text-claro">{{ pedido.total | currency:'ARS' }}</span>
             </div>
           </div>
+          <div class="order-actions mt-3 d-flex justify-content-end gap-2">
+            @if (pedido.estado === 'pendiente') {
+              <button pButton type="button" label="Cancelar Pedido" icon="pi pi-times" class="p-button-danger p-button-sm" (click)="cancelarPedido(pedido)"></button>
+            }
+            <button pButton type="button" label="Repetir Pedido" icon="pi pi-refresh" class="p-button-info p-button-sm" (click)="repetirPedido(pedido)"></button>
+          </div>
         </div>
       }
     </div>
   }
 </div>
 </main>
-

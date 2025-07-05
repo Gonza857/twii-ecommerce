@@ -26,7 +26,6 @@ import PedidoController from "../controllers/PedidoController"
 import type { IPedidoRepository } from "../models/interfaces/repositories/pedido.repository.interface"
 import type { IPedidoService } from "../models/interfaces/services/pedido.service.interface"
 
-
 const mailerService: IMailerService = new MailerService()
 
 // Repositorios -> acceso a datos
@@ -39,23 +38,24 @@ const pedidoRepository: IPedidoRepository = new PedidoRepository(prisma)
 const productoImagenService: IImagenService = new ProductoImageService("http://localhost:3000")
 const carritoService: ICarritoService = new CarritoService(carritoRepository)
 const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository)
-const productoService: IProductoService = new ProductoService(productoRepository, productoImagenService) 
+const productoService: IProductoService = new ProductoService(productoRepository, productoImagenService)
 const authService: IAuthService = new AuthService(mailerService)
-const pedidoService: IPedidoService = new PedidoService(pedidoRepository, carritoRepository)
+// Inject productoRepository into PedidoService for repeating orders
+const pedidoService: IPedidoService = new PedidoService(pedidoRepository, carritoRepository, productoRepository)
 
 // Controladores -> Recbien petición y la pasan al servicio
 const carritoController: CarritoController = new CarritoController(carritoService)
 const productoController: ProductoController = new ProductoController(productoService)
 const usuarioController: UsuarioController = new UsuarioController(usuarioService)
 const authController: AuthController = new AuthController(usuarioService, authService)
-const pedidoController: PedidoController = new PedidoController(pedidoService) 
+const pedidoController: PedidoController = new PedidoController(pedidoService)
 
 const container = {
   carritoController,
   productoController,
   usuarioController,
   authController,
-  pedidoController, 
+  pedidoController,
 }
 
 export const serviceContainer = {

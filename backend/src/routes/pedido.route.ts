@@ -138,3 +138,59 @@ pedidoRouter.put(
   roleMiddleware,
   pedidoController.actualizarEstadoPedido as RequestHandler,
 )
+
+/**
+ * @openapi
+ * /api/pedidos/{id}/cancelar:
+ *   put:
+ *     summary: Cancela un pedido si está en estado "pendiente"
+ *     tags:
+ *       - Pedidos
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del pedido a cancelar.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pedido cancelado exitosamente.
+ *       400:
+ *         description: ID de pedido inválido.
+ *       401:
+ *         description: No autenticado.
+ *       500:
+ *         description: Error al cancelar el pedido (ej. no está pendiente).
+ */
+pedidoRouter.put("/:id/cancelar", authMiddleware, pedidoController.cancelarPedido as RequestHandler)
+
+/**
+ * @openapi
+ * /api/pedidos/{id}/repetir:
+ *   post:
+ *     summary: Crea un nuevo pedido repitiendo uno existente
+ *     tags:
+ *       - Pedidos
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del pedido original a repetir.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       201:
+ *         description: Pedido repetido exitosamente.
+ *       400:
+ *         description: ID de pedido inválido.
+ *       401:
+ *         description: No autenticado.
+ *       500:
+ *         description: Error al repetir el pedido.
+ */
+pedidoRouter.post("/:id/repetir", authMiddleware, pedidoController.repetirPedido as RequestHandler)

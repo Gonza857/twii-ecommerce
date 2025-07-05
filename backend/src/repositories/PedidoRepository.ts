@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client"
 import type { IPedidoRepository } from "../models/interfaces/repositories/pedido.repository.interface"
 import type { Pedido } from "../models/entities/pedido"
-import type { CarritoItemDTO } from "../models/DTO/carrito-item.dto" 
+import type { CarritoItemDTO } from "../models/DTO/carrito-item.dto"
 import { Decimal } from "@prisma/client/runtime/library"
 
 class PedidoRepository implements IPedidoRepository {
@@ -16,7 +16,7 @@ class PedidoRepository implements IPedidoRepository {
       data: {
         usuarioid: usuarioId,
         total: total,
-        estado: "pendiente", 
+        estado: "pendiente",
         pedido_productos: {
           create: items.map((item) => ({
             productoid: item.productoid,
@@ -80,7 +80,20 @@ class PedidoRepository implements IPedidoRepository {
       data: { estado: status },
     })
   }
+
+  // New method to find a single order by ID
+  async findById(orderId: number): Promise<Pedido | null> {
+    return this.prisma.pedido.findUnique({
+      where: { id: orderId },
+      include: {
+        pedido_productos: {
+          include: {
+            producto: true,
+          },
+        },
+      },
+    })
+  }
 }
 
 export default PedidoRepository
-

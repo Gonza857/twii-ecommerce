@@ -17,7 +17,7 @@ class ProductoController {
         this.getProductos = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const filtros = {
-                    clasificacion: req.query.clasificacion,
+                    clasificacion: req.query.clasificacion ? parseInt(req.query.clasificacion, 10) : undefined,
                     precioMin: req.query.precioMin ? parseFloat(req.query.precioMin) : undefined,
                     precioMax: req.query.precioMax ? parseFloat(req.query.precioMax) : undefined,
                     nombre: req.query.nombre
@@ -54,6 +54,10 @@ class ProductoController {
                 if (errorImagenProductoDTO)
                     return res.status(400).send();
             }
+            // Antes de validar:
+            if (_req.body.clasificacion && typeof _req.body.clasificacion === 'string') {
+                _req.body.clasificacion = parseInt(_req.body.clasificacion, 10);
+            }
             // Validar cuerpo de petición
             const [productoCrearDTO, errorProductoCrearDTO] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.productoSchema, _req.body));
             if (errorProductoCrearDTO)
@@ -65,6 +69,10 @@ class ProductoController {
             res.status(201).send();
         });
         this.modificarProducto = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            // Antes de validar:
+            if (_req.body.clasificacion && typeof _req.body.clasificacion === 'string') {
+                _req.body.clasificacion = parseInt(_req.body.clasificacion, 10);
+            }
             // Validar cuerpo de petición
             const [productoValidado, errorValidacionProducto] = (0, safe_1.safeSync)(() => (0, zod_validator_1.validate)(producto_schema_1.productoEditarSchema, _req.body));
             if (errorValidacionProducto)
@@ -85,7 +93,21 @@ class ProductoController {
                 return res.status(500).json({ mensaje: "error al guardar producto" });
             res.status(200).send();
         });
+        this.obtenerEstadisticas = (_req, res) => __awaiter(this, void 0, void 0, function* () {
+            const [estadisticas, errorEstadisticas] = yield (0, safe_1.safe)(this.productoService.obtenerEstadisticas());
+            console.log("ErrorEstadisticas producto", errorEstadisticas);
+            if (errorEstadisticas)
+                return res.status(500).send();
+            console.log("Estadisticas obtenidas", estadisticas);
+            res.status(200).json(estadisticas);
+        });
         this.productoService = productoService;
+    }
+    getClasificaciones(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const clasificaciones = yield this.productoService.obtenerClasificaciones();
+            res.json(clasificaciones);
+        });
     }
     eliminarProducto(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
