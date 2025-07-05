@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import {ButtonModule} from 'primeng/button';
 import {
   FormBuilder,
@@ -35,7 +35,7 @@ import {StyleClass} from 'primeng/styleclass';
   standalone: true,
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   private servicioUsuario: UsuarioService = inject(UsuarioService);
   private router: Router = inject(Router);
   private fb: FormBuilder = inject(FormBuilder);
@@ -110,6 +110,10 @@ export class RegisterComponent implements OnInit {
     }
 
     this.servicioUsuario.registrarse(usuarioRegister)
+  }
+
+  ngOnDestroy(): void {
+    this.servicioUsuario.limpiarRespuesta()
   }
 
 
