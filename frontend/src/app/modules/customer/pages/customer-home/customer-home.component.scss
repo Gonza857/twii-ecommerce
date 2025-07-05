@@ -1,0 +1,6 @@
+.wrapper-clasificaciones {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 0.5rem;
+}

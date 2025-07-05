@@ -8,6 +8,7 @@ import {ProductoService} from '../../../../services/producto/producto.service';
 import {Card, CardModule} from 'primeng/card';
 import {EstadisticaComponent} from './components/estadistica/estadistica.component';
 import {NgClass} from '@angular/common';
+import Decimal from "decimal.js"
 
 @Component({
   selector: 'app-admin-home',
@@ -67,5 +68,6 @@ export class AdminHomeComponent implements OnInit {
     this.productoService.obtenerEstadisticas()
 
   }
+
 
 }
