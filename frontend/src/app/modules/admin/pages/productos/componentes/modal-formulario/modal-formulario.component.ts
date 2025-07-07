@@ -18,7 +18,7 @@ import { ClasificacionService } from '../../../../../../services/clasificacion/c
   standalone: true,
   styleUrl: './modal-formulario.component.scss'
 })
-export class ModalFormularioComponent {
+export class ModalFormularioComponent implements OnInit{
   @Input() esModoEdicion = signal(false)
   @Input() displayDialog = signal(false);
   @Input() productoActual = signal<Producto | null>(null);
@@ -41,12 +41,11 @@ export class ModalFormularioComponent {
     effect(() => {
       if (this.esModoEdicion() && this.productoActual()) {
         const producto = this.productoActual()!;
-
         this.form.patchValue({
           nombre: producto.nombre,
           descripcion: producto.descripcion,
           precio: producto.precio,
-          imagen: null,
+          imagen: producto.imagen,
           cambioImagen: false,
           clasificacion: producto.clasificacion.id
         });
@@ -70,6 +69,7 @@ export class ModalFormularioComponent {
 
   enviarProducto() {
     const producto: ProductoFormulario = ProductoMapper.mapProductoFormularioToRest(this.form)
+
     if (this.esModoEdicion()) {
       this.productoService.actualizarProducto(producto, this.productoActual()!.id).subscribe({
         next: (res: { mensaje: string }) => {

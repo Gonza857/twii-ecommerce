@@ -14,11 +14,12 @@ import { ButtonDirective } from 'primeng/button';
 import {CarritoService} from '../../../../services/carrito/carrito.service';
 import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
 import { FiltroService } from '../../../../services/producto/filtro.service';
+import {ProductoComponent} from './producto/producto.component';
 
 @Component({
   standalone: true,
   selector: 'app-lista-productos',
-  imports: [CommonModule, FormsModule, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective],
+  imports: [CommonModule, FormsModule, CardModule, SkeletonModule, RouterLink, SelectModule, ButtonDirective, ProductoComponent],
   templateUrl: './visualizacion-productos.component.html',
   styleUrls: ['./visualizacion-productos.component.scss'],
 })
