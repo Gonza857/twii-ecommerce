@@ -9,7 +9,7 @@ export interface IProductoRepository {
         precioMax?: number;
         nombre?: string;
     }): Promise<Producto[]>;
-    obtenerClasificaciones(): Promise<Clasificacion[]>;
+    //obtenerClasificaciones(): Promise<Clasificacion[]>;
     create(data: ProductoDTO): Promise<number>;
     update(id: number, data: ProductoDTO): Promise<void>;
     delete(id: number): Promise<void>;

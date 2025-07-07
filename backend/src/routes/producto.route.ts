@@ -11,7 +11,7 @@ const productoController: ProductoController = container.productoController;
 
 productosRouter.get('/', (req, res) => productoController.getProductos(req, res));
 
-productosRouter.get('/clasificaciones', (req, res) => productoController.getClasificaciones(req, res));
+//productosRouter.get('/clasificaciones', (req, res) => productoController.getClasificaciones(req, res));
 
 productosRouter.get(
     "/estadisticas",

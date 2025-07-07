@@ -67,11 +67,11 @@ export class ProductoRepository implements IProductoRepository {
         });
     }
 
-    public async obtenerClasificaciones(): Promise<Clasificacion[]> {
+    /*public async obtenerClasificaciones(): Promise<Clasificacion[]> {
         return this.prisma.clasificacion.findMany({
             orderBy: {nombre: 'asc'}
         });
-    }
+    }*/
 
     async create(data: ProductoDTO): Promise<number> {
         const productoCreado = await this.prisma.producto.create({
