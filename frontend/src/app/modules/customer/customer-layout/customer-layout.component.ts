@@ -1,3 +1,4 @@
+import { FiltroService } from './../../../services/producto/filtro.service';
 import { Component, effect, inject, type OnInit } from "@angular/core"
 import { RouterLink, RouterOutlet } from "@angular/router"
 import { DrawerModule } from "primeng/drawer"
@@ -5,6 +6,7 @@ import { CarritoDrawerComponent } from "../pages/visualizacion-carrito/carrito-d
 import { UsuarioService } from "../../../services/usuario/usuario.service"
 import type { Usuario } from "../../../services/usuario/interfaces/usuario.interface"
 import {CarritoService} from '../../../services/carrito/carrito.service';
+import { ProductoService } from "../../../services/producto/producto.service"
 
 @Component({
   selector: "app-home",
@@ -18,6 +20,8 @@ export class CustomerLayoutComponent implements OnInit {
   protected usuarioActual: Usuario | null = null
   carritoVisible: boolean = false
   public readonly carritoService = inject(CarritoService)
+  protected readonly productoService: ProductoService = inject(ProductoService)
+  protected readonly filtroService: FiltroService = inject(FiltroService)
 
   constructor() {
     effect(() => {
@@ -30,7 +34,11 @@ export class CustomerLayoutComponent implements OnInit {
     this.carritoService.drawerVisible.set(!this.carritoVisible)
   }
 
-  cerrarSesion() {
+  cerrarSesion() {                
+    localStorage.removeItem('filtrosProductos');
+
+    this.filtroService.filtrosRemovidos$.next();
+
     this.usuarioService.cerrarSesion()
   }
 

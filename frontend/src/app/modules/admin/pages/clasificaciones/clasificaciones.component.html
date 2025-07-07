@@ -1,0 +1,60 @@
+<main class="styledMain bg-principal">
+    <section class="col-xl-6 mx-auto py-2">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="text-white">Gestión de Clasificaciones</h2>
+
+            <button class="btn-primario d-flex justify-content-center align-items-center gap-2"
+                (click)="abrirAgregar()">
+                Agregar clasificación
+                <i class="pi pi-plus"></i>
+            </button>
+        </div>
+
+        <div class="col-12">
+            <p-table [value]="clasificaciones" size="small" stripedRows showGridlines responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-clasificacion>
+                    <tr>
+                        <td>{{ clasificacion.nombre }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-warning me-2" (click)="abrirEditar(clasificacion)">
+                                    <i class="pi pi-pencil" style="color: black"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" (click)="eliminarClasificacion(clasificacion.id)">
+                                    <i class="pi pi-trash" style="color: black"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog header="{{ esModoEdicion() ? 'Editar Clasificación' : 'Nueva Clasificación' }}"
+            [visible]="displayDialog()" [modal]="true" [closable]="false"
+            (onHide)="displayDialog.set(false); clasificacionActual.set(null)">
+            <form (ngSubmit)="guardarClasificacion()" #form="ngForm">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" required [(ngModel)]="nombre" />
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-success" [disabled]="form.invalid">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="displayDialog.set(false)">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </p-dialog>
+    </section>
+</main>

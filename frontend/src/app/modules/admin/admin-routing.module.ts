@@ -25,6 +25,10 @@ const routes: Routes = [
         path: 'pedidos',
         loadComponent: () => import("../admin/pages/pedidos/admin-pedidos.component").then(m => m.AdminPedidosComponent)
       },
+      {
+        path: 'clasificaciones',
+        loadComponent: () => import("../admin/pages/clasificaciones/clasificaciones.component").then(m => m.ClasificacionesComponent)
+      },
     ]
   }
 ];
