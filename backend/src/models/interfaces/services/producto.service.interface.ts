@@ -11,7 +11,7 @@ export interface IProductoService {
         precioMax?: number;
         nombre?: string;
     }): Promise<Producto[]>;
-    obtenerClasificaciones(): Promise<Clasificacion[]>;
+    //obtenerClasificaciones(): Promise<Clasificacion[]>;
     obtenerProductoPorId(id: number): Promise<Producto | null>;
     crearProducto(data: ProductoCrearDTO, imagen: ArchivoDTO): Promise<void>;
     actualizarProducto(id: number, data: ProductoEditarDTO, archivo: ArchivoDTO | null): Promise<void>;

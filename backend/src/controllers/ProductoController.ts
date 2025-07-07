@@ -36,10 +36,10 @@ class ProductoController {
         }
     }
 
-    async getClasificaciones(req: Request, res: Response) {
+    /*async getClasificaciones(req: Request, res: Response) {
         const clasificaciones = await this.productoService.obtenerClasificaciones();
         res.json(clasificaciones);
-    }
+    }*/
 
     public obtenerPorId = async (_req: Request, res: Response) => {
         const { id } = _req.params;

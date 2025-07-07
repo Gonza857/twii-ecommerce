@@ -35,9 +35,9 @@ class ProductoService implements IProductoService {
         return await this.productoRepository.obtenerProductosFiltrados(filtros);
     }
 
-    public async obtenerClasificaciones(): Promise<Clasificacion[]> {
+    /*/public async obtenerClasificaciones(): Promise<Clasificacion[]> {
         return await this.productoRepository.obtenerClasificaciones();
-    }
+    }*/
 
     public async obtenerPorId(id: number): Promise<Producto | null> {
         return await this.productoRepository.obtenerPorId(id);
