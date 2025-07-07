@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import ProductoMapper from '../../../../../../services/producto/mapping/producto.mapper';
 import { ProductoService, Clasificacion } from '../../../../../../services/producto/producto.service';
 import { CommonModule } from '@angular/common';
+import { ClasificacionService } from '../../../../../../services/clasificacion/clasificacion.service';
 
 @Component({
   selector: 'app-modal-formulario',
@@ -24,13 +25,14 @@ export class ModalFormularioComponent {
 
   private readonly fb: FormBuilder = inject(FormBuilder)
   protected readonly productoService: ProductoService = inject(ProductoService);
+  protected readonly clasificacionService: ClasificacionService = inject(ClasificacionService);
   protected form!: FormGroup;
   clasificaciones: Clasificacion[] = [];
 
   @Output() manejarModalFormulario = new EventEmitter<boolean>();
 
   ngOnInit() {
-    this.productoService.obtenerClasificaciones().subscribe((data) => {
+    this.clasificacionService.obtenerClasificaciones().subscribe((data) => {
       this.clasificaciones = data;
     });
   }

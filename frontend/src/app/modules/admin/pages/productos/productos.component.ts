@@ -26,7 +26,6 @@ export class ProductosComponent implements OnInit {
   esModoEdicion = signal(false);
   productoActual = signal<Producto | null>(null)
 
-
   ngOnInit(): void {
     this.productoService.obtenerProductos()
   }
