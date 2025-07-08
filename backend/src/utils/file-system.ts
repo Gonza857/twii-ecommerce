@@ -18,7 +18,6 @@ export class FileSystem {
     }
 
     public async upload(ruta: string, archivo: ArchivoDTO, nombreArchivo: string) {
-        console.log("FILE SYSTEM: imagen entrante", archivo)
         await this.ensureUploadDir();
 
         const ext = path.extname(archivo.originalname).toLowerCase();
@@ -55,7 +54,6 @@ export class FileSystem {
 
         try {
             await unlink(rutaArchivo);
-            console.log(`Imagen ${archivoEncontrado} eliminada correctamente.`);
         } catch (error) {
             // throw new Error('No se pudo eliminar la imagen');
             return false;

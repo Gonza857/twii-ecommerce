@@ -96,9 +96,6 @@ export class ProductoService {
         next: (productos: Producto[]) => {
           this.productos.set(productos);
         },
-        error: (e: any) => {
-          console.log("ERROR OBTENER PRODUCTOS", e)
-        }
       });
   }
 
@@ -132,7 +129,6 @@ export class ProductoService {
           });
         },
         error: (e: any) => {
-          console.log("error", e)
         }
       });
   }
@@ -193,9 +189,6 @@ export class ProductoService {
       next: () => {
         this.obtenerProductos();
       },
-      error: (e: any) => {
-          console.log("Error", e)
-      }
     });
   }
 
@@ -208,9 +201,6 @@ export class ProductoService {
         next: (res: EstadisticasProductos) => {
           this.estadisticas.set(res)
         },
-        error: (e: any) => {
-          console.log("Error", e)
-        }
       })
   }
 }

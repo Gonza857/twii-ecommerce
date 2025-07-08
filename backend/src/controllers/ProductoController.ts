@@ -133,10 +133,7 @@ class ProductoController {
         const [estadisticas, errorEstadisticas] = await safe(
             this.productoService.obtenerEstadisticas()
         )
-        console.log("ErrorEstadisticas producto", errorEstadisticas)
         if (errorEstadisticas) return res.status(500).send();
-
-        console.log("Estadisticas obtenidas", estadisticas)
         res.status(200).json(estadisticas)
     }
 }

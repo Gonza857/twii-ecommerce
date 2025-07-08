@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
 
@@ -9,7 +9,7 @@ import {UsuarioService} from '../../../../services/usuario/usuario.service';
   standalone: true,
   styleUrl: './realizar-confirmacion.component.scss',
 })
-export class RealizarConfirmacionComponent implements OnInit {
+export class RealizarConfirmacionComponent implements OnInit, OnDestroy {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly usuarioService: UsuarioService = inject(UsuarioService);
   private readonly router: Router = inject(Router);
@@ -32,5 +32,9 @@ export class RealizarConfirmacionComponent implements OnInit {
     this.token = this.activatedRoute.snapshot.paramMap.get('token');
     if (this.token == null) return;
     this.usuarioService.confirmarCuenta(this.token)
+  }
+
+  ngOnDestroy(): void {
+    this.usuarioService.limpiarRespuesta()
   }
 }

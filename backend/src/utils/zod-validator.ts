@@ -11,7 +11,6 @@ export function validate<T extends ZodTypeAny>(
     try {
         return schema.parse(data);
     } catch (e) {
-        console.log(e)
         if (e instanceof ZodError) {
             throw new Error("Error de validación de datos.");
         }

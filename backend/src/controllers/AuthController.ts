@@ -195,13 +195,17 @@ class AuthController {
         );
         if (errorUsuarioRegisterDTO) return res.status(400).send(this.enviarErrorGenerico());
 
-        const usuarioExistente: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioRegisterDTO!.email)
+        const usuarioExistente: UsuarioLogin | null =
+            await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioRegisterDTO!.email)
 
-        const usuarioConPassHash: UsuarioRegisterDTO = await this.authService.registrarse(usuarioRegisterDTO!, usuarioExistente);
+        const [usuarioConPassHash, errorRegistrar] = await safe<UsuarioRegisterDTO>(
+                this.authService.registrarse(usuarioRegisterDTO!, usuarioExistente)
+        );
+        if (errorRegistrar) return res.status(409).send(this.enviarErrorGenerico(errorRegistrar.message));
 
         // Crear usuario y obtener id
         const [idUsuarioCreado, errorIdUsuarioCreado] = await safe<number | null>(
-            this.usuarioService.guardar(usuarioConPassHash)
+            this.usuarioService.guardar(usuarioConPassHash!)
         );
         if (errorIdUsuarioCreado) return res.status(500).json(this.enviarErrorGenerico())
 
@@ -209,7 +213,7 @@ class AuthController {
 
         // Enviar correo confirmación
         const [resultado, error] = await safe(
-            this.authService.enviarCorreoConfirmacion(usuarioConPassHash.email, token)
+            this.authService.enviarCorreoConfirmacion(usuarioConPassHash!.email, token)
         );
         if (error) {
             if (error instanceof CorreoExistenteException) return res.status(409).json({mensaje: error.message})
