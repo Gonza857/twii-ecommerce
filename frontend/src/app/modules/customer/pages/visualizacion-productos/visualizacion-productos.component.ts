@@ -1,8 +1,7 @@
-import { Clasificacion, ClasificacionService } from './../../../../services/clasificacion/clasificacion.service';
+import { Clasificacion, ClasificacionService } from '../../../../services/clasificacion/clasificacion.service';
 import { Component, OnInit, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PrimeTemplate } from "primeng/api";
 import { CardModule } from "primeng/card";
 import { SkeletonModule } from "primeng/skeleton";
 import { FiltrosProducto, ProductoService } from '../../../../services/producto/producto.service';
@@ -13,8 +12,9 @@ import { SelectModule } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
 import {CarritoService} from '../../../../services/carrito/carrito.service';
 import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
-import { FiltroService } from '../../../../services/producto/filtro.service';
 import {ProductoComponent} from './producto/producto.component';
+import {FiltroService} from '../../../../services/producto/filtro.service';
+
 
 @Component({
   standalone: true,

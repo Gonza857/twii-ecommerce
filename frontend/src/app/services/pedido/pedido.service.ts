@@ -51,7 +51,6 @@ export class PedidoService {
           })
         },
         error: (e: any) => {
-          console.log("ERROR al obtener pedidos por usuario", e)
           this.signalRespuestaServer.set({
             isLoading: false,
             error: "No se pudieron cargar tus pedidos. Intenta de nuevo más tarde.",

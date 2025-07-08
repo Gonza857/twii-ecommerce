@@ -13,7 +13,7 @@ import type { Pedido } from "../../../../services/pedido/interfaces/pedido.inter
 import { map } from "rxjs"
 import type { PedidoRest } from "../../../../services/pedido/interfaces/pedido.interface.rest"
 import PedidoMapper from "../../../../services/pedido/mapping/pedido.mapper"
-import { ConfirmDialogModule } from "primeng/confirmdialog" 
+import { ConfirmDialogModule } from "primeng/confirmdialog"
 @Component({
   selector: "app-admin-pedidos",
   standalone: true,
@@ -36,7 +36,7 @@ import { ConfirmDialogModule } from "primeng/confirmdialog"
 export class AdminPedidosComponent implements OnInit {
   private readonly pedidoService = inject(PedidoService)
   private readonly toast = inject(MessageService)
-  private readonly confirmationService = inject(ConfirmationService) 
+  private readonly confirmationService = inject(ConfirmationService)
   pedidos = signal<Pedido[]>([])
   isLoading = signal(true)
   error = signal<string | null>(null)
@@ -63,12 +63,10 @@ export class AdminPedidosComponent implements OnInit {
       .pipe(map((pedidosRest: PedidoRest[]) => PedidoMapper.mapToPedidosArray(pedidosRest)))
       .subscribe({
         next: (data) => {
-          console.log("pedidos", data)
           this.pedidos.set(data)
           this.isLoading.set(false)
         },
         error: (err) => {
-          console.error("Error al obtener todos los pedidos:", err)
           this.error.set("No se pudieron cargar los pedidos. Intenta de nuevo más tarde.")
           this.isLoading.set(false)
         },

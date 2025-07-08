@@ -18,9 +18,11 @@ INSERT INTO producto (nombre, descripcion, "idClasificacion", precio, imagen) VA
 ('Lavandina 1L', 'Desinfectante multiuso', 2, 450.00, 'http://localhost:3000/uploads/productos/producto-4.webp');
 
 -- Usuario normal
-INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, rolId) VALUES
-('Calle Falsa 123', 'Pérez', 'Juan', 'juan.perez@email.com', '1234segura', 1);
+INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, validado, rolId) VALUES
+('Calle Falsa 123', 'Pérez', 'Juan', 'juan.perez@email.com',
+'$2b$10$HtdF6.2f2pkukKfY9yD6JOrFHyAv8sLxVGeGjsCtvihx3dTnU0EE2', 1, 2);
 
--- Usuario de prueba/test
-INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, rolId) VALUES
-('Testing 456', 'Test', 'Usuario', 'test@test.com', 'test', 2);
+-- Usuario de admin
+INSERT INTO usuario (direccion, apellido, nombre, email, contrasena, validado, rolId) VALUES
+('Testing 456', 'Test', 'Usuario', 'test@test.com',
+'$2b$10$yoi8KM3EYae26EkSAH2DWeCSMk6Ar1VLTuYbvyR6pMXV8pB5UTz.G', 1, 1);

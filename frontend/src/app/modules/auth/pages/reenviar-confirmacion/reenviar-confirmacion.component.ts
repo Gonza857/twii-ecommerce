@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/message';
 import { Card } from 'primeng/card';
@@ -12,7 +12,7 @@ import {UsuarioService} from '../../../../services/usuario/usuario.service';
   standalone: true,
   styleUrl: './reenviar-confirmacion.component.scss',
 })
-export class ReenviarConfirmacionComponent implements OnInit {
+export class ReenviarConfirmacionComponent implements OnInit, OnDestroy {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly servicioUsuario: UsuarioService = inject(UsuarioService);
   private readonly router: Router = inject(Router);
@@ -48,5 +48,9 @@ export class ReenviarConfirmacionComponent implements OnInit {
   reenviarCorreo() {
     this.enviando = true;
     this.servicioUsuario.reenviarCorreo(this.userId)
+  }
+
+  ngOnDestroy(): void {
+    this.servicioUsuario.limpiarRespuesta()
   }
 }

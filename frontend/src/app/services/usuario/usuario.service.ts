@@ -203,12 +203,8 @@ export class UsuarioService {
       )
       .subscribe({
         next: (estadisticas: EstadisticasUsuario) => {
-          console.log("Estadisticas conseguidas", estadisticas);
           this.estadisticasSignal.set(estadisticas)
         },
-        error: (e: any) => {
-          console.log("Error", e)
-        }
       })
   }
 

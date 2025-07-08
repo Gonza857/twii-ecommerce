@@ -75,18 +75,12 @@ export class ModalFormularioComponent implements OnInit{
         next: (res: { mensaje: string }) => {
           this.productoService.obtenerProductos()
         },
-        error: (e: any) => {
-          console.log("[ACTUALIZAR PRODUCTO] error", e)
-        }
       });
     } else {
       this.productoService.crearProducto(producto).subscribe({
         next: () => {
           this.productoService.obtenerProductos()
         },
-        error: (e: any) => {
-          console.log("[SUBIR PRODUCTO] error", e)
-        }
       });
     }
 

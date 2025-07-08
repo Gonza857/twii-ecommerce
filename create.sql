@@ -1,3 +1,18 @@
+DROP DATABASE IF EXISTS "twii-ecommerce";
+CREATE DATABASE "twii-ecommerce";
+
+
+CREATE TABLE clasificacion (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  nombre VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE rol (
+	id INT NOT NULL PRIMARY KEY,
+	nombre VARCHAR(255) UNIQUE NOT NULL
+);
+
+
 CREATE TABLE usuario (
 	id INT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
 	direccion VARCHAR(255),
@@ -5,17 +20,34 @@ CREATE TABLE usuario (
 	nombre VARCHAR(100) NOT NULL,
 	email VARCHAR(100) UNIQUE NOT NULL,
 	contrasena VARCHAR(255) NOT NULL,
+	validado BOOLEAN DEFAULT FALSE,
 	rolId INT NOT NULL,
 	CONSTRAINT fk_rol_usuario FOREIGN KEY (rolId) REFERENCES Rol(id)
 );
 
-ALTER TABLE usuario
-ADD COLUMN validado BOOLEAN DEFAULT false;
+CREATE TABLE "producto" (
+    "id" SERIAL NOT NULL,
+    "nombre" VARCHAR(50) NOT NULL,
+    "descripcion" TEXT NOT NULL,
+    "precio" DECIMAL(10,2) NOT NULL,
+    "imagen" VARCHAR(255),
+    "idclasificacion" INTEGER NOT NULL,
 
-CREATE TABLE rol (
-	id INT NOT NULL PRIMARY KEY,
-	nombre VARCHAR(255) UNIQUE NOT NULL
+    CONSTRAINT "producto_pkey" PRIMARY KEY ("id")
+    CONSTRAINT fk_producto_clasificacion FOREIGN KEY (idClasificacion) REFERENCES clasificacion(id)
 );
+
+CREATE TABLE pedido_producto (
+    id SERIAL PRIMARY KEY,
+    cantidad INTEGER NOT NULL,
+    precioUnitario DECIMAL(10,2) NOT NULL,
+    pedidoid INTEGER NOT NULL,
+    productoid INTEGER NOT NULL,
+    CONSTRAINT fk_pedido_pedido_producto FOREIGN KEY (pedidoid) REFERENCES pedido(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_producto_pedido_producto FOREIGN KEY (productoid) REFERENCES producto(id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+
 
 CREATE TABLE pedido (
     id SERIAL PRIMARY KEY,
@@ -38,9 +70,5 @@ CREATE TABLE pedido_producto (
 );
 
 
-CREATE TABLE clasificacion (
-  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  nombre VARCHAR(255) UNIQUE NOT NULL
-);
-ALTER TABLE producto
-DROP COLUMN clasificacion;
+
+

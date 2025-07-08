@@ -22,8 +22,6 @@ class UsuarioService implements IUsuarioService {
     }
 
     public async obtenerUsuarioPorId(id: string): Promise<Usuario | null> {
-        debugger;
-        console.log(`piden por id ${id}`)
         // Lógica para buscar usuario en la BD
         const idBuscado = Number(id);
         if (isNaN(idBuscado)) throw new DatosIncorrectoException("No se pudo encontrar un usuario");
