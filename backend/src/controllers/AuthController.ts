@@ -60,7 +60,7 @@ class AuthController {
         const [usuarioLoginDTO, errorUsuarioLoginDTO] = safeSync<UsuarioLoginDTO>(
             () => validate(loginSchema, _req.body)
         );
-        if (errorUsuarioLoginDTO) return res.status(400).send(this.enviarErrorGenerico());
+        if (errorUsuarioLoginDTO) return res.status(400).send(this.enviarErrorGenerico("Email o contraseña incorrectos."));
 
         const usuario: UsuarioLogin | null = await this.usuarioService.obtenerUsuarioParaLoginPorCorreo(usuarioLoginDTO!.email)
 
