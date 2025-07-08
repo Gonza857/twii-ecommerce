@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, inject, Input, Signal} from '@angular/core';
 import {Producto} from '../../../../../services/producto/interfaces/producto.interface';
 import {RouterLink} from '@angular/router';
 import {Card, CardModule} from 'primeng/card';
@@ -29,6 +29,7 @@ export class ProductoComponent {
   @Input() public producto!: Producto;
   @Input() public usuarioId!: number;
   @Input() public usuarioLogueado!: boolean;
+  @Input() public carrito!: Signal<CarritoProducto[]>;
 
   opcionesCantidad = Array.from({ length: 10 }, (_, i) => ({
     label: `${i + 1}`,
@@ -43,7 +44,7 @@ export class ProductoComponent {
   }
 
   getItemCarrito(productoId: number): CarritoProducto | undefined {
-    return this.carritoService.carrito().find(item => item.productoid === productoId);
+    return this.carrito().find(item => item.productoid === productoId);
   }
 
   cambiarCantidad(item: CarritoProducto) {
