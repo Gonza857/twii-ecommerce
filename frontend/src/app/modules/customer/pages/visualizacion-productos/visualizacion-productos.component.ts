@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from "primeng/card";
 import { SkeletonModule } from "primeng/skeleton";
-import { ProductoService } from '../../../../services/producto/producto.service';
+import { FiltrosProducto, ProductoService } from '../../../../services/producto/producto.service';
 import { Producto } from "../../../../services/producto/interfaces/producto.interface";
 import { RouterLink } from "@angular/router";
 import { UsuarioService } from '../../../../services/usuario/usuario.service';
@@ -13,7 +13,8 @@ import { ButtonDirective } from 'primeng/button';
 import {CarritoService} from '../../../../services/carrito/carrito.service';
 import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
 import {ProductoComponent} from './producto/producto.component';
-import { FiltroService } from '../../../../services/producto/filtro.service';
+import {FiltroService} from '../../../../services/producto/filtro.service';
+
 
 @Component({
   standalone: true,
@@ -121,7 +122,7 @@ export class ListaProductosComponent implements OnInit {
   }
 
   actualizarProductos(): void {
-    const filtros: any = {};
+    const filtros: FiltrosProducto = {};
 
     if (this.clasificacionSeleccionada !== null && this.clasificacionSeleccionada !== undefined) {
       filtros.clasificacion = this.clasificacionSeleccionada;

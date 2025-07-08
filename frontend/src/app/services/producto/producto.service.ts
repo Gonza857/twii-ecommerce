@@ -26,6 +26,13 @@ type ResultadoRequest = {
   data?: any,
 }
 
+export interface FiltrosProducto {
+  clasificacion?: number;
+  precioMin?: number;
+  precioMax?: number;
+  nombre?: string;
+}
+
 // --- NUEVO: Interfaz para el estado completo del producto ---
 export interface ProductoDetailState {
   producto: Producto | null;
@@ -161,10 +168,6 @@ export class ProductoService {
     return this.http.get<Producto[]>(`${this.apiUrl}${query}`);
   }
 
-  obtenerClasificaciones(): Observable<Clasificacion[]> {
-    return this.http.get<Clasificacion[]>(`${this.apiUrl}/clasificaciones`);
-  }
-
   public crearProducto(producto: ProductoFormulario): Observable<ProductoDTO> {
     const productoFormData = this.crearFormDataProducto(producto);
     return this.http.post<ProductoDTO>(this.apiUrl, productoFormData)
@@ -191,7 +194,7 @@ export class ProductoService {
         this.obtenerProductos();
       },
       error: (e: any) => {
-
+          console.log("Error", e)
       }
     });
   }
