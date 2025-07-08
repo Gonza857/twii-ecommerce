@@ -56,7 +56,7 @@
 
               <p class="products-heading text-claro">Productos:</p>
               <div class="product-list">
-                @for (item of pedido.pedido_productos ?? []; track item.id) {
+                @for (item of pedido.pedido_productos; track item.id) {
                   <div class="product-item">
                     <span class="product-name text-secundario">{{ item.producto?.nombre }}</span>
                     <span class="product-details text-secundario">{{ item.cantidad }}
@@ -75,3 +75,5 @@
     }
   </div>
 </main>
+
+<p-confirmDialog></p-confirmDialog>

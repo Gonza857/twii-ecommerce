@@ -3,12 +3,12 @@ import { provideRouter } from "@angular/router"
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async"
 import { providePrimeNG } from "primeng/config"
 import Aura from "@primeng/themes/aura"
-import { MessageService } from "primeng/api"
+import { MessageService, ConfirmationService } from "primeng/api"
 
 import { routes } from "./app.routes"
 import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http"
 import { provideAnimations } from "@angular/platform-browser/animations"
-import { credentialsInterceptor } from "./interceptors/credentials.interceptor" 
+import { credentialsInterceptor } from "./interceptors/credentials.interceptor"
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,13 +16,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([credentialsInterceptor])),
+    provideAnimations(),
     MessageService,
+    ConfirmationService,
     providePrimeNG({
       theme: {
         preset: Aura,
       },
     }),
-    provideAnimations(),
   ],
 }
 
