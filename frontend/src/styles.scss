@@ -97,3 +97,8 @@
   }
 }
 
+.p-toast {
+  position: fixed !important;
+  z-index: 999999 !important;
+  pointer-events: all !important;
+}

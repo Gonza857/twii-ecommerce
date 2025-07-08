@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import {ProductoService} from '../../../../services/producto/producto.service';
 import {Card, CardModule} from 'primeng/card';
 import {NgForOf, NgStyle} from '@angular/common';
@@ -8,6 +8,8 @@ import {RouterLink} from '@angular/router';
 import {ProductoComponent} from '../visualizacion-productos/producto/producto.component';
 import {UsuarioService} from '../../../../services/usuario/usuario.service';
 import { ClasificacionService } from '../../../../services/clasificacion/clasificacion.service';
+import { CarritoService } from '../../../../services/carrito/carrito.service';
+import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
 
 
 @Component({
@@ -28,7 +30,9 @@ export class CustomerHomeComponent implements OnInit {
   protected readonly servicioProducto: ProductoService = inject(ProductoService);
   protected readonly servicioUsuario: UsuarioService = inject(UsuarioService);
   protected readonly servicioClasificacion: ClasificacionService = inject(ClasificacionService)
+  protected readonly carritoService: CarritoService = inject(CarritoService);
   protected clasificaciones: any | null = null
+  carrito!: Signal<CarritoProducto[]>;
   usuarioId?: number;
   usuarioLogueado: boolean = false;
 
@@ -39,10 +43,12 @@ export class CustomerHomeComponent implements OnInit {
       }
     })
 
-
-    this.usuarioLogueado = this.servicioUsuario.usuario() != null;
-    this.usuarioId = this.servicioUsuario.usuario()?.id;
+    this.servicioUsuario.obtenerUsuarioActual().subscribe(() => {
+      this.usuarioLogueado = this.servicioUsuario.usuario() != null;
+      this.usuarioId = this.servicioUsuario.usuario()?.id;
+    });
 
     this.servicioProducto.obtenerProductos()
+    this.carrito = this.carritoService.carrito;
   }
 }
