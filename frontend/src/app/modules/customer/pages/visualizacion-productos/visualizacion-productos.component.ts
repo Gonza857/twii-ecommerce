@@ -1,8 +1,7 @@
-import { Clasificacion } from './../../../../services/producto/producto.service';
+import { Clasificacion, ClasificacionService } from '../../../../services/clasificacion/clasificacion.service';
 import { Component, OnInit, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PrimeTemplate } from "primeng/api";
 import { CardModule } from "primeng/card";
 import { SkeletonModule } from "primeng/skeleton";
 import { ProductoService } from '../../../../services/producto/producto.service';
@@ -14,6 +13,7 @@ import { ButtonDirective } from 'primeng/button';
 import {CarritoService} from '../../../../services/carrito/carrito.service';
 import { CarritoProducto } from '../../../../services/carrito/interfaces/carrito.interface';
 import {ProductoComponent} from './producto/producto.component';
+import { FiltroService } from '../../../../services/producto/filtro.service';
 
 @Component({
   standalone: true,
@@ -40,7 +40,9 @@ export class ListaProductosComponent implements OnInit {
 
   constructor(private productoService: ProductoService,
     private carritoService: CarritoService,
-    private usuarioService: UsuarioService) { }
+    private usuarioService: UsuarioService,
+    private filtroService: FiltroService,
+    private clasificacionService : ClasificacionService) { }
 
   ngOnInit(): void {
     this.usuarioService.obtenerUsuarioActual().subscribe(() => {
@@ -48,9 +50,13 @@ export class ListaProductosComponent implements OnInit {
       this.usuarioId = this.usuarioService.usuario()?.id;
     });
 
-    this.productoService.obtenerClasificaciones().subscribe((data) => {
+    this.clasificacionService.obtenerClasificaciones().subscribe((data) => {
       this.clasificaciones = data;
     });
+
+    this.filtroService.filtrosRemovidos$.subscribe(() => {
+    this.limpiarFiltro();
+  });
 
     const filtrosGuardados = localStorage.getItem('filtrosProductos');
 

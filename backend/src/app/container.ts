@@ -1,3 +1,4 @@
+import { clasificacionRouter } from './../routes/clasificacion.route';
 import ProductoController from "../controllers/ProductoController"
 import UsuarioController from "../controllers/UsuarioController"
 import UsuarioService from "../services/UsuarioService"
@@ -25,6 +26,11 @@ import PedidoService from "../services/PedidoService"
 import PedidoController from "../controllers/PedidoController"
 import type { IPedidoRepository } from "../models/interfaces/repositories/pedido.repository.interface"
 import type { IPedidoService } from "../models/interfaces/services/pedido.service.interface"
+import {ClasificacionController} from "../controllers/ClasificacionController"
+import { IClasificacionRepository } from '../models/interfaces/repositories/clasificacion.repository.interface';
+import { ClasificacionRepository } from '../repositories/ClasificacionRepository';
+import { IClasificacionService } from '../models/interfaces/services/clasificacion.service.interface';
+import { ClasificacionService } from '../services/ClasificacionService';
 
 const mailerService: IMailerService = new MailerService()
 
@@ -33,6 +39,7 @@ const usuarioRepository: IUsuarioRepository = new UsuarioRepository(prisma)
 const carritoRepository: ICarritoRepository = new CarritoRepository(prisma)
 const productoRepository: IProductoRepository = new ProductoRepository(prisma)
 const pedidoRepository: IPedidoRepository = new PedidoRepository(prisma)
+const clasificacionRepository: IClasificacionRepository = new ClasificacionRepository(prisma);
 
 // Servicios -> logica de negocio
 const productoImagenService: IImagenService = new ProductoImageService("http://localhost:3000")
@@ -40,6 +47,8 @@ const carritoService: ICarritoService = new CarritoService(carritoRepository)
 const usuarioService: IUsuarioService = new UsuarioService(usuarioRepository)
 const productoService: IProductoService = new ProductoService(productoRepository, productoImagenService)
 const authService: IAuthService = new AuthService(mailerService)
+const clasificacionService: IClasificacionService = new ClasificacionService(clasificacionRepository)
+
 // Inject productoRepository into PedidoService for repeating orders
 const pedidoService: IPedidoService = new PedidoService(pedidoRepository, carritoRepository, productoRepository)
 
@@ -49,6 +58,10 @@ const productoController: ProductoController = new ProductoController(productoSe
 const usuarioController: UsuarioController = new UsuarioController(usuarioService)
 const authController: AuthController = new AuthController(usuarioService, authService)
 const pedidoController: PedidoController = new PedidoController(pedidoService)
+const clasificacionController: ClasificacionController = new ClasificacionController(clasificacionService)
+
+//const clasificacionController: ClasificacionController = new ClasificacionController(clasificacionService)
+
 
 const container = {
   carritoController,
@@ -56,6 +69,7 @@ const container = {
   usuarioController,
   authController,
   pedidoController,
+  clasificacionController
 }
 
 export const serviceContainer = {

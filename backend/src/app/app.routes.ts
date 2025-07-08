@@ -4,7 +4,7 @@ import { usuariosRouter } from "../routes/usuario.route"
 import { authRouter } from "../routes/auth.route"
 import { carritoRouter } from "../routes/carrito.route"
 import { pedidoRouter } from "../routes/pedido.route" 
-
+import {clasificacionRouter} from "../routes/clasificacion.route"
 export class AppRoutes {
   static getRoutes(): Router {
     const router = Router()
@@ -14,6 +14,7 @@ export class AppRoutes {
     router.use("/api/usuarios", usuariosRouter)
     router.use("/api/auth", authRouter)
     router.use("/api/pedidos", pedidoRouter)
+    router.use("/api/clasificacion", clasificacionRouter)
 
     return router
   }
