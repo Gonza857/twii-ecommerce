@@ -34,10 +34,6 @@ export class ListaProductosComponent implements OnInit {
   usuarioId?: number;
   usuarioLogueado: boolean = false;
   carrito!: Signal<CarritoProducto[]>;
-  opcionesCantidad = Array.from({ length: 10 }, (_, i) => ({
-    label: `${i + 1}`,
-    value: i + 1
-  }));
 
   constructor(private productoService: ProductoService,
     private carritoService: CarritoService,
@@ -156,26 +152,5 @@ export class ListaProductosComponent implements OnInit {
 
     this.actualizarProductos();
   }
-
-  agregarAlCarrito(producto: Producto): void {
-    if (!this.usuarioLogueado || !this.usuarioId) return;
-
-    this.carritoService.agregarProducto(this.usuarioId, producto.id, 1);
-    this.carritoService.abrirDrawer();
-  }
-
-  getItemCarrito(productoId: number): CarritoProducto | undefined {
-    return this.carrito().find(item => item.productoid === productoId);
-  }
-
-  cambiarCantidad(item: CarritoProducto) {
-    this.carritoService.cambiarCantidad(this.usuarioId!, item.productoid, item.cantidad);
-  }
-
-  eliminarProducto(item: CarritoProducto): void {
-    if (!this.usuarioId) return;
-    this.carritoService.quitarProducto(this.usuarioId, item.productoid);
-  }
-
 
 }
