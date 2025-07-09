@@ -5,10 +5,12 @@ import { CommonModule } from "@angular/common"
 import { ButtonModule } from "primeng/button"
 import { UsuarioService } from "../../../../../services/usuario/usuario.service"
 import {CarritoService} from '../../../../../services/carrito/carrito.service';
+import { ConfirmationService } from "primeng/api"
+import { ConfirmDialogModule } from "primeng/confirmdialog"
 
 @Component({
   selector: "app-carrito-drawer",
-  imports: [CommonModule, CarritoItemComponent, RouterModule, ButtonModule],
+  imports: [CommonModule, CarritoItemComponent, RouterModule, ButtonModule, ConfirmDialogModule],
   templateUrl: "./carrito-drawer.component.html",
   standalone: true,
   styleUrl: "./carrito-drawer.component.scss",
@@ -16,6 +18,7 @@ import {CarritoService} from '../../../../../services/carrito/carrito.service';
 export class CarritoDrawerComponent implements OnInit {
   private readonly usuarioService = inject(UsuarioService)
   public readonly carritoService = inject(CarritoService)
+  private readonly confirmationService = inject(ConfirmationService)
 
   protected total$ = this.carritoService.total
   protected carrito$ = this.carritoService.carrito
@@ -40,9 +43,20 @@ export class CarritoDrawerComponent implements OnInit {
   }
 
   vaciarCarrito(): void {
-    if (this.usuarioId && confirm("¿Seguro que querés vaciar el carrito?")) {
-      this.carritoService.vaciar(this.usuarioId)
-    }
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que quieres vaciar el carrito?`,
+      header: "Confirmar Cancelación",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Sí, vaciar",
+      rejectLabel: "No",
+      acceptButtonStyleClass: "p-button-danger p-button-sm",
+      rejectButtonStyleClass: "p-button-text p-button-sm",
+        accept: () => {
+          if (this.usuarioId !== undefined) {
+            this.carritoService.vaciar(this.usuarioId);
+          }
+        }
+    })
   }
 
   finalizarCompra(): void {
